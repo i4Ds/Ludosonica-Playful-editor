@@ -1,0 +1,171 @@
+﻿* {
+	vertical-align: middle;
+}
+
+body {
+	font-family: Arial, sans-serif;
+	font-size: 14px;
+	margin: 0;
+	overflow: hidden;
+}
+
+hr {
+	border: 0px;
+	border-top: 1px solid #ccc;
+}
+
+button {
+	position: relative;
+}
+
+.Panel {
+	-moz-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+
+	/* No support for these yet */
+	-o-user-select: none;
+	user-select: none;
+}
+
+
+input.Number {
+	color: #0080f0;
+	font-size: 12px;							/** TODO: Use of !imporant is not ideal **/
+	background-color: transparent!important;	/* For now this is a quick fix a rendering issue due to inherited background */
+	border: 1px solid transparent;
+	padding: 2px;
+	cursor: col-resize;
+}
+
+
+
+
+	.SoundDrop {
+		display: inline-block;
+	}
+
+	.SoundDrop .dropArea {
+		border: 2px dashed #bbb;
+		-moz-border-radius: 5px;
+		-webkit-border-radius: 5px;
+		border-radius: 5px;
+		padding: 5px;
+		text-align: center;
+		font: 12pt bold 'Vollkorn';
+		color: #bbb;
+		display: inline-block;
+		width: 120px;
+		position: relative;
+	}
+	
+	.SoundDrop button {
+		margin-left: 5px;
+		cursor: pointer;
+	}
+	
+	.SoundDrop .deleteButton {
+		font-size: 6px;
+		position: absolute;
+		top: 0px;
+		right: 0px;
+	}
+	
+	#blocker {
+
+		position: absolute;
+
+		width: 100%;
+		height: 100%;
+
+		background-color: rgba(0,0,0,0.5);
+
+	}
+
+	#instructions {
+
+		width: 100%;
+		height: 100%;
+
+		display: -webkit-box;
+		display: -moz-box;
+		display: box;
+
+		-webkit-box-orient: horizontal;
+		-moz-box-orient: horizontal;
+		box-orient: horizontal;
+
+		-webkit-box-pack: center;
+		-moz-box-pack: center;
+		box-pack: center;
+
+		-webkit-box-align: center;
+		-moz-box-align: center;
+		box-align: center;
+
+		color: #ffffff;
+		text-align: center;
+
+		cursor: pointer;
+
+	}
+	
+	.eventProperties, .behaviorProperties {
+		margin: 2px;
+		padding-left: 5px;
+		border: 1px solid #bbb;
+	}
+	
+	.eventDeleteButton {
+	
+	}
+	
+	.menuPlayButton {
+		height: 100%;
+		background-image: url(../images/play_nohover.png);
+		background-size: auto 100%;
+		width: 2.5em;
+		cursor: pointer;
+		border: 0;
+		padding: 0;
+		background-color: transparent;
+	}
+	
+	.menuPlayButton:hover {
+		background-image: url(../images/play_hover.png);
+	}
+	
+	.menuPlayButton:focus {
+		outline: 0;
+	}
+	
+	.menuPlayButton.stopButton {
+		background-image: url(../images/stop_nohover.png);
+	}
+	
+	.menuPlayButton.stopButton:hover {
+		background-image: url(../images/stop_hover.png);
+	}
+	
+	
+	.menuCameraButton {
+		height: 100%;
+		background-image: url(../images/movementCamera.png);
+		background-size: auto 100%;
+		width: 6em;
+		cursor: pointer;
+		border: 0;
+		padding: 0;
+		background-color: transparent;
+		display: none;
+		position: absolute;
+		top: 0px;
+		right: 100px;
+	}
+	
+	#gestureDisplay {
+		height: 100%;
+		position: absolute;
+		right: 2px;
+		top: 0px;
+	}

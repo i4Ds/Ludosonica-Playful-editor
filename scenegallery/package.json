@@ -1,0 +1,24 @@
+{
+  "name": "scenegallery",
+  "version": "0.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "dependencies": {
+    "express": "~4.10.6",
+    "busboy": "~0.2.9",
+    "connect-busboy": "0.0.2",
+    "mkdirp": "~0.5.0",
+    "ejs": "~1.0.0",
+    "sqlite3": "~3.0.4",
+    "install": "~0.1.8",
+    "jszip": "~2.4.0",
+    "npm": "~2.1.12",
+    "reformed": "~0.1.1",
+    "recaptcha": "~1.2.0",
+    "rimraf": "~2.2.8"
+  }
+}
