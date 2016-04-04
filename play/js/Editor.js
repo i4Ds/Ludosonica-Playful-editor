@@ -59,8 +59,6 @@ var Editor = function () {
 	// lower the reportsize or try to use different buffer sizes for different caches ( see
 	// physijs_worker.js:252 )
 	this.scene = new Physijs.Scene( {fixedTimeStep: 1/120} );
-	this.scene._gravity = new THREE.Vector3(0, -16, 0);
-	this.scene.setGravity( this.scene._gravity );
 	this.sceneHelpers = new THREE.Scene();
 
 	this.object = {};

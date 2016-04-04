@@ -504,7 +504,6 @@ Play.prototype._playLoop = function ( delta ) {
 	this._character.__dirtyPosition = true;
 	
 	
-	
 	var touches = this._character._physijs.touches;
 				
 	var touchesGrabCheck = this._previousTouches || [];
@@ -609,6 +608,27 @@ Play.prototype._playLoop = function ( delta ) {
 	if ( lineCount < this._lines.length - 1 ) {
 		for ( var x = lineCount; x < this._lines.length; x++ ) {
 			this._lines[ x ].visible = false;
+		}
+	}
+	
+	// cap the velocity of all objects
+	// attention: This is a hack, because doing that in the internal simulation ticks like proposed here:
+	// http://www.bulletphysics.org/mediawiki-1.5.8/index.php/Code_Snippets
+	// is not possible, see e.g. https://github.com/kripken/ammo.js/issues/30
+	// Therefore be aware of internal ticks. Too high changes (e.g. huge gravity) might make the object still move way too fast in the end
+	if ( editor.scene.maxVelocity && editor.scene.maxVelocity != Infinity ) {
+		var mV = editor.scene.maxVelocity
+		for (id1 in editor.scene._objects) {
+			if ( !editor.scene._objects.hasOwnProperty( id1 ) ) continue;
+			object = editor.scene._objects[ id1 ];
+			// todo: add cases where object doesn't have to be capped (e.g. static)
+			var vel = object.getLinearVelocity();
+			var len = vel.length();
+			if (len > mV) {
+				//normalize velocity
+				vel = vel.multiplyScalar(mV/len);
+				object.setLinearVelocity(vel);
+			}
 		}
 	}
 

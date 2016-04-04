@@ -279,7 +279,7 @@
 
 					case 'Scene':
 
-						object = new THREE.Scene();
+						object = new Physijs.Scene( {fixedTimeStep: 1/120} );
 						
 						if ( data.fog !== undefined ) {
 							object.fog = new THREE[ data.fog.type ]( data.fog.color, data.fog.type == 'Fog' ? data.fog.near : data.fog.density, data.fog.far );
@@ -334,6 +334,16 @@
 						}
 
 						object.hasLeapBox = data.hasLeapBox;
+						
+						object.maxVelocity = data.maxVelocity ? data.maxVelocity : Infinity;
+						
+						if (!data._gravity) {
+							data._gravity = new THREE.Vector3(0, -16, 0)
+						}
+						
+						console.log('set gravity', data._gravity)
+						object._gravity = data._gravity
+						object.setGravity( object._gravity );
 						
 						break;
 
@@ -741,6 +751,10 @@
 						
 						
 						editor.scene.fog = new THREE.Fog( 0xAAAAAA, 0.01, 50 );
+						editor.scene.hasLeapBox = true;
+						editor.scene._gravity = new THREE.Vector3(0, -16, 0);
+						editor.scene.setGravity( editor.scene._gravity );
+						editor.scene.maxVelocity = Infinity;
 						
 						
 						var color = 0x222222;

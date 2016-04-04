@@ -204,8 +204,43 @@ Sidebars.Properties.Scene = function ( editor ) {
 
 	container.add( leapBoxRow );
 	
-	//
+	// max velocity
 
+	var maxVelocityRow = new UI.Panel();
+
+	var maxVelocity = new UI.Number( 1 ).setWidth( '60px' ).setRange( 0, Infinity ).onChange( function( evt ) {
+		
+		var mV = maxVelocity.getValue();
+		editor.scene.maxVelocity = mV;
+		
+	} );
+
+	maxVelocityRow.add( new UI.Text( 'Max velocity' ).setWidth( '90px' ) );
+	maxVelocityRow.add( maxVelocity );
+
+	container.add( maxVelocityRow );
+	
+	// gravity
+
+	var gravityRow = new UI.Panel();
+
+	var gravity = new UI.Number( 16 ).setWidth( '60px' ).setRange( 0, 30 ).onChange( function( evt ) {
+		
+		// gravity: negate, as y, i.e. (0, -16, 0)
+		var g = gravity.getValue();
+		var gVec = new THREE.Vector3(0, -g, 0)
+		editor.scene._gravity = gVec;
+		editor.scene.setGravity( editor.scene._gravity );
+		
+	} );
+
+	gravityRow.add( new UI.Text( 'Gravity' ).setWidth( '90px' ) );
+	gravityRow.add( gravity );
+
+	container.add( gravityRow );
+	
+	//
+	
 	var refreshFogUI = function () {
 
 		var type = fogType.getValue();
@@ -223,7 +258,9 @@ Sidebars.Properties.Scene = function ( editor ) {
 		'fogFar': 2,
 		'fogDensity': 2,
 		'skyBox' : 2,
-		'leapBox': 1
+		'leapBox': 2,
+		'maxVelocity': 2,
+		'gravity': 2
 	};
 	
 	function updateRows() {
@@ -235,7 +272,9 @@ Sidebars.Properties.Scene = function ( editor ) {
 			'fogFar': fogFarRow,
 			'fogDensity': fogDensityRow,
 			'skyBox': skyboxRow,
-			'leapBox': leapBoxRow
+			'leapBox': leapBoxRow,
+			'maxVelocity': maxVelocityRow,
+			'gravity': gravityRow
 		};
 
 		for ( var property in properties ) {
@@ -322,6 +361,14 @@ Sidebars.Properties.Scene = function ( editor ) {
 		}
 		
 		leapBox.setValue( scene.hasLeapBox === false ? false : true );
+		
+		if ( scene.maxVelocity ) maxVelocity.setValue( scene.maxVelocity )
+		
+		if ( scene._gravity ) {
+			
+			gravity.setValue( -scene._gravity.y )
+		
+		}
 		
 		updateSceneOptionsDisplay( editor.selected );
 	});

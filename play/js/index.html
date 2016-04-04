@@ -335,6 +335,11 @@
 
 						object.hasLeapBox = data.hasLeapBox;
 						
+						object.maxVelocity = data.maxVelocity ? data.maxVelocity : Infinity;
+						
+						object._gravity = data._gravity
+						object.setGravity( object._gravity );
+						
 						break;
 
 					case 'PerspectiveCamera':

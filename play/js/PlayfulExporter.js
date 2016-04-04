@@ -256,6 +256,10 @@ THREE.PlayfulExporter.prototype = {
 					}
 					
 				}
+				
+				data._gravity = object._gravity;
+				
+				data.maxVelocity = object.maxVelocity;
 
 			} else if ( object instanceof THREE.PerspectiveCamera ) {
 

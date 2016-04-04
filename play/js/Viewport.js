@@ -627,7 +627,7 @@ var Viewport = function ( editor ) {
 
 	} );
 	
-	signals.objectChanged.add( function ( object ) {
+	/*signals.objectChanged.add( function ( object ) {
 
 		if ( object != undefined && object == editor.selected ) {
 
@@ -638,7 +638,7 @@ var Viewport = function ( editor ) {
 
 		render();
 
-	} );
+	} );*/
 
 	signals.objectAdded.add( function ( object ) {
 
@@ -665,6 +665,7 @@ var Viewport = function ( editor ) {
 			if ( object.geometry !== undefined ) {
 
 				selectionBox.update( object );
+				selectionBox.visible = true;
 
 			}
 
