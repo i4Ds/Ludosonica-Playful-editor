@@ -94,6 +94,10 @@ Editor.prototype = {
 		this.scene.name = scene.name;
 		this.scene.userData = JSON.parse( JSON.stringify( scene.userData ) );
 		this.scene.fog = scene.fog;
+		this.scene.hasLeapBox = scene.hasLeapBox;
+		this.scene.maxVelocity = scene.maxVelocity;
+		this.scene._gravity = scene._gravity;
+		this.scene.setGravity(this.scene._gravity);
 
 		// avoid render per object
 
