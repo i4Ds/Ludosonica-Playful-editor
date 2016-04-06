@@ -213,6 +213,8 @@ Sidebars.Properties.Scene = function ( editor ) {
 		var mV = maxVelocity.getValue();
 		editor.scene.maxVelocity = mV;
 		
+		setGravityBehaviour( mV, -editor.scene._gravity.y );
+		
 	} );
 
 	maxVelocityRow.add( new UI.Text( 'Max velocity' ).setWidth( '90px' ) );
@@ -232,12 +234,68 @@ Sidebars.Properties.Scene = function ( editor ) {
 		editor.scene._gravity = gVec;
 		editor.scene.setGravity( editor.scene._gravity );
 		
+		setGravityBehaviour( editor.scene.maxVelocity, g );
+		
 	} );
 
 	gravityRow.add( new UI.Text( 'Gravity' ).setWidth( '90px' ) );
 	gravityRow.add( gravity );
 
 	container.add( gravityRow );
+	
+	// gravity behaviour (gravity and max velocity presets for easy mode)
+		
+	var gravityBehaviourPresets = {
+		
+		'Normal': [Infinity, 16],
+		'Constant': [5, 30]
+		
+	}
+	
+	var gravityBehaviourRow = new UI.Panel();
+	var gravityBehaviour = new UI.Select().setOptions( {
+
+		'Normal': 'Normal',
+		'Constant': 'Constant'
+
+	} ).setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' )
+	gravityBehaviour.onChange( function () {
+		
+		var gB = gravityBehaviourPresets[gravityBehaviour.getValue()];
+		
+		var mV = gB[0];
+		editor.scene.maxVelocity = mV;
+		maxVelocity.setValue( editor.scene.maxVelocity );
+		
+		var g = gB[1];
+		var gVec = new THREE.Vector3(0, -g, 0);
+		editor.scene._gravity = gVec;
+		editor.scene.setGravity( editor.scene._gravity );
+		gravity.setValue( g );
+
+	} );
+
+	gravityBehaviourRow.add( new UI.Text( 'Gravity Behaviour' ).setWidth( '90px' ) );
+	gravityBehaviourRow.add( gravityBehaviour );
+
+	container.add( gravityBehaviourRow );
+	
+	function setGravityBehaviour( maxVel, gravity ) {
+		
+		for ( var pi in gravityBehaviourPresets ) {
+			if ( !gravityBehaviourPresets.hasOwnProperty( pi ) ) continue;
+			var p = gravityBehaviourPresets[pi];
+			
+			if ( p[0] == maxVel && p[1] == gravity ) {
+				gravityBehaviour.setValue(pi);
+				return;
+			}
+		}
+		
+		// it's a custom gravity and/or maxVel value
+		gravityBehaviour.setValue( undefined );
+		
+	}
 	
 	//
 	
@@ -260,7 +318,8 @@ Sidebars.Properties.Scene = function ( editor ) {
 		'skyBox' : 2,
 		'leapBox': 2,
 		'maxVelocity': 2,
-		'gravity': 2
+		'gravity': 2,
+		'gravityBehaviour': 1
 	};
 	
 	function updateRows() {
@@ -274,7 +333,8 @@ Sidebars.Properties.Scene = function ( editor ) {
 			'skyBox': skyboxRow,
 			'leapBox': leapBoxRow,
 			'maxVelocity': maxVelocityRow,
-			'gravity': gravityRow
+			'gravity': gravityRow,
+			'gravityBehaviour': gravityBehaviourRow
 		};
 
 		for ( var property in properties ) {
@@ -362,12 +422,22 @@ Sidebars.Properties.Scene = function ( editor ) {
 		
 		leapBox.setValue( scene.hasLeapBox === false ? false : true );
 		
-		if ( scene.maxVelocity ) maxVelocity.setValue( scene.maxVelocity )
+		if ( scene.maxVelocity ) maxVelocity.setValue( scene.maxVelocity );
 		
 		if ( scene._gravity ) {
 			
-			gravity.setValue( -scene._gravity.y )
+			gravity.setValue( -scene._gravity.y );
 		
+		}
+		
+		if ( scene.maxVelocity && scene._gravity ) {
+			
+			setGravityBehaviour( scene.maxVelocity, -scene._gravity.y );
+			
+		} else {
+			
+			gravityBehaviour.setValue( 'Normal' );
+			
 		}
 		
 		updateSceneOptionsDisplay( editor.selected );
