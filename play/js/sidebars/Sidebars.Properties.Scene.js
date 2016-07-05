@@ -226,7 +226,7 @@ Sidebars.Properties.Scene = function ( editor ) {
 
 	var gravityRow = new UI.Panel();
 
-	var gravity = new UI.Number( 16 ).setWidth( '60px' ).setRange( 0, 30 ).onChange( function( evt ) {
+	var gravity = new UI.Number( 16 ).setWidth( '60px' ).setRange( 0, 60 ).onChange( function( evt ) {
 		
 		// gravity: negate, as y, i.e. (0, -16, 0)
 		var g = gravity.getValue();
@@ -248,7 +248,7 @@ Sidebars.Properties.Scene = function ( editor ) {
 	var gravityBehaviourPresets = {
 		
 		'Normal': [Infinity, 16],
-		'Constant': [5, 30]
+		'Constant': [10, 60]
 		
 	}
 	
