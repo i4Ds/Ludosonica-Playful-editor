@@ -36,7 +36,7 @@ var Config = function () {
 
 			window.localStorage[ name ] = JSON.stringify( storage );
 
-			console.log( '[' + /\d\d\:\d\d\:\d\d/.exec( new Date() )[ 0 ] + ']', 'Saved config to LocalStorage.' );
+			Logger.info('[' + /\d\d\:\d\d\:\d\d/.exec( new Date() )[ 0 ] + ']', 'Saved config to LocalStorage.', "logged by Config.js");
 
 		},
 

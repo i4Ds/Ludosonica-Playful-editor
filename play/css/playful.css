@@ -25,17 +25,25 @@
 	background-color: #e6e6e6;
 	border-radius: 0.2em;
 	border: 1px solid #ccc;
-	position: absolute; top: 0.3em; left: 0.3em;
+	//position: absolute; top: 0.3em; left: 0.3em;
 }
 
 #view.buttongroup {
+	position: absolute;
 	top: auto;
 	bottom: 0.3em;
 	display: none;
 }
 #modes.buttongroup {
-	left: auto;
-	right: 0.3em;
+	//left: auto;
+	//right: 0.3em;
+	float: right;
+	margin: 0.3em;
+}
+
+#menu.buttongroup{
+	float: left;
+	margin: 0.3em;
 }
 
 .buttongroup .button{
@@ -50,10 +58,12 @@
 }
 .buttongroup .button:first-child {
 	border-left: none;
-	border-radius: 0.2em 0 0 0.2em;
+	border-top-left-radius: 0.2em;
+	border-bottom-left-radius: 0.2em;
 }
 .buttongroup .button:last-child {
-	border-radius: 0 0.2em 0.2em 0;
+	border-top-right-radius: 0.2em;
+	border-bottom-right-radius: 0.2em;
 }
 
 
@@ -250,7 +260,7 @@
 		outline: none;
 		height: 12em;
 		color: #444;
-		width: 18em;
+		width: 100%;
 		float: right;
 	}
 	.sidebar .Panel.FancySelect .option {
@@ -266,17 +276,18 @@
 		text-overflow: ellipsis;
 		overflow: hidden;
 	}
-	.sidebar .Panel.FancySelect .option span[class^="icon-"] {
+	.sidebar .Panel.FancySelect .option span[class^="icn"] {
 		font-size: 1.2em; line-height: 0.6em;
 		float: right;
 		color: #ccc;
 		cursor: pointer; margin-left: 0.4em;
 	}
-	.sidebar .Panel.FancySelect .option:hover span.icon-dupli-small {
+	.sidebar .Panel.FancySelect .option:hover span.icn {
 		color: #5365d3;
 	}
-	.sidebar .Panel.FancySelect .option:hover span.icon-del-small {
-		color: #d00;
+	.sidebar .Panel.FancySelect .option:hover span.icn-delete {
+		//color: #d00;
+		color: #e57245;
 	}
 	
 	

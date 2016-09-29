@@ -83,3 +83,12 @@
 .icon-file:before {
   content: "o";
 }
+.icon-template:before {
+  content: "p";
+}
+.icon-add-template:before {
+  content: "r";
+}
+.icon-scene:before {
+  content: "q";
+}

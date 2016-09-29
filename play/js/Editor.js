@@ -44,9 +44,9 @@ var Editor = function () {
 		leapBoxChanged: new SIGNALS.Signal(),
 		windowResize: new SIGNALS.Signal(),
 		
-		menuButtonClicked: new SIGNALS.Signal()
+		menuButtonClicked: new SIGNALS.Signal(),
 
-
+		templateAdded: new SIGNALS.Signal()
 
 	};
 	
@@ -70,11 +70,18 @@ var Editor = function () {
 	this.helpers = {};
 	
 	this.soundCollection;
+
+	this.objectPropertyService = new ObjectPropertyService();
 	
 	this.theme = new Editor.Theme( this );
 	this.play = new Play( this );
+
+	this.templateManager = new Editor.TemplateManager( this );
 	
 	this.omittedObjects = [ "Skybox", "Helper" ]; // objects which don't appear in the scenegraph
+
+	this.templateInstanceMap = [];
+
 
 };
 
@@ -82,6 +89,7 @@ Editor.prototype = {
 
 	// set the editor's theme
 	setTheme: function ( value ) {
+		console.log(value);
 
 		//document.getElementById( 'theme' ).href = value;
 
@@ -165,6 +173,7 @@ Editor.prototype = {
 	setObjectName: function ( object, name ) {
 
 		object.name = name;
+		object.instanceChanged.dispatch();
 		this.signals.sceneGraphChanged.dispatch();
 
 	},
@@ -297,8 +306,8 @@ Editor.prototype = {
 		object._egh.material.needsUpdate = true;
 	
 	},
-	//
 
+// Add helper object to show a wireframe box (with no face diagonals) around an object
 	addHelper: function () {
 
 		var geometry = new THREE.SphereGeometry( 0.2, 4, 2 );
@@ -396,11 +405,13 @@ Editor.prototype = {
 
 			this.config.setKey( 'selected', object.uuid );
 
+
 		} else {
 
 			this.config.setKey( 'selected', null );
 
 		}
+
 
 		this.signals.objectSelected.dispatch( object );
 
@@ -420,6 +431,13 @@ Editor.prototype = {
 
 		} );
 
+	},
+
+	selectTemplateById: function ( id ) {
+
+		var templObject = this.templateManager.getTemplateById( id );
+
+		this.select( templObject );
 	},
 
 	selectByUuid: function ( uuid ) {
@@ -815,6 +833,6 @@ Editor.prototype = {
 			
 			this.sceneChildrenSaves = undefined;
 		}
-	},
+	}
 
-}
+};

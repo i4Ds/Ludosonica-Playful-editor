@@ -6,7 +6,7 @@ _lS = {
 	init: function() {
 	
 		if ( !editor._isLoadingFile ) {
-			console.log(' set theme fog ');
+			Logger.info(' set theme fog ', '_LS');
 			var fogColor = new THREE.Color( 0x0099bb );
 			editor.signals.fogTypeChanged.dispatch( 'Fog' );
 			editor.signals.fogColorChanged.dispatch( fogColor.getHex() );
@@ -28,7 +28,7 @@ _lS = {
 	/* decorate will be called on object creation, scene creation or theme selection */
 	decorate: function( object ) {
 		
-		console.log(object)
+		console.log(object);
 		o = object;
 		if ( object instanceof THREE.Mesh ) {
 			
