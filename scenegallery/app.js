@@ -5,7 +5,7 @@ var path = require('path');
 //var logger = require('morgan');
 //var cookieParser = require('cookie-parser');
 //var bodyParser = require('body-parser');
-
+// Matej's code
 var app = express();
 
 GLOBAL.db = './gallery.db';
@@ -33,6 +33,10 @@ db.serialize(function() {
 	db.run("CREATE TABLE IF NOT EXISTS captcha_session ( token TEXT PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL )");
 });
 db.close();
+
+var db = new sqlite3.Database('./database.sqlite3');
+ db.run ("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,username TEXT NOT NULL,password TEXT NOT NULL, salt TEXT NOT NULL ) ");
+ db.close();
 
 
 
