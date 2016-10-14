@@ -8,7 +8,7 @@
 	<body>
 		<link href="css/types.css" rel="stylesheet" />
 		<link id="theme" href="css/light.css" rel="stylesheet" />
-		
+
 		<link href="icons/styles.css" rel="stylesheet" />
 		<link href="css/playful.css" rel="stylesheet" />
 
@@ -89,7 +89,7 @@
 		<script src="js/GalleryPanel.js"></script>
 		<script src="js/GalleryCameraPanel.js"></script>
 		<script src="js/GalleryUploadPanel.js"></script>
-		
+
 		<script src="js/sidebars/Sidebars.js"></script>
 		<script src="js/sidebars/Sidebars.Add.js"></script>
 		<script src="js/sidebars/Sidebars.File.js"></script>
@@ -131,28 +131,28 @@
 		uniform float c;
 		uniform float p;
 		varying float intensity;
-		void main() 
+		void main()
 		{
 			vec3 vNormal = normalize( normalMatrix * normal );
 			vec3 vNormel = normalize( normalMatrix * viewVector );
 			intensity = pow( c - dot(vNormal, vNormel), p );
-			
+
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 		}
 		</script>
 
 		<!-- fragment shader a.k.a. pixel shader -->
-		<script id="glowFragmentShader" type="x-shader/x-vertex"> 
+		<script id="glowFragmentShader" type="x-shader/x-vertex">
 		uniform vec3 glowColor;
 		varying float intensity;
-		void main() 
+		void main()
 		{
 			vec3 glow = glowColor * intensity;
 			gl_FragColor = vec4( glow, 1.0 );
 		}
 		</script>
 		<!-- ----------------------------------------------------------- -->
-		
+
 		<!-- Three.js overrides -->
 		<script>
 		THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
@@ -169,27 +169,27 @@
 					var material = loader.parse( data );
 
 					material.uuid = data.uuid;
-					
+
 					material.edges = data.edges;
-					
+
 					material.runtimeMaterials = data.runtimeMaterials;
-					
+
 					// load textures
 					if ( data.map ) {
 						var loadedFile = editor.loader.loadedTexturesFolder.file( data.map );
 						if ( loadedFile ) {
 							material.map = new THREE.Texture(); //shim so that uv buffers get allocated at init
-						
+
 							var loadedTexture = loadedFile.asArrayBuffer();
 							var file = new Blob([loadedTexture]);
-							
+
 							var reader = new FileReader();
 							reader.addEventListener( 'load', function ( event ) {
-								
+
 								var image = document.createElement( 'img' );
 								image.addEventListener( 'load', function( event ) {
 									var args = this;
-	
+
 									var texture = new THREE.Texture( image );
 									texture.sourceFile = args[ 2 ];
 									texture.sourceBlob = args[ 1 ];
@@ -197,7 +197,7 @@
 
 									args[ 0 ].map = texture;
 									args[ 0 ].needsUpdate = true;
-									
+
 									editor.signals.materialChanged.dispatch( args[ 0 ] );
 
 								}.bind( this ), false );
@@ -205,25 +205,23 @@
 								image.src = event.target.result;
 
 							}.bind( [material, file, data.map] ), false );
-						
+
 							reader.readAsDataURL( file );
-							
+
 						}
-						
-					}					
-					
-					//if physijs data was stored create a physical material instead
-					if (data.restitution) {
-						material = Physijs.createMaterial(
-							material,
-							data.friction,
-							data.restitution
-						);
-					} else {
-						console.log('no restitution', data);
+
 					}
 
-					
+					//create a physical material
+						var friction = data.friction || 0;
+						var restitution = data.restitution || 0;
+						material = Physijs.createMaterial(
+							material,
+							friction,
+							restitution
+						);
+
+
 					if ( data.name !== undefined ) material.name = data.name;
 
 					materials[ data.uuid ] = material;
@@ -235,38 +233,38 @@
 			return materials;
 
 		};
-		
+
 		// substitutes the sounds with the sound name
 		var traverseForSound = function ( object ) {
-			
+
 			for (var k in object) {
 				if (object.hasOwnProperty( k )) {
-					
+
 					if ( k == 'sound' && object[ k ] != undefined ) {
-						
+
 						var soundName = object[ k ];
 						var loadedFile = editor.loader.loadedSoundsFolder.file( soundName );
 						if ( loadedFile ) {
-						
+
 							var loadedSound = loadedFile.asArrayBuffer();
 							object[ k ] = new Blob([loadedSound]);
 							object[ k ].name = soundName;
-							
+
 						} else {
-						
+
 							console.warn( 'Could not find soundfile ' + soundName );
-						
+
 						}
-					
+
 					} else if ( typeof object[ k ] == 'object' ) {
 						traverseForSound( object[ k ]);
 					}
-					
+
 				}
 			}
-			
+
 		};
-		
+
 		THREE.ObjectLoader.prototype.parseObject = function () {
 
 			var matrix = new THREE.Matrix4();
@@ -280,33 +278,33 @@
 					case 'Scene':
 
 						object = new Physijs.Scene( {fixedTimeStep: 1/120} );
-						
+
 						if ( data.fog !== undefined ) {
 							object.fog = new THREE[ data.fog.type ]( data.fog.color, data.fog.type == 'Fog' ? data.fog.near : data.fog.density, data.fog.far );
 							editor.signals.fogColorChanged.dispatch( data.fog.color );
 							console.log('loaded fog', object.fog);
 						}
-						
+
 						if ( data.skybox ) {
-						
+
 							if ( data.skybox.textures ) {
-							
+
 								var textureList = [];
 								for ( var i = 0; i < 6; i++ ) {
-									
+
 									var loadedFile = editor.loader.loadedTexturesFolder.file( data.skybox.textures[ i ] );
 									if ( loadedFile ) {
-									
+
 										var loadedTexture = loadedFile.asArrayBuffer();
 										var file = new Blob([loadedTexture]);
-										
+
 										var reader = new FileReader();
 										reader.addEventListener( 'load', function ( event ) {
-											
+
 											var image = document.createElement( 'img' );
 											image.addEventListener( 'load', function( event ) {
 												var args = this;
-				
+
 												var texture = new THREE.Texture( image );
 												texture.sourceFile = args[ 2 ];
 												texture.sourceBlob = args[ 1 ];
@@ -322,28 +320,28 @@
 										}.bind( [i, file, data.skybox.textures[ i ]] ), false );
 
 										reader.readAsDataURL( file );
-										
+
 									}
-								
+
 								}
-								
+
 							}
-							
+
 							editor.signals.skyboxChanged.dispatch( data.skybox.type );
-						
+
 						}
 
 						object.hasLeapBox = data.hasLeapBox;
-						
+
 						object.maxVelocity = data.maxVelocity ? data.maxVelocity : Infinity;
-						
+
 						if (!data._gravity) {
 							data._gravity = new THREE.Vector3(0, -16, 0)
 						}
-						
+
 						object._gravity = data._gravity
 						object.setGravity( object._gravity );
-						
+
 						break;
 
 					case 'PerspectiveCamera':
@@ -413,54 +411,54 @@
 							console.error( 'THREE.ObjectLoader: Undefined material ' + data.material );
 
 						}
-						
+
 						// CUSTOM
 						if ( data.physiMeshType && Physijs[ data.physiMeshType ] ) {
 							object = new Physijs[ data.physiMeshType ]( geometry, material );
-						} 
+						}
 						// END CUSTOM
-						else 
-						{						
+						else
+						{
 
 							object = new THREE.Mesh( geometry, material );
-						
+
 						}
-						
+
 						// CUSTOM
 						object.isStatic = data.isStatic;
-						
+
 						if ( data.events != undefined ) {
-							
+
 							object.events = data.events;
 							traverseForSound( object.events );
 						}
-						
+
 						if ( data.behaviors !== undefined ) {
-						
+
 							object.behaviors = data.behaviors;
-						
+
 						}
-						
+
 						// every object will have shadows so it's not exported/imported
 						object.castShadow = true;
 						object.receiveShadow = true;
-						
-						
+
+
 						if ( material.edges ) {
 							editor.setEdge( object );
 						}
-						
+
 						/*if ( object.material.map ) {
 							console.log('has map');
 							object.material.map.image.addEventListener( 'load', function( event ) {
-							
+
 								object.geometry.uvsNeedUpdate = true;
 								object.geometry.buffersNeedUpdate = true;
 								object.material.needsUpdate = true;
 
 							}, false );
 						}*/
-						
+
 						/*console.log('update uvs', object.geometry.faceVertexUvs[0].length, object.geometry.faceVertexUvs[0][0]);
 						object.geometry.uvsNeedUpdate = true;
 						object.geometry.buffersNeedUpdate = true;
@@ -525,24 +523,24 @@
 			}
 
 		}();
-		
+
 		// We also want the objects to clone other stuff, like sounds
-		
+
 		THREE.Object3D.prototype.cloneBase = THREE.Object3D.prototype.clone;
 		THREE.Object3D.prototype.clone = function ( object, recursive ) {
 
 			object = THREE.Object3D.prototype.cloneBase.call( this, object, recursive );
-			
+
 			// clone sounds
 			if ( this.sounds != undefined ) {
-				
+
 				object.sounds = { };
-				
+
 				for (var key in this.sounds) {
 					if (this.sounds.hasOwnProperty( key )) {
-					
+
 						object.sounds[ key ] = this.sounds[ key ];
-						
+
 					}
 				}
 			}
@@ -550,11 +548,11 @@
 			return object;
 
 		};
-		
+
 		THREE.Geometry.prototype.clone = function () {
 
 			var geometry = new THREE.Geometry(), geomParams = this.parameters;
-			
+
 			var handleParameters = function( type, params ) {
 				geometry = new type(
 					params[0] ? geomParams[ params[0] ] : undefined,
@@ -572,9 +570,9 @@
 					params[1] ? geomParams[ params[1] ] : undefined,
 					params[2] ? geomParams[ params[2] ] : undefined );*/
 			};
-			
+
 			if ( this instanceof THREE.PlaneGeometry ) {
-			
+
 				handleParameters( THREE.PlaneGeometry, [ 'width', 'height', 'widthSegments', 'heightSegments' ] );
 
 			} else if ( this instanceof THREE.BoxGeometry ) {
@@ -638,28 +636,28 @@
 					geometry.faceVertexUvs[ 0 ].push( uvCopy );
 
 				}
-			
+
 			}
 
 			return geometry;
 
-		} 
+		}
 		</script>
-		
+
 		<script>
-			
+
 			// physijs paths
-			
+
 			Physijs.scripts.worker = 'js/libs/physijs_worker.js';
 			Physijs.scripts.ammo = 'ammo.js';
-			
+
 			//
 
 			window.URL = window.URL || window.webkitURL;
 			window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
 			var workMode = 'easy';
-			
+
 			var editor = new Editor();
 
 			var viewport = new Viewport( editor ).setId( 'viewport' );
@@ -670,34 +668,34 @@
 
 			var sidebars = new Sidebars( editor ).setId( 'sidebars' );
 			document.body.appendChild( sidebars.dom );
-			
+
 			var tools = new Tools( editor ).setId( 'tools' );
 			document.body.appendChild( tools.dom );
-			
+
 			var gallery = new GalleryPanel( editor ).setId('gallery');
 			document.body.appendChild( gallery.dom );
 
 			var galleryCamera = new GalleryCameraPanel( editor ).setId('galleryCamera');
 			document.body.appendChild( galleryCamera.dom );
-			
+
 			var galleryUpload = new GalleryUploadPanel( editor ).setId('galleryUpload');
 			document.body.appendChild( galleryUpload.dom );
-			$( window ).load( function(){ 
-				grecaptcha.render( 
+			$( window ).load( function(){
+				grecaptcha.render(
 					$('.g-recaptcha')[0],
-					{ 
+					{
 						'sitekey' : '6Ld5j_8SAAAAADdyhgzdoSKe6LRR8c75rW5F9RWr',
 						'data-theme':'dark',
-					});	
+					});
 			});
-			
-			
-			
+
+
+
 
 			//
 
 			editor.storage.init( function () {
-				
+
 				editor.storage.get( function ( state ) {
 
 					if ( state !== undefined ) {
@@ -707,26 +705,26 @@
 
 						editor.setScene( scene );*/
 						state.type = 'application/zip';
-						
+
 						// before load select theme, as it may alter the (default/loaded) scene and objects
 						editor.setTheme( editor.config.getKey( 'theme' ) );
-						
+
 						if ( !editor.theme.isLoading ) {
-						
+
 							editor.loader.loadFile( state );
-						
+
 						} else {
-							
+
 							editor.signals.themeLoaded.addOnce( function () {
 								editor.loader.loadFile( this );
 							}.bind( state ) );
-						
+
 						}
 
 					} else {
-					
+
 						//default scene
-						
+
 						var color = 0xffffff;
 						var intensity = 1.0;
 
@@ -741,29 +739,29 @@
 						light.shadowCameraBottom = -3;
 						light.castShadow = true;
 						//dl.shadowCameraVisible = true;
-						
+
 						//editor.scene.traverse( function(el) { if (el._physijs) { el.castShadow = true; el.receiveShadow = true; } });
 
 						light.position.set( 2, 9, 2.5 );
 
 						editor.addObject( light );
-						
-						
+
+
 						editor.scene.fog = new THREE.Fog( 0xAAAAAA, 0.01, 50 );
 						editor.scene.hasLeapBox = true;
 						editor.scene._gravity = new THREE.Vector3(0, -16, 0);
 						editor.scene.setGravity( editor.scene._gravity );
 						editor.scene.maxVelocity = Infinity;
-						
-						
+
+
 						var color = 0x222222;
 
 						var light = new THREE.AmbientLight( color );
 						light.name = 'AmbientLight default';
 
 						editor.addObject( light );
-						
-						
+
+
 						var width = 100;
 						var height = 0.1;
 						var depth = 100;
@@ -781,13 +779,13 @@
 						var mesh = new Physijs.BoxMesh( geometry, material );
 						mesh.name = 'Ground';
 						mesh.position.set(0, -0.1, 0);
-						mesh.receiveShadow = true;						
+						mesh.receiveShadow = true;
 						mesh.isStatic = true;
 
 						editor.addObject( mesh );
-						
+
 						editor.setTheme( editor.config.getKey( 'theme' ) );
-						
+
 					}
 
 					var selected = editor.config.getKey( 'selected' );
@@ -800,8 +798,8 @@
 
 				} );
 
-				//load remote scene				
-				var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);					
+				//load remote scene
+				var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);
 				if( sceneId !== null ){
 					editor.loader.loadRemotePlayful(sceneId[0]);
 				}
@@ -818,18 +816,18 @@
 						if ( !viewport.play ) {
 							//editor.storage.set( { sceneobjects: exporter.parse( editor.scene ), sounds: exporter.sounds } );
 							editor.storage.createZip( function( blob ) {
-							
+
 								blob.name = 'playful.playful';
 								//blob.type = "application/octet-stream";
-							
+
 								editor.storage.store( blob );
-								
+
 								/* new File( blob, 'playful.playful', {
 									type: "application/octet-stream" // optional - default = ''
 								} ) );*/
-							
+
 							});
-							
+
 						}
 
 					}, 1000 );
@@ -843,9 +841,12 @@
 				signals.objectRemoved.add( saveState );
 				signals.materialChanged.add( saveState );
 				signals.sceneGraphChanged.add( saveState );
+				signals.fogTypeChanged.add( saveState );
+				signals.fogColorChanged.add( saveState );
+				signals.fogParametersChanged.add( saveState );
 
 			} );
-			
+
 			//
 
 			document.addEventListener( 'dragover', function ( event ) {
@@ -866,7 +867,7 @@
 
 				switch ( event.keyCode ) {
 
-					case 8: // prevent browser back 
+					case 8: // prevent browser back
 						event.preventDefault();
 						break;
 					case 46: // delete
@@ -888,13 +889,13 @@
 			window.addEventListener( 'resize', onWindowResize, false );
 
 			onWindowResize();
-			
+
 			//
-			
+
 			window.fireCustomEvent = function( element, eventName, data ) {
-				
+
 				/*var event;
-			
+
 				if (document.createEvent) {
 					event = document.createEvent("HTMLEvents");
 					event.initEvent(eventName, true, true);
@@ -904,21 +905,21 @@
 				}
 
 				event.eventName = eventName;
-				
+
 				if (document.createEvent) {
 					element.dispatchEvent(event);
 				} else {
 					element.fireEvent("on" + event.eventType, event);
 				}*/
-				
+
 				// Create the event
 				var event = new CustomEvent(eventName);
 
 				// Dispatch/Trigger/Fire the event
 				element.dispatchEvent(event);
-			
+
 			};
-			
+
 			//CustomEvent polyfill
 			(function () {
 			  function CustomEvent ( event, params ) {
