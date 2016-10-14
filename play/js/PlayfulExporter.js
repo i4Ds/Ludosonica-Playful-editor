@@ -11,8 +11,6 @@ THREE.PlayfulExporter.prototype = {
 
 	parse: function ( object ) {
 
-		console.log(object);
-
 		var output = {
 			metadata: {
 				version: 4.3,
@@ -169,11 +167,6 @@ THREE.PlayfulExporter.prototype = {
 			if ( materials[ material.uuid ] === undefined ) {
 
 				var data = materialExporter.parse( material );
-
-				if(data.type != 'MeshPhongMaterial'){
-					console.log(data);
-					Logger.warn( data , "logged by PlayfulExporter.js row 173");
-				}
 
 				delete data.metadata;
 
