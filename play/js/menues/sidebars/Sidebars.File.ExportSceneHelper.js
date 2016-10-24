@@ -6,8 +6,6 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 	
 	var output = exporter.parse( editor.scene );
 
-	console.log(output);
-
 	if ( exporter instanceof THREE.ObjectExporter || exporter instanceof THREE.PlayfulExporter ) {
 
 		output = JSON.stringify( output, null, '\t' );
@@ -45,11 +43,6 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 		};
 		
 		for ( var sI = 0; sI < soundsLength; sI++ ) {
-			if ( typeof sounds[sI] != 'object' ) { 
-				console.warn('Sound is not loaded, can not export!', sounds[sI]);
-				attachmentsLoaded();
-				continue;
-			}
 			var loader = new FileReader();
 			loader.sound = sounds[sI];
 			loader.onload = function() {
@@ -79,4 +72,4 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 	} else {
 		createDownload();
 	}
-}
+};

@@ -18,33 +18,33 @@ THREE.PlayfulExporter.prototype = {
 				generator: 'PlayfulExporter'
 			}
 		};
-		
+
 		var sounds = [], textures = [];
 		this.sounds = sounds;
 		this.textures = textures;
-		
-		
+
+
 		// clones the object and substitutes the sounds with the sound name
 		var traverseForSoundAndClone = function ( object, clone ) {
-			
+
 			for (var k in object) {
 				if (object.hasOwnProperty( k )) {
-					
+
 					if ( k == 'sound' && object[ k ] != undefined ) {
-					
+
 						sounds.push(object[ k ]);
 						clone[ k ] = object[ k ].name;
-					
+
 					} else if ( typeof object[ k ] == 'object' ) {
 						clone[ k ] = {};
 						traverseForSoundAndClone( object[ k ], clone[ k ] );
 					} else {
 						clone[ k ] = object[ k ]
 					}
-					
+
 				}
 			}
-			
+
 		};
 
 		//
@@ -169,21 +169,21 @@ THREE.PlayfulExporter.prototype = {
 				var data = materialExporter.parse( material );
 
 				delete data.metadata;
-				
+
 				// CUSTOM
-				
+
 				data.edges = material.edges;
-				
+
 				data.runtimeMaterials = material.runtimeMaterials;
-				
+
 				// add textures to data
 				if ( material.map !== undefined && material.map !== null ) {
-					
+
 					textures.push( material.map );
 					data.map = material.map.sourceFile;
-				
+
 				}
-				
+
 				if (material._physijs) {
 					var physics = material._physijs;
 					data.friction = physics.friction;
@@ -216,13 +216,13 @@ THREE.PlayfulExporter.prototype = {
 			if ( object instanceof THREE.Scene ) {
 
 				data.type = 'Scene';
-				
+
 				if ( object.hasLeapBox === false ) {
-					
+
 					data.hasLeapBox = object.hasLeapBox;
-					
+
 				}
-				
+
 				if ( object.fog != undefined ) {
 					data.fog = {
 						type: object.fog instanceof THREE.Fog ? 'Fog' : 'FogExp2',
@@ -232,33 +232,33 @@ THREE.PlayfulExporter.prototype = {
 						density: object.fog.density
 					}
 				}
-				
+
 				if ( object.skybox ) {
-					
+
 					data.skybox = {
 						type: object.skybox.type
-					}
-					
+					};
+
 					if ( object.skybox.type == 'Custom' ) {
-					
+
 						// add the images
 						data.skybox.textures = [];
 						for ( var i = 0; i < 6; i++ ) {
-						
+
 							if ( object.skybox.materials[ i ].map.sourceFile != undefined && object.skybox.materials[ i ].map.sourceFile.indexOf('skybox_RT') == -1 )
 								object.skybox.materials[ i ].map.sourceFile = 'skybox_' + Skybox.prototype.endings[ i ] + '_' + object.skybox.materials[ i ].map.sourceFile;
-							
+
 							if ( object.skybox.materials[ i ].map.sourceBlob) textures.push( object.skybox.materials[ i ].map );
 							data.skybox.textures.push( object.skybox.materials[ i ].map.sourceFile );
-							
+
 						}
-						
+
 					}
-					
+
 				}
-				
+
 				data._gravity = object._gravity;
-				
+
 				data.maxVelocity = object.maxVelocity;
 
 			} else if ( object instanceof THREE.PerspectiveCamera ) {
@@ -317,9 +317,9 @@ THREE.PlayfulExporter.prototype = {
 				data.type = 'Mesh';
 				data.geometry = parseGeometry( object.geometry );
 				data.material = parseMaterial( object.material );
-				
+
 				data.isStatic = object.isStatic;
-				
+
 				// CUSTOM
 				if ( object._physijs ) {
 					if (object instanceof Physijs.PlaneMesh) {
@@ -335,19 +335,19 @@ THREE.PlayfulExporter.prototype = {
 						data.physiMeshType = 'SphereMesh';
 					}
 				}
-				
+
 				if ( object.events != undefined ) {
-				
+
 					data.events = [];
-					
+
 					traverseForSoundAndClone( object.events, data.events );
-				
+
 				}
-				
+
 				if ( object.behaviors != undefined ) {
-				
+
 					data.behaviors = object.behaviors;
-				
+
 				}
 				// END CUSTOM
 
@@ -371,7 +371,7 @@ THREE.PlayfulExporter.prototype = {
 				for ( var i = 0; i < object.children.length; i ++ ) {
 
 					if ( editor.omittedObjects.indexOf( object.children[ i ].name ) != -1 ) continue;
-				
+
 					data.children.push( parseObject( object.children[ i ] ) );
 
 				}
@@ -380,18 +380,18 @@ THREE.PlayfulExporter.prototype = {
 
 			return data;
 
-		}
+		};
 
 		output.object = parseObject( object );
-		
+
 		return output;
 
 	},
-	
+
 	getSounds: function() {
 		return this.sounds;
 	},
-	
+
 	getTextures: function() {
 		return this.textures;
 	}

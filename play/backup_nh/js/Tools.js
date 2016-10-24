@@ -13,4 +13,4 @@ var Tools = function ( editor ) {
 
 	return container;
 
-}
+};

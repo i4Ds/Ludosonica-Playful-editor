@@ -1,3 +1,7 @@
+/**
+ * extended fiona
+ */
+
 var UI = {};
 
 UI.Element = function () {};
@@ -7,7 +11,7 @@ UI.Element.prototype = {
 	setId: function ( id ) {
 
 		this.dom.id = id;
-		
+
 		return this;
 
 	},
@@ -700,6 +704,7 @@ UI.Number = function ( number ) {
 
 UI.Number.prototype = Object.create( UI.Element.prototype );
 
+
 UI.Number.prototype.getValue = function () {
 
 	return parseFloat( this.dom.value );
@@ -962,30 +967,30 @@ UI.Sound = function (  ) {
 	dom.className = 'SoundDrop';
 
 	this.dom = dom;
-	
+
 	this.dom.dropArea = document.createElement( 'div' );
 	this.dom.dropArea.className = 'dropArea';
 	this.dom.dropArea.textContent = 'Drop audio file here';
-	
+
 	this.dom.appendChild( this.dom.dropArea );
-	
+
 	var playButton = document.createElement( 'button' );
 	playButton.textContent = '>';
 	playButton.style.display = 'none';
 	this.dom.playButton = playButton;
-	
+
 	this.dom.appendChild( playButton );
-	
-	
+
+
 	this.dom._deleteSoundButton = document.createElement( 'button' );
 	this.dom._deleteSoundButton.className = 'deleteButton';
 	this.dom._deleteSoundButton.textContent = 'x';
 	this.dom._deleteSoundButton.addEventListener( 'click', this.setValue.bind(this) );
-	
+
 	// Setup the dnd listeners.
 	this.dom.addEventListener('dragover', this.handleDragOver.bind(this), false);
 	this.dom.addEventListener('drop', this.handleFileSelect.bind(this), false);
-	
+
 	// create the (initially inactive) play listeners
 	this._mouseListeners = {
 		down: this.play.bind(this),
@@ -1011,8 +1016,8 @@ UI.Sound.prototype.handleFileSelect = function(evt) {
 	evt.preventDefault();
 
 	var files = evt.dataTransfer.files; // FileList object.
-	
-	if (files && files[0]) {		
+
+	if (files && files[0]) {
 		this.setValue( files[0] );
 	}
 }
@@ -1030,25 +1035,25 @@ UI.Sound.prototype.getValue = function() {
 UI.Sound.prototype.setValue = function(sound) {
 
 	if (sound instanceof Blob) {
-	
+
 		// add sound
 		this.sound = sound;
 		editor.soundCollection.add( sound, function( buffer ) {
-		
+
 			var changeEvent = document.createEvent('HTMLEvents');
 			changeEvent.initEvent( 'change', true, true );
 			changeEvent.buffer = buffer;
 			this.dom.dispatchEvent( changeEvent );
-			
+
 		}.bind(this) );
 		this.dom.dropArea.textContent = sound.name;
 		this.dom.dropArea.appendChild ( this.dom._deleteSoundButton );
 		this.dom.playButton.style.display = '';
 		this.dom.playButton.addEventListener( 'mousedown', this._mouseListeners.down, false );
 		this.dom.playButton.addEventListener( 'mouseup', this._mouseListeners.up, false );
-		
+
 	} else {
-	
+
 		// remove sound
 		this.stop();
 		this.dom.playButton.style.display = 'none';
@@ -1056,12 +1061,12 @@ UI.Sound.prototype.setValue = function(sound) {
 		this.dom.playButton.removeEventListener( 'mouseup', this._mouseListeners.up, false );
 		this.dom.dropArea.textContent = 'Drop audio file here';
 		this.sound = undefined;
-		
+
 		var changeEvent = document.createEvent('HTMLEvents');
 		changeEvent.initEvent( 'change', true, true );
 		this.dom.dispatchEvent( changeEvent );
 	}
-	
+
 };
 
 UI.Sound.prototype.play = function() {
@@ -1086,14 +1091,14 @@ UI.EventList = function (  ) {
 	UI.Element.call( this );
 
 	var scope = this;
-	
+
 	this.eventList = [];
 
 	var dom = document.createElement( 'div' );
 	dom.className = 'EventList';
 
 	this.dom = dom;
-	
+
 	this.dom.eventTemplate = document.createElement( 'div' );
 	this.dom.eventTemplate.innerHTML = '\
 	<select size="1">\
@@ -1112,18 +1117,18 @@ UI.EventList = function (  ) {
 		<option>Change Static</option>\
 	</select>\
 	<button style="display: none;">+</button>\
-	<button class="eventDeleteButton"><img src="images/iconset/Delete.png" /></button>\
+	<button class="icon-del-small eventDeleteButton">\
 	<div class="eventProperties" style="display: none;"></div>';
-	
-	
+
+
 	this.dom.addButton = document.createElement( 'button' );
-	this.dom.addButton.textContent = '+';	
+	this.dom.addButton.textContent = '+';
 	this.dom.appendChild( this.dom.addButton );
-	
+
 	this.dom.addButton.addEventListener('click', this.add.bind(this), false);
-	
-	
-	
+
+
+
 	this.dom._changeEvent = document.createEvent('HTMLEvents');
 	this.dom._changeEvent.initEvent( 'change', true, true );
 	this.fireChange = function() { this.dom.dispatchEvent( this.dom._changeEvent ); }.bind( this );
@@ -1137,26 +1142,26 @@ UI.EventList.prototype = Object.create( UI.Element.prototype );
 // tripperProperties and actionProperties is where you can define your triggers and actions!
 UI.EventList.prototype.triggerProperties = {
 	"Touch Fist": {
-		
+
 	},
 	"Touch Point": {
-	
+
 	},
 	"Touch Stroke": {
-	
+
 	},
 	Collision: {
-	
+
 	},
 	Appear: {
-	
+
 	}
 };
 
 UI.EventList.prototype.actionProperties = {
 	Toss: {
 		getUI: function (  ) {
-				
+
 			var container = new UI.Panel();
 			var xPanel = new UI.Panel();
 			var yPanel = new UI.Panel();
@@ -1171,7 +1176,7 @@ UI.EventList.prototype.actionProperties = {
 			container.add( yPanel );
 			container.add( zPanel );
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject ) {
 
@@ -1192,57 +1197,57 @@ UI.EventList.prototype.actionProperties = {
 	},
 	"Play sound": {
 		getUI: function ( eventNode ) {
-		
+
 			var self = this;
 			var container = new UI.Panel();
 			var sound = new UI.Sound().onChange( function( event ) {
-				
+
 				if ( event.buffer ) {
-					
+
 					/*if ( editor.config.getKey('defaultColor') == 'RMS' ) {
-					
+
 						editor.signals.soundAdded.dispatch( event.buffer, editor.selected.material );
-						
+
 					}*/
-					
+
 				}
-				
+
 				self.fireChange();
-				
+
 			} );
-			
+
 			container.add( new UI.Text( 'Sound' ).setWidth( '90px' ) );
 			container.add( sound );
 			eventNode._soundProperty = sound;
 
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject, eventNode ) {
-			
+
 			//save the sound itself in the event list
 			resultObject.sound = eventNode._soundProperty.getValue();
-			
+
 		},
 		setData: function ( container, dataObject, eventNode ) {
-			
+
 			eventNode._soundProperty.setValue( dataObject.sound );
-			
+
 		}
 	},
 	"Change Static": {
 		getUI: function ( eventNode ) {
-		
+
 			var container = new UI.Panel();
-			
+
 			container.add( new UI.Text( 'Action' ).setWidth( '90px' ) );
 			container.add( new UI.Select().setOptions( { 0:'Set dynamic', 1:'Set static', 2:'Toggle static' } ).onChange( this.fireChange ) );
-			
+
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject, eventNode ) {
-			
+
 			var staticSelect = container.dom.querySelector('select');
 			resultObject.mode = staticSelect.value;
 
@@ -1255,101 +1260,101 @@ UI.EventList.prototype.actionProperties = {
 		}
 	},
 	"Stop sounds": { },
-	
+
 };
 
 UI.EventList.prototype.setProperties = function ( trigger, action, propertiesElement, eventNode ) {
 
 	// empty the maybe already used property field
 	propertiesElement.clear();
-	
+
 	if ( this.triggerProperties[ trigger ] && this.triggerProperties[ trigger ].getUI ) propertiesElement.add( this.triggerProperties[ trigger ].getUI.call( this, eventNode ) );
 	if ( this.actionProperties[ action ] && this.actionProperties[ action ].getUI ) propertiesElement.add( this.actionProperties[ action ].getUI.call( this, eventNode ) );
 
 };
 
 UI.EventList.prototype.getValue = function ( ) {
-	
+
 	var eventList = [];
-	
+
 	// get event and action for every row, and read the data
 	var events = this.eventList;
-	
+
 	for(var i = 0; i < events.length; ++i) {
-	
+
 		var event = events[ i ];
 		if ( event.parentNode != this.dom ) continue;
-		
+
 		var trigger = event.querySelector('select').value;
 		var action = event.getElementsByClassName('eventActionSelector')[0].value;
 		if ( trigger != '...' && action != '...' ) {
-		
+
 			var data = {
 				trigger: { type: trigger },
 				action: { type: action }
-			}
-			
+			};
+
 			var propertiesElement = new UI.Panel( event.getElementsByClassName('eventProperties')[0] );
-			
+
 			if ( this.triggerProperties[ trigger ].getData ) this.triggerProperties[ trigger ].getData( propertiesElement, data.trigger, event );
 			if ( this.actionProperties[ action ].getData ) this.actionProperties[ action ].getData( propertiesElement, data.action, event );
-			
+
 			eventList.push( data );
 		}
-	
+
 	}
-	
+
 	return eventList;
-	
+
 };
 
 UI.EventList.prototype.setValue = function ( events ) {
-	
+
 	// first, clear all entries
 	var oldRows = this.dom.parentNode.querySelectorAll( 'div.EventList > div' );
 	for ( var i = 0; i < oldRows.length; i++ ) {
-		
+
 		this.dom.removeChild( oldRows[ i ] );
-		
+
 	}
 	this.eventList = [];
-	
+
 	if ( events != undefined ) {
-		
+
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
-		
+
 		//temporarily disable the change events or they'll get fired all the time while setting default data
 		var _fireChangeBackup = this.fireChange;
 		this.fireChange = function() { };
-		
+
 		for ( var i = 0; i < events.length; i++ ) {
-		
+
 			var event = events[ i ];
-			
+
 			var row = this.add();
-			
+
 			var propertiesElement = new UI.Panel( row.getElementsByClassName('eventProperties')[0] );
-			
+
 			// set selects
 			var selects = row.querySelectorAll('select');
 			selects[0].value = event.trigger.type;
 			selects[0].dispatchEvent(evt);
 			selects[1].value = event.action.type;
 			selects[1].dispatchEvent(evt);
-			
+
 			var eventNode = this.eventList[ this.eventList.length - 1 ];
-			
+
 			// set properties
 			if ( this.triggerProperties[ event.trigger.type ].setData ) this.triggerProperties[ event.trigger.type ].setData( propertiesElement, event.trigger, eventNode );
 			if ( this.actionProperties[ event.action.type ].setData ) this.actionProperties[ event.action.type ].setData( propertiesElement, event.action, eventNode );
 		}
-		
+
 		// activate firing changes again
 		this.fireChange = _fireChangeBackup;
-		
+
 	}
-	
+
 }
 
 UI.EventList.prototype.setLabel = function ( value ) {
@@ -1364,50 +1369,50 @@ UI.EventList.prototype.add = function() {
 
 	//properties will be attached to clone whenever necessary.
 	var clone = this.dom.eventTemplate.cloneNode(true);
-	
+
 	this.dom.insertBefore(clone,this.dom.firstChild);
-	
+
 	var triggerDropdown = clone.querySelector('select');
-	
+
 	//first select
 	triggerDropdown.addEventListener('change', function(event) {
-	
+
 		//get the next (hidden) select
 		var actionSelect = event.target.nextSibling.nextSibling;
-		
+
 		if (event.target.selectedIndex == 0) {
 			//selected the empty option. hide further elements.
 			actionSelect.style.display = 'none';
 		} else {
 			actionSelect.style.display = '';
 		}
-		
+
 	}.bind(this), false);
-	
-	
+
+
 	//second select
 	clone.getElementsByClassName('eventActionSelector')[0].addEventListener('change', function(event) {
 		var actionSelect = event.target;
-		
+
 		if (actionSelect.selectedIndex == 0) {
 			//selected the empty option. hide further elements.
 			clone.querySelector('button').style.display = 'none';
 		} else {
 			clone.querySelector('button').style.display = '';
-			
+
 			this.setProperties( triggerDropdown.value, event.target.value, propertiesElement, clone );
 		}
-		
+
 		this.fireChange();
 	}.bind(this), false);
-	
+
 	var propertiesElement = new UI.Panel( clone.getElementsByClassName('eventProperties')[0] );
-	
+
 	//properties hide/show
 	clone.querySelector('button').addEventListener('click', function(event) {
-		
+
 		//get the next (hidden) select
-		
+
 		if (propertiesElement.dom.style.display == 'none') {
 			//selected the empty option.remove selection
 			propertiesElement.dom.style.display = '';
@@ -1416,19 +1421,19 @@ UI.EventList.prototype.add = function() {
 			propertiesElement.dom.style.display = 'none';
 			event.target.innerHTML = '+';
 		}
-		
+
 	}.bind(this), false);
-	
+
 	clone.getElementsByClassName('eventDeleteButton')[0].addEventListener('click', function(event) {
-	
+
 		this.eventList.splice( this.eventList.indexOf( clone ), 1 );
 		this.dom.removeChild( clone );
 		this.fireChange();
-		
+
 	}.bind(this), false);
-	
+
 	this.eventList.push( clone );
-	
+
 	return clone;
 };
 
@@ -1440,14 +1445,14 @@ UI.RuntimeMaterial = function (  ) {
 	UI.Element.call( this );
 
 	var scope = this;
-	
+
 	this.runtimematerialList = [];
 
 	var dom = document.createElement( 'div' );
 	dom.className = 'RuntimeMaterial';
 
 	this.dom = dom;
-	
+
 	this.dom.eventTemplate = document.createElement( 'div' );
 	this.dom.eventTemplate.innerHTML = '\
 	<select size="1">\
@@ -1462,18 +1467,18 @@ UI.RuntimeMaterial = function (  ) {
 		<option>Edges</option>\
 	</select>\
 	<button style="display: none;">+</button>\
-	<button class="eventDeleteButton"><img src="images/iconset/Delete.png" /></button>\
+	<button class="eventDeleteButton icon-del-small">\
 	<div class="eventProperties" style="display: none;"></div>';
-	
-	
+
+
 	this.dom.addButton = document.createElement( 'button' );
-	this.dom.addButton.textContent = '+';	
+	this.dom.addButton.textContent = '+';
 	this.dom.appendChild( this.dom.addButton );
-	
+
 	this.dom.addButton.addEventListener('click', this.add.bind(this), false);
-	
-	
-	
+
+
+
 	this.dom._changeEvent = document.createEvent('HTMLEvents');
 	this.dom._changeEvent.initEvent( 'change', true, true );
 	this.fireChange = function() { this.dom.dispatchEvent( this.dom._changeEvent ); }.bind( this );
@@ -1488,20 +1493,20 @@ UI.RuntimeMaterial.prototype = Object.create( UI.Element.prototype );
 UI.RuntimeMaterial.prototype.triggerProperties = {
 	"Amplitude": {
 		getUI: function ( eventNode ) {
-		
+
 			var container = new UI.Panel();
-			
+
 			container.add( new UI.Text( 'Scale' ).setWidth( '90px' ) );
 			var scale = new UI.Number(1).setRange(0,100);
 			scale.setClass('amplitudeScale');
 			scale.onChange( this.fireChange );
 			container.add( scale );
-			
+
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject, eventNode ) {
-			
+
 			var scale = container.dom.querySelector('.amplitudeScale');
 			resultObject.scale = scale.value;
 
@@ -1515,20 +1520,20 @@ UI.RuntimeMaterial.prototype.triggerProperties = {
 	},
 	"Time": {
 		getUI: function ( eventNode ) {
-		
+
 			var container = new UI.Panel();
-			
+
 			container.add( new UI.Text( 'Easing' ).setWidth( '90px' ) );
 			var select = new UI.Select().setOptions( Object.keys(Play.Effects.prototype.easing) );
 			select.setClass('timeEasing');
 			select.onChange( this.fireChange );
 			container.add( select );
-			
+
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject, eventNode ) {
-			
+
 			var easingSelect = container.dom.querySelector('.timeEasing');
 			resultObject.easing = easingSelect.options[easingSelect.selectedIndex].text;
 
@@ -1549,24 +1554,24 @@ UI.RuntimeMaterial.prototype.triggerProperties = {
 
 UI.RuntimeMaterial.prototype.actionProperties = {
 	Brightness: {
-	
+
 	},
 	"Color": {
 		getUI: function ( eventNode ) {
-		
+
 			var container = new UI.Panel();
-			
+
 			container.add( new UI.Text( 'Color' ).setWidth( '90px' ) );
 			var colorInput = new UI.Color();
 			colorInput.setClass('colorSelect');
 			colorInput.onChange( this.fireChange );
 			container.add( colorInput );
-			
+
 			return container;
-			
+
 		},
 		getData: function ( container, resultObject, eventNode ) {
-			
+
 			var colorSelect = container.dom.querySelector('.colorSelect');
 			resultObject.color = colorSelect.value;
 
@@ -1579,7 +1584,7 @@ UI.RuntimeMaterial.prototype.actionProperties = {
 		}
 	},
 	Edges: {
-	
+
 	}
 };
 
@@ -1587,94 +1592,94 @@ UI.RuntimeMaterial.prototype.setProperties = function ( trigger, action, propert
 
 	// empty the maybe already used property field
 	propertiesElement.clear();
-	
+
 	if ( this.triggerProperties[ trigger ] && this.triggerProperties[ trigger ].getUI ) propertiesElement.add( this.triggerProperties[ trigger ].getUI.call( this, eventNode ) );
 	if ( this.actionProperties[ action ] && this.actionProperties[ action ].getUI ) propertiesElement.add( this.actionProperties[ action ].getUI.call( this, eventNode ) );
 
 };
 
 UI.RuntimeMaterial.prototype.getValue = function ( ) {
-	
+
 	var runtimematerialList = [];
-	
+
 	// get event and action for every row, and read the data
 	var runtimematerials = this.runtimematerialList;
-	
+
 	for(var i = 0; i < runtimematerials.length; ++i) {
-	
+
 		var rm = runtimematerials[ i ];
 		if ( rm.parentNode != this.dom ) continue;
-		
+
 		var trigger = rm.querySelector('select').value;
 		var action = rm.getElementsByClassName('eventActionSelector')[0].value;
 		if ( trigger != '...' && action != '...' ) {
-		
+
 			var data = {
 				trigger: { type: trigger },
 				action: { type: action }
 			}
-			
+
 			var propertiesElement = new UI.Panel( rm.getElementsByClassName('eventProperties')[0] );
-			
+
 			if ( this.triggerProperties[ trigger ].getData ) this.triggerProperties[ trigger ].getData( propertiesElement, data.trigger, rm );
 			if ( this.actionProperties[ action ].getData ) this.actionProperties[ action ].getData( propertiesElement, data.action, rm );
-			
+
 			runtimematerialList.push( data );
 		}
-	
+
 	}
-	
+
 	return runtimematerialList;
-	
+
 };
 
 UI.RuntimeMaterial.prototype.setValue = function ( events ) {
-	
+
 	// first, clear all entries
 	var oldRows = this.dom.parentNode.querySelectorAll( 'div.RuntimeMaterial > div' );
 	for ( var i = 0; i < oldRows.length; i++ ) {
-		
+
 		this.dom.removeChild( oldRows[ i ] );
-		
+
 	}
 	this.runtimematerialList = [];
-	
+
 	if ( events != undefined ) {
-		
+
 		var evt = document.createEvent("HTMLEvents");
 		evt.initEvent("change", false, true);
-		
+
 		//temporarily disable the change events or they'll get fired all the time while setting default data
 		var _fireChangeBackup = this.fireChange;
 		this.fireChange = function() { };
-		
+
 		for ( var i = 0; i < events.length; i++ ) {
-		
+
 			var event = events[ i ];
-			
+
 			var row = this.add();
-			
+
 			var propertiesElement = new UI.Panel( row.getElementsByClassName('eventProperties')[0] );
-			
+
 			// set selects
 			var selects = row.querySelectorAll('select');
 			selects[0].value = event.trigger.type;
 			selects[0].dispatchEvent(evt);
 			selects[1].value = event.action.type;
 			selects[1].dispatchEvent(evt);
-			
+
 			var rmNode = this.runtimematerialList[ this.runtimematerialList.length - 1 ];
-			
+
 			// set properties
 			if ( this.triggerProperties[ event.trigger.type ].setData ) this.triggerProperties[ event.trigger.type ].setData( propertiesElement, event.trigger, rmNode );
 			if ( this.actionProperties[ event.action.type ].setData ) this.actionProperties[ event.action.type ].setData( propertiesElement, event.action, rmNode );
 		}
-		
+
 		// activate firing changes again
 		this.fireChange = _fireChangeBackup;
-		
+
 	}
-	
+
 }
 
 UI.RuntimeMaterial.prototype.setLabel = function ( value ) {
@@ -1689,53 +1694,53 @@ UI.RuntimeMaterial.prototype.add = function() {
 
 	//properties will be attached to clone whenever necessary.
 	var clone = this.dom.eventTemplate.cloneNode(true);
-	
+
 	this.dom.insertBefore(clone,this.dom.firstChild);
-	
+
 	var triggerDropdown = clone.querySelector('select');
 	var actionDropdown = clone.getElementsByClassName('eventActionSelector')[0];
-	
+
 	//first select
 	triggerDropdown.addEventListener('change', function(event) {
-	
+
 		//get the next (hidden) select
 		var actionSelect = event.target.nextSibling.nextSibling;
-		
+
 		if (event.target.selectedIndex == 0) {
 			//selected the empty option. hide further elements.
 			actionSelect.style.display = 'none';
 		} else {
 			actionSelect.style.display = '';
-			
+
 			this.setProperties( triggerDropdown.value, actionDropdown.value, propertiesElement, clone );
 		}
-		
+
 	}.bind(this), false);
-	
-	
+
+
 	//second select
 	actionDropdown.addEventListener('change', function(event) {
 		var actionSelect = event.target;
-		
+
 		if (actionSelect.selectedIndex == 0) {
 			//selected the empty option. hide further elements.
 			clone.querySelector('button').style.display = 'none';
 		} else {
 			clone.querySelector('button').style.display = '';
-			
+
 			this.setProperties( triggerDropdown.value, event.target.value, propertiesElement, clone );
 		}
-		
+
 		this.fireChange();
 	}.bind(this), false);
-	
+
 	var propertiesElement = new UI.Panel( clone.getElementsByClassName('eventProperties')[0] );
-	
+
 	//properties hide/show
 	clone.querySelector('button').addEventListener('click', function(event) {
-		
+
 		//get the next (hidden) select
-		
+
 		if (propertiesElement.dom.style.display == 'none') {
 			//selected the empty option.remove selection
 			propertiesElement.dom.style.display = '';
@@ -1744,19 +1749,19 @@ UI.RuntimeMaterial.prototype.add = function() {
 			propertiesElement.dom.style.display = 'none';
 			event.target.innerHTML = '+';
 		}
-		
+
 	}.bind(this), false);
-	
+
 	clone.getElementsByClassName('eventDeleteButton')[0].addEventListener('click', function(event) {
-	
+
 		this.runtimematerialList.splice( this.runtimematerialList.indexOf( clone ), 1 );
 		this.dom.removeChild( clone );
 		this.fireChange();
-		
+
 	}.bind(this), false);
-	
+
 	this.runtimematerialList.push( clone );
-	
+
 	return clone;
 };
 
@@ -1769,30 +1774,30 @@ UI.Behavior = function ( name ) {
 
 	this.dom = document.createElement( 'div' );
 	this.dom.className = 'Behavior';
-	
+
 	this.dom._changeEvent = document.createEvent('HTMLEvents');
 	this.dom._changeEvent.initEvent( 'change', true, true );
 	this.fireChange = function() { this.dom.dispatchEvent( this.dom._changeEvent ); }.bind( this );
-	
+
 	this.dom.appendChild( new UI.Text( name ).setWidth( '90px' ).dom );
-	
+
 	this.dom.behaviorCheckbox = new UI.Checkbox( false ).setWidth( '50px' );
 	this.dom.behaviorCheckbox.onChange( this.fireChange );
 	this.dom.appendChild( this.dom.behaviorCheckbox.dom );
-	
+
 	this.dom.addButton = document.createElement( 'button' );
-	this.dom.addButton.textContent = '+';	
-	this.dom.addButton.style.display = 'none';	
+	this.dom.addButton.textContent = '+';
+	this.dom.addButton.style.display = 'none';
 	this.dom.addButton.addEventListener('click', this.toggleProperties.bind( this ), false);
 	this.dom.appendChild( this.dom.addButton );
-	
+
 	this.dom.behaviorProperties = document.createElement( 'div' );
 	this.dom.behaviorProperties.className = 'behaviorProperties';
 	this.dom.behaviorProperties.style.display = 'none';
 	this.dom.appendChild( this.dom.behaviorProperties );
 
 	return this;
-	
+
 };
 
 UI.Behavior.prototype = Object.create( UI.Element.prototype );
@@ -1808,38 +1813,38 @@ UI.Behavior.prototype.toggleProperties = function (  ) {
 		this.dom.behaviorProperties.style.display = 'none';
 		this.dom.addButton.innerHTML = '+';
 	}
-	
+
 };
 
 UI.Behavior.prototype.getValue = function (  ) {
-	
+
 	return this.dom.behaviorCheckbox.getValue();
-	
+
 };
 
 UI.Behavior.prototype.setValue = function ( value ) {
-	
+
 	this.dom.behaviorCheckbox.setValue( value );
 	//this.fireChange();
-	
+
 };
 
 UI.Behavior.prototype.getProperties = function (  ) { };
 UI.Behavior.prototype.setProperties = function (  ) { };
 UI.Behavior.prototype.setPropertiesDOM = function ( html ) {
-	
+
 	this.dom.addButton.style.display = html == undefined ? 'none' : '';
 
 	if ( html !== undefined ) {
 		if ( typeof html == 'string' ) {
-			
+
 			this.dom.behaviorProperties.innerHTML = html;
-			
+
 		} else {
-			
+
 			this.dom.behaviorProperties.innerHTML = '';
 			this.dom.behaviorProperties.appendChild( html );
-			
+
 		}
 	}
 };

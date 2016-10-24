@@ -20,5 +20,9 @@ Sidebars.Properties = function ( editor ) {
 	properties.add( new Sidebars.Properties.AdvancedSwitch( editor, container ) );
 
 	container.add(properties);
+
+	$(container.dom).addClass('properties');
+	$(properties.dom).addClass('scrollpanel');
+
 	return container;
 };

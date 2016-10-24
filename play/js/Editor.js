@@ -44,9 +44,10 @@ var Editor = function () {
 		leapBoxChanged: new SIGNALS.Signal(),
 		windowResize: new SIGNALS.Signal(),
 		
-		menuButtonClicked: new SIGNALS.Signal()
+		menuButtonClicked: new SIGNALS.Signal(),
 
-
+		templateAdded: new SIGNALS.Signal(),
+		templateDeleted: new SIGNALS.Signal()
 
 	};
 	
@@ -70,11 +71,16 @@ var Editor = function () {
 	this.helpers = {};
 	
 	this.soundCollection;
+
+	this.objectPropertyService = new ObjectPropertyService();
 	
 	this.theme = new Editor.Theme( this );
 	this.play = new Play( this );
+
+	this.templateManager = new Editor.TemplateManager( this );
 	
 	this.omittedObjects = [ "Skybox", "Helper" ]; // objects which don't appear in the scenegraph
+
 
 };
 
@@ -82,6 +88,7 @@ Editor.prototype = {
 
 	// set the editor's theme
 	setTheme: function ( value ) {
+		console.log(value);
 
 		//document.getElementById( 'theme' ).href = value;
 
@@ -98,6 +105,8 @@ Editor.prototype = {
 		this.scene.maxVelocity = scene.maxVelocity;
 		this.scene._gravity = scene._gravity;
 		this.scene.setGravity(this.scene._gravity);
+
+		this.scene.templates = scene.templates;
 
 		// avoid render per object
 
@@ -126,6 +135,7 @@ Editor.prototype = {
 
 		this.signals.sceneGraphChanged.active = true;
 		this.signals.sceneGraphChanged.dispatch();
+
 
 	},
 
@@ -165,6 +175,7 @@ Editor.prototype = {
 	setObjectName: function ( object, name ) {
 
 		object.name = name;
+		object.instanceChanged.dispatch();
 		this.signals.sceneGraphChanged.dispatch();
 
 	},
@@ -187,6 +198,16 @@ Editor.prototype = {
 
 		this.signals.objectRemoved.dispatch( object );
 		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	removeTemplate: function ( templateId ) {
+
+		if ( confirm( 'Delete template ?' ) === false ) return;
+
+		this.templateManager.removeTemplate( templateId );
+
+		this.signals.templateDeleted.dispatch();
 
 	},
 
@@ -297,8 +318,8 @@ Editor.prototype = {
 		object._egh.material.needsUpdate = true;
 	
 	},
-	//
 
+// Add helper object to show a wireframe box (with no face diagonals) around an object
 	addHelper: function () {
 
 		var geometry = new THREE.SphereGeometry( 0.2, 4, 2 );
@@ -396,11 +417,14 @@ Editor.prototype = {
 
 			this.config.setKey( 'selected', object.uuid );
 
+
 		} else {
 
 			this.config.setKey( 'selected', null );
 
 		}
+
+		console.log( this.selected );
 
 		this.signals.objectSelected.dispatch( object );
 
@@ -420,6 +444,21 @@ Editor.prototype = {
 
 		} );
 
+	},
+
+	selectTemplateById: function ( id ) {
+
+		var templObject = this.templateManager.getTemplateById( id );
+
+		if(templObject){
+
+			this.select( templObject );
+		}
+
+	},
+
+	setTemplates: function ( templates ){
+		this.scene.templates = templates;
 	},
 
 	selectByUuid: function ( uuid ) {
@@ -815,6 +854,6 @@ Editor.prototype = {
 			
 			this.sceneChildrenSaves = undefined;
 		}
-	},
+	}
 
-}
+};

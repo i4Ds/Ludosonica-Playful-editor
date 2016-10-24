@@ -3,6 +3,7 @@ Editor.Theme = function ( editor ) {
 	this.currentTheme = undefined;
 
 	editor.signals.themeChanged.add( function ( value ) {
+		console.log(value);
 		
 			editor.theme.isLoading = true;
 		
@@ -11,7 +12,7 @@ Editor.Theme = function ( editor ) {
 				dataType: 'script',
 				success: function() {
 					
-					console.log('theme loaded');
+					Logger.info('theme '+value+' loaded', "logged by Editor.Theme.js, row 15");
 				
 					//remove old theme
 					if ( editor.theme.currentTheme ) editor.theme.currentTheme.remove();
@@ -42,7 +43,7 @@ Editor.Theme = function ( editor ) {
 					
 				}
 			}).fail(function(v1, v2, v3) {
-				console.warn(v1, v2, v3);
+				Logger.error(v1, v2, v3, "logged by Editor.Themes.js, row 45");
 				editor.theme.isLoading = false;
 			});
 		
@@ -89,11 +90,11 @@ Editor.Theme = function ( editor ) {
 					var width = 1;
 					var height = 1;
 					var depth = 1;
-			
+
 					var widthSegments = 1;
 					var heightSegments = 1;
 					var depthSegments = 1;
-			
+
 					var geometry = new THREE.BoxGeometry( width, height, depth, widthSegments, heightSegments, depthSegments );
 					var material = Physijs.createMaterial(
 						new THREE.MeshPhongMaterial( { ambient: 0x555555, color: 0x555555, specular: 0xffffff, shininess: 50, shading: THREE.SmoothShading }  ),
@@ -101,11 +102,11 @@ Editor.Theme = function ( editor ) {
 						0.5
 					);
 					var mesh = new Physijs.BoxMesh( geometry, material );
-					
+
 					mesh.castShadow = true;
 					mesh.receiveShadow = true;
 					mesh.isStatic = true;
-					
+
 					return mesh;
 				};
 			}
@@ -154,8 +155,8 @@ Editor.Theme = function ( editor ) {
 					);
 					var mesh = new Physijs.CylinderMesh( geometry, material );
 					
-					mesh.castShadow = true;
-					mesh.receiveShadow = true;
+					//mesh.castShadow = true;
+					//mesh.receiveShadow = true;
 					mesh.isStatic = true;
 			
 					return mesh;
