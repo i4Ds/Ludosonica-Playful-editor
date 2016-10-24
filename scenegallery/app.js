@@ -8,6 +8,22 @@ var path = require('path');
 
 var app = express();
 
+
+var cookieParser = require('cookie-parser');
+var bodyParser = require('body-parser');
+var exphbs = require('express-handlebars');
+var expressValidator = require('express-validator');
+var flash = require('connect-flash');
+var session = require('express-session');
+var passport = require('passport');
+var LocalStrategy = require('passport-local').Strategy;
+
+
+
+var crypto = require('crypto');
+
+
+
 GLOBAL.db = './gallery.db';
 GLOBAL.captchaSessionTime = 600000; // 10 minutes
 GLOBAL.maxSize = 50000000; // ~50 MByte
@@ -18,9 +34,11 @@ GLOBAL.root = __dirname;
 
 var sqlite3 = require('sqlite3').verbose();
 
-app.engine('.html', require('ejs').__express);
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'html');
+
+
+  app.set('views', path.join(__dirname, 'views'));
+  app.engine('.html', require('ejs').__express);
+  app.set('view engine', 'html'); 
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
@@ -28,42 +46,106 @@ app.set('view engine', 'html');
 app.use(express.static(path.join(__dirname, 'public')));
 
 var db = new sqlite3.Database( GLOBAL.db );
+
 db.serialize(function() {
-	db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, nickname TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL )");
-	db.run("CREATE TABLE IF NOT EXISTS captcha_session ( token TEXT PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL )");
+  // pragma foreign_keys = ON;
+  // db.run("DROP TABLE users");
+  // db.run("DROP TABLE scene");
+  // db.run("CREATE TABLE IF NOT EXISTS results (result_id INTEGER AUTOINCREMENT PRIMARY KEY NOT NULL, user_id INT NOT NULL, scene_id INT NOT NULL, FOREIGN KEY (user_id) REFERENCES users (id), FOREIGN KEY (scene_id) REFERENCES scene (id))");
+  db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, nickname TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL )");
+  db.run("CREATE TABLE IF NOT EXISTS captcha_session ( token TEXT PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL )");
+  db.run("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,name TEXT NOT NULL,email TEXT NOT NULL,password TEXT NOT NULL,salt TEXT NOT NULL, CONSTRAINT email_unique UNIQUE (email) ) ");
 });
-db.close();
+ db.close();
+
+
+  // BodyParser
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({extended: false}))
+  app.use(cookieParser());
+
+  //set up the folder
+  app.use(express.static(path.join(__dirname,'public'))); //store the stylesheets, images...
+
+  //Express session
+
+  app.use(session({
+    secret: 'secret',
+    saveUninitialized: true,
+    resave: true
+  }));
+
+  //passport init
+  app.use(passport.initialize());
+  app.use(passport.session());
+
+  // In this example, the formParam value is going to get morphed into form body format useful for printing.
+  app.use(expressValidator({
+    errorFormatter: function(param, msg, value) {
+        var namespace = param.split('.')
+        , root    = namespace.shift()
+        , formParam = root;
+
+      while(namespace.length) {
+        formParam += '[' + namespace.shift() + ']';
+      }
+      return {
+        param : formParam,
+        msg   : msg,
+        value : value
+      };
+    }
+  }));
+
+  // Connect flash
+  app.use(flash());
+
+
+//global variables for flash messages
+app.use(function(req,res,next) {
+  res.locals.success_msg = req.flash('success_msg');
+  res.locals.error_msg = req.flash('error_msg');
+  res.locals.error = req.flash('error');
+  res.locals.errors = req.flash('errors');
+  res.locals.users = req.user || null;
+next();
+});
 
 
 
-//show newest Scenes
+
+var routes = require('./routes/index');
+app.use('/', routes);
+var users = require('./routes/users');
+ app.use('/users', users);
+
+// show newest Scenes
 var main = require('./routes/main');
 app.get('/play/gallery', main);
 
-//upload Scenes
-var upload = require('./routes/upload' );
-app.post('/play/gallery/upload', upload);
 
-//check captcha
-var captcha = require('./routes/captcha' );
-app.get('/play/gallery/captchacheck', captcha);
+// //upload Scenes
+// var upload = require('./routes/upload' );
+// app.post('/play/gallery/upload', upload);
 
-//download Scenes
-var download = require('./routes/download' );
-app.get('/play/gallery/download', download);
+// //check captcha
+// var captcha = require('./routes/captcha' );
+// app.get('/play/gallery/captchacheck', captcha);
 
-//remove Scenes
-var remove = require('./routes/remove');
-app.route('/play/gallery/remove').all(remove);
+// //download Scenes
+// var download = require('./routes/download' );
+// app.get('/play/gallery/download', download);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-    var err = new Error('Not Found');
-    err.status = 404;
-    next(err);
-});
+// //remove Scenes
+// var remove = require('./routes/remove');
+// app.route('/play/gallery/remove').all(remove);
 
-
+// // catch 404 and forward to error handler
+// app.use(function(req, res, next) {
+//     var err = new Error('Not Found');
+//     err.status = 404;
+//     next(err);
+// });
 
 
 
@@ -91,6 +173,19 @@ app.use(function(err, req, res, next) {
         // error: {}
     // });
 });
+
+
+
+app.set('port', (process.env.PORT || 3000));
+
+app.listen(app.get('port'),function() {
+  console.log('Server is running on port ' + app.get('port'));
+});
+
+
+// app.post('/login', passport.authenticate('local', { successRedirect: '/good-login',
+//                                                     failureRedirect: '/bad-login' }));
+
 
 
 module.exports = app;
