@@ -71,8 +71,6 @@ var Editor = function () {
 	this.helpers = {};
 	
 	this.soundCollection;
-
-	this.objectPropertyService = new ObjectPropertyService();
 	
 	this.theme = new Editor.Theme( this );
 	this.play = new Play( this );

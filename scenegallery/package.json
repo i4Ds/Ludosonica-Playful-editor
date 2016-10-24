@@ -1,37 +1,29 @@
 {
-  "name": "scenegallery",
-  "version": "0.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "dependencies": {
-    "bcryptjs": "^2.3.0",
-    "body-parser": "^1.15.2",
-    "busboy": "~0.2.9",
-    "connect-busboy": "0.0.2",
-    "connect-flash": "^0.1.1",
-    "cookie-parser": "^1.4.3",
-    "ejs": "^1.0.0",
-    "express": "~4.10.6",
-    "express-handlebars": "^3.0.0",
-    "express-messages": "^1.0.1",
-    "express-session": "^1.14.1",
-    "express-validator": "^2.20.10",
-    "install": "~0.1.8",
-    "jszip": "~2.4.0",
-    "mkdirp": "~0.5.0",
-    "modules": "^0.4.0",
-    "nodemailer": "^2.6.4",
-    "npm": "~2.1.12",
-    "passport": "^0.3.2",
-    "passport-http": "^0.3.0",
-    "passport-local": "^1.0.0",
-    "recaptcha": "~1.2.0",
-    "reformed": "~0.1.1",
-    "rimraf": "~2.2.8",
-    "sqlite3": "~3.0.4"
-  }
+    "name": "scenegallery",
+    "version": "0.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "dependencies": {
+        "busboy": "~0.2.9",
+        "connect-busboy": "0.0.2",
+        "connect-flash": "^0.1.1",
+        "ejs": "~1.0.0",
+        "express": "~4.10.6",
+        "express-session": "^1.14.1",
+        "glob": "^7.1.0",
+        "install": "~0.1.8",
+        "jszip": "~2.4.0",
+        "mkdirp": "~0.5.0",
+        "npm": "~2.1.12",
+        "passport": "^0.3.2",
+        "passport-local": "^1.0.0",
+        "recaptcha": "~1.2.0",
+        "reformed": "~0.1.1",
+        "rimraf": "~2.2.8",
+        "sqlite3": "2.15.9"
+    }
 }

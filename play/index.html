@@ -74,10 +74,10 @@
 <script src="js/Editor.js"></script>
 <script src="js/Editor.Theme.js"></script>
 <script src="js/Editor.TemplateManager.js"></script>
-<script src="js/ObjectPropertyService.js"></script>
 <script src="js/Template.js"></script>
 <script src="js/Config.js"></script>
 
+<script src="js/core/ThreeJSExtensions.js"></script>
 <script src="js/core/Loader.js"></script>
 <script src="js/core/Storage.js"></script>
 <script src="js/core/PlayfulExporter.js"></script>
@@ -87,6 +87,7 @@
 <script src="js/menues/GalleryPanel.js"></script>
 <script src="js/menues/GalleryCameraPanel.js"></script>
 <script src="js/menues/GalleryUploadPanel.js"></script>
+<script src="js/menues/SavePanel.js"></script>
 
 <script src="js/menues/sidebars/Sidebars.js"></script>
 <script src="js/menues/sidebars/Sidebars.Add.js"></script>
@@ -140,6 +141,8 @@
 			gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 		}
 
+
+
 </script>
 
 <!-- fragment shader a.k.a. pixel shader -->
@@ -151,6 +154,8 @@
 			vec3 glow = glowColor * intensity;
 			gl_FragColor = vec4( glow, 1.0 );
 		}
+
+
 
 </script>
 <!-- ----------------------------------------------------------- -->
@@ -164,139 +169,6 @@
     Logger.setLevel(Logger.WARN);
 
 
-    // We also want the objects to clone other stuff, like sounds
-
-    THREE.Object3D.prototype.cloneBase = THREE.Object3D.prototype.clone;
-    THREE.Object3D.prototype.clone = function (object, recursive) {
-
-        object = THREE.Object3D.prototype.cloneBase.call(this, object, recursive);
-
-        // clone sounds
-        if (this.sounds != undefined) {
-
-            object.sounds = {};
-
-            for (var key in this.sounds) {
-                if (this.sounds.hasOwnProperty(key)) {
-
-                    object.sounds[key] = this.sounds[key];
-
-                }
-            }
-        }
-			object = THREE.Object3D.prototype.cloneBase.call( this, object, recursive );
-
-			// clone sounds
-			if ( this.sounds != undefined ) {
-
-				object.sounds = { };
-
-				for (var key in this.sounds) {
-					if (this.sounds.hasOwnProperty( key )) {
-
-						object.sounds[ key ] = this.sounds[ key ];
-
-					}
-				}
-			}
-
-        return object;
-
-    };
-
-    THREE.Geometry.prototype.clone = function () {
-
-        var geometry = new THREE.Geometry(), geomParams = this.parameters;
-
-        var handleParameters = function (type, params) {
-            geometry = new type(
-                    params[0] ? geomParams[params[0]] : undefined,
-                    params[1] ? geomParams[params[1]] : undefined,
-                    params[2] ? geomParams[params[2]] : undefined,
-                    params[3] ? geomParams[params[3]] : undefined,
-                    params[4] ? geomParams[params[4]] : undefined,
-                    params[5] ? geomParams[params[5]] : undefined,
-                    params[6] ? geomParams[params[6]] : undefined,
-                    params[7] ? geomParams[params[7]] : undefined,
-                    params[8] ? geomParams[params[8]] : undefined,
-                    params[9] ? geomParams[params[9]] : undefined
-            );
-            /*console.log( geometry, params[0] ? geomParams[ params[0] ] : undefined,
-             params[1] ? geomParams[ params[1] ] : undefined,
-             params[2] ? geomParams[ params[2] ] : undefined );*/
-        };
-
-        if (this instanceof THREE.PlaneGeometry) {
-
-            handleParameters(THREE.PlaneGeometry, ['width', 'height', 'widthSegments', 'heightSegments']);
-
-        } else if (this instanceof THREE.BoxGeometry) {
-
-            handleParameters(THREE.BoxGeometry, ['width', 'height', 'depth', 'widthSegments', 'heightSegments', 'depthSegments']);
-
-        } else if (this instanceof THREE.CircleGeometry) {
-
-            handleParameters(THREE.CircleGeometry, ['radius', 'segments']);
-
-        } else if (this instanceof THREE.CylinderGeometry) {
-
-            handleParameters(THREE.CylinderGeometry, ['radiusTop', 'radiusBottom', 'height', 'radialSegments', 'heightSegments', 'openEnded']);
-
-        } else if (this instanceof THREE.SphereGeometry) {
-
-            handleParameters(THREE.SphereGeometry, ['radius', 'widthSegments', 'heightSegments', 'phiStart', 'phiLength', 'thetaStart', 'thetaLength']);
-
-        } else if (this instanceof THREE.IcosahedronGeometry) {
-
-            handleParameters(THREE.IcosahedronGeometry, ['radius', 'detail']);
-
-        } else if (this instanceof THREE.TorusGeometry) {
-
-            handleParameters(THREE.TorusGeometry, ['radius', 'tube', 'radialSegments', 'tubularSegments', 'arc']);
-
-        } else if (this instanceof THREE.TorusKnotGeometry) {
-
-            handleParameters(THREE.TorusKnotGeometry, ['radius', 'tube', 'radialSegments', 'tubularSegments', 'p', 'q', 'heightScale']);
-
-        } else {
-
-            var vertices = this.vertices;
-
-            for (var i = 0, il = vertices.length; i < il; i++) {
-
-                geometry.vertices.push(vertices[i].clone());
-
-            }
-
-            var faces = this.faces;
-
-            for (var i = 0, il = faces.length; i < il; i++) {
-
-                geometry.faces.push(faces[i].clone());
-
-            }
-
-            var uvs = this.faceVertexUvs[0];
-
-            for (var i = 0, il = uvs.length; i < il; i++) {
-
-                var uv = uvs[i], uvCopy = [];
-
-                for (var j = 0, jl = uv.length; j < jl; j++) {
-
-                    uvCopy.push(new THREE.Vector2(uv[j].x, uv[j].y));
-
-                }
-
-                geometry.faceVertexUvs[0].push(uvCopy);
-
-            }
-
-        }
-
-        return geometry;
-
-    }
 </script>
 
 <script>
@@ -340,9 +212,25 @@
                 $('.g-recaptcha')[0],
                 {
                     'sitekey': '6Ld5j_8SAAAAADdyhgzdoSKe6LRR8c75rW5F9RWr',
-                    'data-theme': 'dark',
+                    'data-theme': 'dark'
                 });
     });
+
+    var sceneSave = new SavePanel(editor).setId('sceneSave');
+    document.body.appendChild(sceneSave.dom);
+
+
+    function getParameterByName(name, url) {
+        if (!url) {
+            url = window.location.href;
+        }
+        name = name.replace(/[\[\]]/g, "\\$&");
+        var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
+                results = regex.exec(url);
+        if (!results) return null;
+        if (!results[2]) return '';
+        return decodeURIComponent(results[2].replace(/\+/g, " "));
+    }
 
 
     //
@@ -351,6 +239,7 @@
 
         editor.storage.get(function (state) {
 
+            // state is the scene file
             if (state !== undefined) {
 
                 /*var loader = new THREE.ObjectLoader();
@@ -377,67 +266,7 @@
             } else {
 
                 //default scene
-
-                var color = 0xffffff;
-                var intensity = 1.0;
-
-                var light = new THREE.DirectionalLight(color, intensity);
-                light.name = 'DirectionalLight default';
-                light.target.name = 'DirectionalLight default Target';
-                light.shadowCameraNear = 0.5;
-                light.shadowCameraFar = 30;
-                light.shadowCameraLeft = -5;
-                light.shadowCameraRight = 5;
-                light.shadowCameraTop = 5;
-                light.shadowCameraBottom = -3;
-                light.castShadow = true;
-                //dl.shadowCameraVisible = true;
-
-                //editor.scene.traverse( function(el) { if (el._physijs) { el.castShadow = true; el.receiveShadow = true; } });
-
-                light.position.set(2, 9, 2.5);
-
-                editor.addObject(light);
-
-
-                editor.scene.fog = new THREE.Fog(0xAAAAAA, 0.01, 50);
-                editor.scene.hasLeapBox = true;
-                editor.scene._gravity = new THREE.Vector3(0, -16, 0);
-                editor.scene.setGravity(editor.scene._gravity);
-                editor.scene.maxVelocity = Infinity;
-
-
-                var color = 0x222222;
-
-                var light = new THREE.AmbientLight(color);
-                light.name = 'AmbientLight default';
-
-                editor.addObject(light);
-
-
-                var width = 100;
-                var height = 0.1;
-                var depth = 100;
-
-                var widthSegments = 1;
-                var heightSegments = 1;
-                var depthSegments = 1;
-
-                var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
-                var material = Physijs.createMaterial(
-                        new THREE.MeshPhongMaterial({color: 0x555555}),
-                        0.8,
-                        1
-                );
-                var mesh = new Physijs.BoxMesh(geometry, material);
-                mesh.name = 'Ground';
-                mesh.position.set(0, -0.1, 0);
-                mesh.receiveShadow = true;
-                mesh.isStatic = true;
-
-                editor.addObject(mesh);
-
-                editor.setTheme(editor.config.getKey('theme'));
+                generateDefaultScene();
 
             }
 
@@ -452,10 +281,21 @@
         });
 
         //load remote scene
-        var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);
+//        var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);
+//        if (sceneId !== null) {
+//            editor.loader.loadRemotePlayful(sceneId[0]);
+//        }
+
+        var sceneId = getParameterByName('load_scene');
+        var userId = getParameterByName('user');
         if (sceneId !== null) {
-            editor.loader.loadRemotePlayful(sceneId[0]);
+            editor.loader.loadRemotePlayful(sceneId);
         }
+        console.log('user: ', userId, ', scene: ', sceneId);
+
+        sessionStorage.setItem('user', userId);
+        sessionStorage.setItem('scene', sceneId);
+
 
         var timeout;
         var exporter = new THREE.PlayfulExporter();
@@ -497,12 +337,77 @@
         signals.objectRemoved.add(saveState);
         signals.materialChanged.add(saveState);
         signals.sceneGraphChanged.add(saveState);
-				signals.fogTypeChanged.add( saveState );
-				signals.fogColorChanged.add( saveState );
-				signals.fogParametersChanged.add( saveState );
+        signals.fogTypeChanged.add(saveState);
+        signals.fogColorChanged.add(saveState);
+        signals.fogParametersChanged.add(saveState);
 
 
     });
+
+    function generateDefaultScene() {
+
+        var color = 0xffffff;
+        var intensity = 1.0;
+
+        var light = new THREE.DirectionalLight(color, intensity);
+        light.name = 'DirectionalLight default';
+        light.target.name = 'DirectionalLight default Target';
+        light.shadowCameraNear = 0.5;
+        light.shadowCameraFar = 30;
+        light.shadowCameraLeft = -5;
+        light.shadowCameraRight = 5;
+        light.shadowCameraTop = 5;
+        light.shadowCameraBottom = -3;
+        light.castShadow = true;
+        //dl.shadowCameraVisible = true;
+
+        //editor.scene.traverse( function(el) { if (el._physijs) { el.castShadow = true; el.receiveShadow = true; } });
+
+        light.position.set(2, 9, 2.5);
+
+        editor.addObject(light);
+
+
+        editor.scene.fog = new THREE.Fog(0xAAAAAA, 0.01, 50);
+        editor.scene.hasLeapBox = true;
+        editor.scene._gravity = new THREE.Vector3(0, -16, 0);
+        editor.scene.setGravity(editor.scene._gravity);
+        editor.scene.maxVelocity = Infinity;
+
+
+        var color = 0x222222;
+
+        var light = new THREE.AmbientLight(color);
+        light.name = 'AmbientLight default';
+
+        editor.addObject(light);
+
+
+        var width = 100;
+        var height = 0.1;
+        var depth = 100;
+
+        var widthSegments = 1;
+        var heightSegments = 1;
+        var depthSegments = 1;
+
+        var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
+        var material = Physijs.createMaterial(
+                new THREE.MeshPhongMaterial({color: 0x555555}),
+                0.8,
+                1
+        );
+        var mesh = new Physijs.BoxMesh(geometry, material);
+        mesh.name = 'Ground';
+        mesh.position.set(0, -0.1, 0);
+        mesh.receiveShadow = true;
+        mesh.isStatic = true;
+
+        editor.addObject(mesh);
+
+        // add default objects to add to scene
+        editor.setTheme(editor.config.getKey('theme'));
+    }
 
     //
 
@@ -584,7 +489,7 @@
             var evt = document.createEvent('CustomEvent');
             evt.initCustomEvent(event, params.bubbles, params.cancelable, params.detail);
             return evt;
-        };
+        }
 
         CustomEvent.prototype = window.Event.prototype;
 

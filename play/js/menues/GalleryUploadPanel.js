@@ -55,6 +55,7 @@ var GalleryUploadPanel = function( editor ){
     var uploadButton = $( document.createElement('button') ).text('Upload').addClass('galleryUploadButton');
     infoPanel.dom.appendChild( uploadButton[0] );
 
+
 	var lockPanel = function(){
 			uploadButton.attr('disabled','disabled');
 			uploadButton.css('background-image','url("./images/iconset/wait.gif")');
@@ -112,9 +113,8 @@ var GalleryUploadPanel = function( editor ){
 
 	};
 
+
 	uploadButton.click(function(){
-
-
 
 		if( checkFields() ){
 
@@ -158,7 +158,10 @@ var GalleryUploadPanel = function( editor ){
 				formData.append("email",       	inputMail.val() );
 				formData.append("description", 	inputDescription.val() );
 				formData.append("captcha", 		captcha );
-				//console.log()
+
+				var userId = sessionStorage.getItem('user');
+				var sceneId = sessionStorage.getItem('scene');
+				console.log('upload scene', sceneId, 'of user', userId);
 
 				editor.storage.createZip( function(blob){
 
@@ -259,7 +262,7 @@ var GalleryUploadPanel = function( editor ){
 
     return container;
 
-}
+};
 
 function deactivateEventListener( dom, type ){
 	dom.addEventListener( type, function ( event ) {

@@ -480,6 +480,17 @@
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
 }
 
+#sceneSave {
+    position: absolute;
+    top: calc( 50% - 125px );
+    left: calc( 50% - 150px );
+    z-index: 2;
+    background-color: #DDD;
+    border-radius: 2px;
+    height: 250px;
+    width: 300px;
+}
+
 #galleryUpload {
     position: absolute;
     top: 81px;
@@ -503,7 +514,13 @@
     font-weight: bold;
 }
 
-.galleryUploadPanel > input {
+.sceneSavePanel {
+    margin: 10px;
+    color: #E57245;
+    font-weight: bold;
+}
+
+.galleryUploadPanel > input, .sceneSavePanel > input {
     margin: 5px auto -10px;
     display: block;
     padding: 5px;
@@ -520,7 +537,7 @@
     padding-top: 5px
 }
 
-.galleryUploadPanel > textarea {
+.galleryUploadPanel > textarea, .sceneSavePanel > textarea {
     margin: 5px auto;
     display: block;
     padding: 5px;
@@ -536,7 +553,7 @@
     overflow-x: hidden;
 }
 
-.galleryUploadPanel > button {
+.galleryUploadPanel > button, .sceneSavePanel > button {
     margin: 15px auto 0px auto;
     display: block;
     padding: 10px 80px;

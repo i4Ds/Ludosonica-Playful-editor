@@ -45,7 +45,24 @@ Sidebars.File = function ( editor ) {
 	{
 		Sidebars.File.exportSceneHelper( editor, THREE.PlayfulExporter );
 	});
-	
+
+
+	var saveButton = $("<a/>").html("SAVE").on("click",function(e)
+	{
+		showHide('sceneSave', $(this));
+	});
+
+
+	function showHide ( id, menu ) {
+		var panel = $('#'+id);
+		if(panel.css('display') == 'none'){
+			menu.addClass("active");
+			panel.css('display','block');
+		}else{
+			menu.removeClass("active");
+			panel.css('display','none');
+		}
+	}
 	
 	// Create a list of the menu items
 	$("<ul/>")
@@ -53,6 +70,7 @@ Sidebars.File = function ( editor ) {
 		.append( $("<li/>").html(newButton) )
 		.append( $("<li/>").html(importButton) )
 		.append( $("<li/>").html(exportButton) )
+		.append( $("<li/>").html(saveButton) )
 		.appendTo(menu.dom);
 	
 	// Add signal listener to show/hide this sidebar panel
