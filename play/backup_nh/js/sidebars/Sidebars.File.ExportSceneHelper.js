@@ -6,6 +6,8 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 	
 	var output = exporter.parse( editor.scene );
 
+	console.log(output);
+
 	if ( exporter instanceof THREE.ObjectExporter || exporter instanceof THREE.PlayfulExporter ) {
 
 		output = JSON.stringify( output, null, '\t' );

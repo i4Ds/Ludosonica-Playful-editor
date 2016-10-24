@@ -111,4 +111,4 @@ Sidebars.Scene = function ( editor ) {
 
 	return container;
 
-}
+};
