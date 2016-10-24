@@ -184,6 +184,21 @@
                 }
             }
         }
+			object = THREE.Object3D.prototype.cloneBase.call( this, object, recursive );
+
+			// clone sounds
+			if ( this.sounds != undefined ) {
+
+				object.sounds = { };
+
+				for (var key in this.sounds) {
+					if (this.sounds.hasOwnProperty( key )) {
+
+						object.sounds[ key ] = this.sounds[ key ];
+
+					}
+				}
+			}
 
         return object;
 
@@ -482,6 +497,9 @@
         signals.objectRemoved.add(saveState);
         signals.materialChanged.add(saveState);
         signals.sceneGraphChanged.add(saveState);
+				signals.fogTypeChanged.add( saveState );
+				signals.fogColorChanged.add( saveState );
+				signals.fogParametersChanged.add( saveState );
 
 
     });
