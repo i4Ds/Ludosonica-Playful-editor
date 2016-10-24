@@ -46,7 +46,8 @@ var Editor = function () {
 		
 		menuButtonClicked: new SIGNALS.Signal(),
 
-		templateAdded: new SIGNALS.Signal()
+		templateAdded: new SIGNALS.Signal(),
+		templateDeleted: new SIGNALS.Signal()
 
 	};
 	
@@ -80,8 +81,6 @@ var Editor = function () {
 	
 	this.omittedObjects = [ "Skybox", "Helper" ]; // objects which don't appear in the scenegraph
 
-	this.templateInstanceMap = [];
-
 
 };
 
@@ -106,6 +105,8 @@ Editor.prototype = {
 		this.scene.maxVelocity = scene.maxVelocity;
 		this.scene._gravity = scene._gravity;
 		this.scene.setGravity(this.scene._gravity);
+
+		this.scene.templates = scene.templates;
 
 		// avoid render per object
 
@@ -134,6 +135,7 @@ Editor.prototype = {
 
 		this.signals.sceneGraphChanged.active = true;
 		this.signals.sceneGraphChanged.dispatch();
+
 
 	},
 
@@ -196,6 +198,16 @@ Editor.prototype = {
 
 		this.signals.objectRemoved.dispatch( object );
 		this.signals.sceneGraphChanged.dispatch();
+
+	},
+
+	removeTemplate: function ( templateId ) {
+
+		if ( confirm( 'Delete template ?' ) === false ) return;
+
+		this.templateManager.removeTemplate( templateId );
+
+		this.signals.templateDeleted.dispatch();
 
 	},
 
@@ -412,6 +424,7 @@ Editor.prototype = {
 
 		}
 
+		console.log( this.selected );
 
 		this.signals.objectSelected.dispatch( object );
 
@@ -437,7 +450,15 @@ Editor.prototype = {
 
 		var templObject = this.templateManager.getTemplateById( id );
 
-		this.select( templObject );
+		if(templObject){
+
+			this.select( templObject );
+		}
+
+	},
+
+	setTemplates: function ( templates ){
+		this.scene.templates = templates;
 	},
 
 	selectByUuid: function ( uuid ) {

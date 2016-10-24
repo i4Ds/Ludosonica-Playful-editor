@@ -102,7 +102,6 @@ Editor.Theme = function ( editor ) {
 						0.5
 					);
 					var mesh = new Physijs.BoxMesh( geometry, material );
-					console.log('box mesh ', mesh);
 
 					mesh.castShadow = true;
 					mesh.receiveShadow = true;

@@ -8,6 +8,7 @@ var Loader = function ( editor ) {
 	
 	
 	this.loadRemotePlayful = function( sceneId ){
+
 		var self = this;
 		editor._isLoadingFile = true;
 		
@@ -62,6 +63,7 @@ var Loader = function ( editor ) {
 		var filename = file.name || 'playful.playful';
 		var extension = filename.split( '.' ).pop().toLowerCase();
 
+// extenstion is normally playful ( on reload and on file load )
 		switch ( extension ) {
 
 			case 'babylon':
@@ -215,6 +217,7 @@ var Loader = function ( editor ) {
 					try {
 
 						data = JSON.parse( contents );
+
 						self.loadedSoundsFolder = zip.folder("sounds");
 						self.loadedTexturesFolder = zip.folder("textures");
 
@@ -257,8 +260,6 @@ var Loader = function ( editor ) {
 				reader.addEventListener( 'load', function ( event ) {
 
 					var contents = event.target.result;
-
-					console.log( contents );
 
 					var geometry = new THREE.PLYLoader().parse( contents );
 					geometry.sourceType = "ply";
@@ -380,7 +381,7 @@ var Loader = function ( editor ) {
 
 		}
 
-	}
+	};
 
 	var handleJSON = function ( data, file, filename ) {
 
@@ -437,13 +438,19 @@ var Loader = function ( editor ) {
 			editor.addObject( mesh );
 			editor.select( mesh );
 
+			// metadata is normally of type object
+			// THIS IS NORMALLY USED not 'scene' or 'geometry'
 		} else if ( data.metadata.type.toLowerCase() === 'object' ) {
 
+			// extra prototype functions of objectLoader are defined @ index.html
 			var loader = new THREE.ObjectLoader();
+
 			var result = loader.parse( data );
+			console.log('scene to load after import', result);
 
 			if ( result instanceof THREE.Scene ) {
 
+				// result is normally scene
 				editor.setScene( result );
 
 			} else {
@@ -471,4 +478,4 @@ var Loader = function ( editor ) {
 
 	};
 
-}
+};

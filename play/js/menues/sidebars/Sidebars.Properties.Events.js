@@ -1,7 +1,7 @@
 Sidebars.Properties.Events = function ( editor ) {
 
 	var signals = editor.signals;
-	
+
 	var objectSelected = undefined;
 
 	var container = new UI.Panel();
@@ -13,7 +13,7 @@ Sidebars.Properties.Events = function ( editor ) {
 
 	var eventListRow = new UI.Panel();
 	var eventList = new UI.EventList(  ).onChange( update );
-	
+
 	eventListRow.add( eventList );
 
 	container.add( eventListRow );
@@ -21,25 +21,25 @@ Sidebars.Properties.Events = function ( editor ) {
 	//
 
 	function update( ) {
-		
+
 		objectSelected.events = eventList.getValue();
-		
+
 		if ( objectSelected._egh ) editor.setEdge( objectSelected );
-			
+
 		signals.objectChanged.dispatch( objectSelected );
 
-	};
+	}
 
 	// events
 
 	signals.objectSelected.add( function ( object ) {
 
 		if ( object && object._physijs ) {
-		
+
 			objectSelected = object;
 
 			container.setDisplay( '' );
-			
+
 			eventList.setValue( object.events );
 			update();
 
@@ -53,4 +53,4 @@ Sidebars.Properties.Events = function ( editor ) {
 
 	return container;
 
-}
+};

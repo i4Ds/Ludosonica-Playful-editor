@@ -456,7 +456,7 @@ var Viewport = function (editor) {
     // otherwise controls.enabled doesn't work.
 
     var controls = new THREE.EditorControls(camera, container.dom);
-    controls.center.fromArray(editor.config.getKey('camera').target)
+    controls.center.fromArray(editor.config.getKey('camera').target);
     controls.addEventListener('change', function () {
 
         transformControls.update();
@@ -609,10 +609,10 @@ var Viewport = function (editor) {
         transformControls.detach();
 
 
-        if (object !== null) {
+        if( object !== null && !object.isTemplate ){
 
             if (object.geometry !== undefined &&
-                object instanceof THREE.Sprite === false && !object.isTemplate) {
+                object instanceof THREE.Sprite === false) {
 
                 // todo display selection box for all instances of template
 
@@ -628,6 +628,7 @@ var Viewport = function (editor) {
             }
 
         }
+
 
         render();
 

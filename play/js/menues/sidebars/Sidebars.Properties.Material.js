@@ -1,842 +1,917 @@
-Sidebars.Properties.Material = function ( editor ) {
-
-	var signals = editor.signals;
+Sidebars.Properties.Material = function (editor) {
 
-	var objService = editor.objectPropertyService;
+    var signals = editor.signals;
 
-	var materialClasses = {
+    var objService = editor.objectPropertyService;
 
-		'LineBasicMaterial': THREE.LineBasicMaterial,
-		'LineDashedMaterial': THREE.LineDashedMaterial,
-		'MeshBasicMaterial': THREE.MeshBasicMaterial,
-		'MeshDepthMaterial': THREE.MeshDepthMaterial,
-		'MeshFaceMaterial': THREE.MeshFaceMaterial,
-		'MeshLambertMaterial': THREE.MeshLambertMaterial,
-		'MeshNormalMaterial': THREE.MeshNormalMaterial,
-		'MeshPhongMaterial': THREE.MeshPhongMaterial,
-		'ParticleSystemMaterial': THREE.ParticleSystemMaterial,
-		'ShaderMaterial': THREE.ShaderMaterial,
-		'SpriteMaterial': THREE.SpriteMaterial,
-		'SpriteCanvasMaterial': THREE.SpriteCanvasMaterial,
-		'Material': THREE.Material
+    var materialClasses = {
 
-	};
+        'LineBasicMaterial': THREE.LineBasicMaterial,
+        'LineDashedMaterial': THREE.LineDashedMaterial,
+        'MeshBasicMaterial': THREE.MeshBasicMaterial,
+        'MeshDepthMaterial': THREE.MeshDepthMaterial,
+        'MeshFaceMaterial': THREE.MeshFaceMaterial,
+        'MeshLambertMaterial': THREE.MeshLambertMaterial,
+        'MeshNormalMaterial': THREE.MeshNormalMaterial,
+        'MeshPhongMaterial': THREE.MeshPhongMaterial,
+        'ParticleSystemMaterial': THREE.ParticleSystemMaterial,
+        'ShaderMaterial': THREE.ShaderMaterial,
+        'SpriteMaterial': THREE.SpriteMaterial,
+        'SpriteCanvasMaterial': THREE.SpriteCanvasMaterial,
+        'Material': THREE.Material
 
-	var container = new UI.Panel();
-	container.setDisplay( 'none' );
+    };
 
-	$("<h3/>",{ html: "Material" }).appendTo( container.dom );
+    var container = new UI.Panel();
+    container.setDisplay('none');
 
-	// uuid (disabled)
+    $("<h3/>", {html: "Material"}).appendTo(container.dom);
 
-	var materialUUIDRow = new UI.Panel();
-	var materialUUID = new UI.Input().setWidth( '115px' ).setColor( '#444' ).setFontSize( '12px' ).setDisabled( true );
-	var materialUUIDRenew = new UI.Button( '⟳' ).setMarginLeft( '7px' ).onClick( function () {
+    // uuid (disabled)
 
-		materialUUID.setValue( THREE.Math.generateUUID() );
-		update();
+    var materialUUIDRow = new UI.Panel();
+    materialUUIDRow.setClass("row");
+    var materialUUID = new UI.Input().setWidth('115px').setColor('#444').setFontSize('12px').setDisabled(true);
+    var materialUUIDRenew = new UI.Button('⟳').setMarginLeft('7px').onClick(function () {
 
-	} );
-	materialUUIDRow.add( new UI.Text( 'UUID' ).setWidth( '90px' ) );
-	materialUUIDRow.add( materialUUID );
-	materialUUIDRow.add( materialUUIDRenew );
-	//container.add( materialUUIDRow );
+        materialUUID.setValue(THREE.Math.generateUUID());
+        update();
 
+    });
+    materialUUIDRow.add(new UI.Text('UUID').setWidth('90px'));
+    materialUUIDRow.add(materialUUID);
+    materialUUIDRow.add(materialUUIDRenew);
+    //container.add( materialUUIDRow );
 
-	// name (disabled)
 
-	var materialNameRow = new UI.Panel();
-	materialNameRow.setClass("easy");
-	var materialName = new UI.Input().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( function () {
+    // name (disabled)
 
-		editor.setMaterialName( editor.selected.material, materialName.getValue() );
+    var materialNameRow = new UI.Panel();
+    materialNameRow.setClass("row easy");
+    var materialName = new UI.Input().setWidth('150px').setColor('#444').setFontSize('12px').onChange(function () {
 
-	} );
-	materialNameRow.add( new UI.Text( 'Name' ).setWidth( '90px' ) );
-	materialNameRow.add( materialName );
-	//container.add( materialNameRow );
+        editor.setMaterialName(editor.selected.material, materialName.getValue());
 
-	
-	// class (disabled)
+    });
+    materialNameRow.add(new UI.Text('Name').setWidth('90px'));
+    materialNameRow.add(materialName);
+    //container.add( materialNameRow );
 
-	var materialClassRow = new UI.Panel();
-	materialClassRow.setClass("advanced");
-	var materialClass = new UI.Select().setOptions( {
 
-		'LineBasicMaterial': 'LineBasicMaterial',
-		'LineDashedMaterial': 'LineDashedMaterial',
-		'MeshBasicMaterial': 'MeshBasicMaterial',
-		'MeshDepthMaterial': 'MeshDepthMaterial',
-		'MeshFaceMaterial': 'MeshFaceMaterial',
-		'MeshLambertMaterial': 'MeshLambertMaterial',
-		'MeshNormalMaterial': 'MeshNormalMaterial',
-		'MeshPhongMaterial': 'MeshPhongMaterial',
-		'SpriteMaterial': 'SpriteMaterial'
+    // class (disabled)
 
-	} ).setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
-	materialClassRow.add( new UI.Text( 'Type' ).setWidth( '90px' ) );
-	materialClassRow.add( materialClass );
-	//container.add( materialClassRow );
+    var materialClassRow = new UI.Panel();
+    materialClassRow.setClass("row advanced");
+    var materialClass = new UI.Select().setOptions({
 
+        'LineBasicMaterial': 'LineBasicMaterial',
+        'LineDashedMaterial': 'LineDashedMaterial',
+        'MeshBasicMaterial': 'MeshBasicMaterial',
+        'MeshDepthMaterial': 'MeshDepthMaterial',
+        'MeshFaceMaterial': 'MeshFaceMaterial',
+        'MeshLambertMaterial': 'MeshLambertMaterial',
+        'MeshNormalMaterial': 'MeshNormalMaterial',
+        'MeshPhongMaterial': 'MeshPhongMaterial',
+        'SpriteMaterial': 'SpriteMaterial'
 
-	// color
+    }).setWidth('150px').setColor('#444').setFontSize('12px').onChange(update);
+    materialClassRow.add(new UI.Text('Type').setWidth('90px'));
+    materialClassRow.add(materialClass);
+    //container.add( materialClassRow );
 
-	var materialColorRow = new UI.Panel();
-	materialColorRow.setClass("easy");
-	var materialColor = new UI.Color().onChange( update );
 
-	materialColorRow.add( new UI.Text( 'Color' ).setWidth( '90px' ) );
-	materialColorRow.add( materialColor );
+    // color
 
-	container.add( materialColorRow );
-	
-	
-	// edges
-	
-	var edgesRow = new UI.Panel();
-	edgesRow.setClass("advanced");
-	var edgesCheckbox = new UI.Checkbox( false ).onChange( update );
-	edgesRow.add( new UI.Text( 'Edges' ).setWidth( '90px' ) );
-	edgesRow.add( edgesCheckbox );
-	container.add( edgesRow );
+    var materialColorRow = new UI.Panel();
+    materialColorRow.setClass("row easy");
+    var materialColor = new UI.Color().onChange(update);
 
-	
-	// ambient (disabled)
+    materialColorRow.add(new UI.Text('Color').setWidth('90px'));
+    materialColorRow.add(materialColor);
 
-	var materialAmbientRow = new UI.Panel();
-	materialAmbientRow.setClass("disabled");
-	var materialAmbient = new UI.Color().onChange( update );
+    container.add(materialColorRow);
 
-	materialAmbientRow.add( new UI.Text( 'Ambient' ).setWidth( '90px' ) );
-	materialAmbientRow.add( materialAmbient );
-	container.add( materialAmbientRow );
 
+    // edges (disabled)
 
-	// emissive (disabled)
+    var edgesRow = new UI.Panel();
+    edgesRow.setClass("row advanced disabled");
+    var edgesCheckbox = new UI.Checkbox(false).onChange(update);
+    edgesRow.add(new UI.Text('Edges').setWidth('90px'));
+    edgesRow.add(edgesCheckbox);
+    container.add(edgesRow);
 
-	var materialEmissiveRow = new UI.Panel();
-	materialEmissiveRow.setClass("disabled");
-	var materialEmissive = new UI.Color().onChange( update );
 
-	materialEmissiveRow.add( new UI.Text( 'Emissive' ).setWidth( '90px' ) );
-	materialEmissiveRow.add( materialEmissive );
+    // ambient (disabled)
 
-	container.add( materialEmissiveRow );
+    var materialAmbientRow = new UI.Panel();
+    materialAmbientRow.setClass("row disabled");
+    var materialAmbient = new UI.Color().onChange(update);
 
-	
-	// specular (disabled)
+    materialAmbientRow.add(new UI.Text('Ambient').setWidth('90px'));
+    materialAmbientRow.add(materialAmbient);
+    container.add(materialAmbientRow);
 
-	var materialSpecularRow = new UI.Panel();
-	var materialSpecular = new UI.Color().onChange( update );
 
-	materialSpecularRow.add( new UI.Text( 'Specular' ).setWidth( '90px' ) );
-	materialSpecularRow.add( materialSpecular );
-	//container.add( materialSpecularRow );
+    // emissive (disabled)
 
-	
-	// shininess (disabled)
+    var materialEmissiveRow = new UI.Panel();
+    materialEmissiveRow.setClass("row disabled");
+    var materialEmissive = new UI.Color().onChange(update);
 
-	var materialShininessRow = new UI.Panel();
-	materialShininessRow.setClass("disabled");
-	var materialShininess = new UI.Number( 30 ).onChange( update );
+    materialEmissiveRow.add(new UI.Text('Emissive').setWidth('90px'));
+    materialEmissiveRow.add(materialEmissive);
 
-	materialShininessRow.add( new UI.Text( 'Shininess' ).setWidth( '90px' ) );
-	materialShininessRow.add( materialShininess );
-	container.add( materialShininessRow );
+    container.add(materialEmissiveRow);
 
 
-	// vertex colors (disabled)
+    // specular (disabled)
 
-	var materialVertexColorsRow = new UI.Panel();
-	materialVertexColorsRow.setClass("disabled");
-	var materialVertexColors = new UI.Select().setOptions( {
+    var materialSpecularRow = new UI.Panel();
+    materialSpecularRow.setClass("row");
+    var materialSpecular = new UI.Color().onChange(update);
 
-		0: 'No',
-		1: 'Face',
-		2: 'Vertex'
+    materialSpecularRow.add(new UI.Text('Specular').setWidth('90px'));
+    materialSpecularRow.add(materialSpecular);
+    //container.add( materialSpecularRow );
 
-	} ).onChange( update );
 
-	materialVertexColorsRow.add( new UI.Text( 'Vertex Colors' ).setWidth( '90px' ) );
-	materialVertexColorsRow.add( materialVertexColors );
-	container.add( materialVertexColorsRow );
+    // shininess (disabled)
 
+    var materialShininessRow = new UI.Panel();
+    materialShininessRow.setClass("row disabled");
+    var materialShininess = new UI.Number(30).onChange(update);
 
-	// map
+    materialShininessRow.add(new UI.Text('Shininess').setWidth('90px'));
+    materialShininessRow.add(materialShininess);
+    container.add(materialShininessRow);
 
-	var materialMapRow = new UI.Panel();
-	materialMapRow.setClass("advanced");
-	var materialMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialMap = new UI.Texture().setColor( '#444' ).onChange( update );
 
-	materialMapRow.add( new UI.Text( 'Texture' ).setWidth( '90px' ) );
-	materialMapRow.add( materialMapEnabled );
-	materialMapRow.add( materialMap );
+    // vertex colors (disabled)
 
-	container.add( materialMapRow );
+    var materialVertexColorsRow = new UI.Panel();
+    materialVertexColorsRow.setClass("row disabled");
+    var materialVertexColors = new UI.Select().setOptions({
 
+        0: 'No',
+        1: 'Face',
+        2: 'Vertex'
 
-	// light map (disabled)
+    }).onChange(update);
 
-	var materialLightMapRow = new UI.Panel();
-	materialLightMapRow.setClass("disabled");
-	var materialLightMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialLightMap = new UI.Texture().setColor( '#444' ).onChange( update );
+    materialVertexColorsRow.add(new UI.Text('Vertex Colors').setWidth('90px'));
+    materialVertexColorsRow.add(materialVertexColors);
+    container.add(materialVertexColorsRow);
 
-	materialLightMapRow.add( new UI.Text( 'Light Map' ).setWidth( '90px' ) );
-	materialLightMapRow.add( materialLightMapEnabled );
-	materialLightMapRow.add( materialLightMap );
 
-	container.add( materialLightMapRow );
+    // map
 
+    var materialMapRow = new UI.Panel();
+    materialMapRow.setClass("row advanced");
+    //var materialMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialMap = new UI.Texture().setColor('#444').onChange(update);
 
-	// bump map (disabled)
+    materialMapRow.add(new UI.Text('Texture').setWidth('90px'));
+    //materialMapRow.add(materialMapEnabled);
+    materialMapRow.add(materialMap);
 
-	var materialBumpMapRow = new UI.Panel();
-	materialBumpMapRow.setClass("disabled");
-	var materialBumpMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialBumpMap = new UI.Texture().setColor( '#444' ).onChange( update );
-	var materialBumpScale = new UI.Number( 1 ).setWidth( '30px' ).onChange( update );
+    container.add(materialMapRow);
 
-	materialBumpMapRow.add( new UI.Text( 'Bump Map' ).setWidth( '90px' ) );
-	materialBumpMapRow.add( materialBumpMapEnabled );
-	materialBumpMapRow.add( materialBumpMap );
-	materialBumpMapRow.add( materialBumpScale );
 
-	container.add( materialBumpMapRow );
+    // light map (disabled)
 
+    var materialLightMapRow = new UI.Panel();
+    materialLightMapRow.setClass("row disabled");
+    var materialLightMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialLightMap = new UI.Texture().setColor('#444').onChange(update);
 
-	// normal map (disabled)
+    materialLightMapRow.add(new UI.Text('Light Map').setWidth('90px'));
+    materialLightMapRow.add(materialLightMapEnabled);
+    materialLightMapRow.add(materialLightMap);
 
-	var materialNormalMapRow = new UI.Panel();
-	materialNormalMapRow.setClass("disabled");
-	var materialNormalMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialNormalMap = new UI.Texture().setColor( '#444' ).onChange( update );
+    container.add(materialLightMapRow);
 
-	materialNormalMapRow.add( new UI.Text( 'Normal Map' ).setWidth( '90px' ) );
-	materialNormalMapRow.add( materialNormalMapEnabled );
-	materialNormalMapRow.add( materialNormalMap );
 
-	container.add( materialNormalMapRow );
+    // bump map (disabled)
 
+    var materialBumpMapRow = new UI.Panel();
+    materialBumpMapRow.setClass("row disabled");
+    var materialBumpMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialBumpMap = new UI.Texture().setColor('#444').onChange(update);
+    var materialBumpScale = new UI.Number(1).setWidth('30px').onChange(update);
 
-	// specular map (disabled)
+    materialBumpMapRow.add(new UI.Text('Bump Map').setWidth('90px'));
+    materialBumpMapRow.add(materialBumpMapEnabled);
+    materialBumpMapRow.add(materialBumpMap);
+    materialBumpMapRow.add(materialBumpScale);
 
-	var materialSpecularMapRow = new UI.Panel();
-	materialSpecularMapRow.setClass("disabled");
-	var materialSpecularMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialSpecularMap = new UI.Texture().setColor( '#444' ).onChange( update );
+    container.add(materialBumpMapRow);
 
-	materialSpecularMapRow.add( new UI.Text( 'Specular Map' ).setWidth( '90px' ) );
-	materialSpecularMapRow.add( materialSpecularMapEnabled );
-	materialSpecularMapRow.add( materialSpecularMap );
 
-	container.add( materialSpecularMapRow );
+    // normal map (disabled)
 
+    var materialNormalMapRow = new UI.Panel();
+    materialNormalMapRow.setClass("row disabled");
+    var materialNormalMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialNormalMap = new UI.Texture().setColor('#444').onChange(update);
 
-	// env map (disabled)
+    materialNormalMapRow.add(new UI.Text('Normal Map').setWidth('90px'));
+    materialNormalMapRow.add(materialNormalMapEnabled);
+    materialNormalMapRow.add(materialNormalMap);
 
-	var materialEnvMapRow = new UI.Panel();
-	materialEnvMapRow.setClass("disabled");
-	var materialEnvMapEnabled = new UI.Checkbox( false ).onChange( update );
-	var materialEnvMap = new UI.CubeTexture().setColor( '#444' ).onChange( update );
-	var materialReflectivity = new UI.Number( 1 ).setWidth( '30px' ).onChange( update );
+    container.add(materialNormalMapRow);
 
-	materialEnvMapRow.add( new UI.Text( 'Env Map' ).setWidth( '90px' ) );
-	materialEnvMapRow.add( materialEnvMapEnabled );
-	materialEnvMapRow.add( materialEnvMap );
-	materialEnvMapRow.add( materialReflectivity );
 
-	container.add( materialEnvMapRow );
+    // specular map (disabled)
 
+    var materialSpecularMapRow = new UI.Panel();
+    materialSpecularMapRow.setClass("row disabled");
+    var materialSpecularMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialSpecularMap = new UI.Texture().setColor('#444').onChange(update);
 
-	// blending
+    materialSpecularMapRow.add(new UI.Text('Specular Map').setWidth('90px'));
+    materialSpecularMapRow.add(materialSpecularMapEnabled);
+    materialSpecularMapRow.add(materialSpecularMap);
 
-	var materialBlendingRow = new UI.Panel();
-	materialBlendingRow.setClass("advanced");
-	var materialBlending = new UI.Select().setOptions( {
+    container.add(materialSpecularMapRow);
 
-		0: 'No',
-		1: 'Normal',
-		2: 'Additive',
-		3: 'Subtractive',
-		4: 'Multiply',
-		5: 'Custom'
 
-	} ).setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
+    // env map (disabled)
 
-	materialBlendingRow.add( new UI.Text( 'Blending' ).setWidth( '90px' ) );
-	materialBlendingRow.add( materialBlending );
+    var materialEnvMapRow = new UI.Panel();
+    materialEnvMapRow.setClass("row disabled");
+    var materialEnvMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialEnvMap = new UI.CubeTexture().setColor('#444').onChange(update);
+    var materialReflectivity = new UI.Number(1).setWidth('30px').onChange(update);
 
-	container.add( materialBlendingRow );
+    materialEnvMapRow.add(new UI.Text('Env Map').setWidth('90px'));
+    materialEnvMapRow.add(materialEnvMapEnabled);
+    materialEnvMapRow.add(materialEnvMap);
+    materialEnvMapRow.add(materialReflectivity);
 
+    container.add(materialEnvMapRow);
 
-	// side (disabled)
 
-	var materialSideRow = new UI.Panel();
-	materialSideRow.setClass("disabled");
-	var materialSide = new UI.Select().setOptions( {
+    // blending (diabled)
 
-		0: 'Front',
-		1: 'Back',
-		2: 'Double'
+    var materialBlendingRow = new UI.Panel();
+    materialBlendingRow.setClass("row advanced disabled");
+    var materialBlending = new UI.Select().setOptions({
 
-	} ).setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
+        0: 'No',
+        1: 'Normal',
+        2: 'Additive',
+        3: 'Subtractive',
+        4: 'Multiply',
+        5: 'Custom'
 
-	materialSideRow.add( new UI.Text( 'Side' ).setWidth( '90px' ) );
-	materialSideRow.add( materialSide );
+    }).setWidth('150px').setColor('#444').setFontSize('12px').onChange(update);
 
-	container.add( materialSideRow );
+    materialBlendingRow.add(new UI.Text('Blending').setWidth('90px'));
+    materialBlendingRow.add(materialBlending);
 
+    container.add(materialBlendingRow);
 
-	// opacity
 
-	var materialOpacityRow = new UI.Panel();
-	var materialOpacity = new UI.Number().setWidth( '24px' ).setRange( 0, 1 ).onChange( update );
+    // side (disabled)
 
-	materialOpacityRow.add( new UI.Text( 'Opacity' ).setWidth( '90px' ) );
-	materialOpacityRow.add( materialOpacity );
+    var materialSideRow = new UI.Panel();
+    materialSideRow.setClass("row disabled");
+    var materialSide = new UI.Select().setOptions({
 
-	container.add( materialOpacityRow );
+        0: 'Front',
+        1: 'Back',
+        2: 'Double'
 
+    }).setWidth('150px').setColor('#444').setFontSize('12px').onChange(update);
 
-	// transparent (disabled)
+    materialSideRow.add(new UI.Text('Side').setWidth('90px'));
+    materialSideRow.add(materialSide);
 
-	var materialTransparentRow = new UI.Panel();
-	materialTransparentRow.setClass("disabled");
-	var materialTransparent = new UI.Checkbox().setLeft( '100px' ).onChange( update );
+    container.add(materialSideRow);
 
-	materialTransparentRow.add( new UI.Text( 'Transparent' ).setWidth( '90px' ) );
-	materialTransparentRow.add( materialTransparent );
 
-	container.add( materialTransparentRow );
+    // opacity
 
+    var materialOpacityRow = new UI.Panel();
+    materialOpacityRow.setClass("row");
+    var materialOpacity = new UI.Number().setWidth('24px').setRange(0, 1).onChange(update);
 
-	// wireframe (disabled)
+    materialOpacityRow.add(new UI.Text('Opacity').setWidth('90px'));
+    materialOpacityRow.add(materialOpacity);
 
-	var materialWireframeRow = new UI.Panel();
-	materialWireframeRow.setClass("disabled");
-	var materialWireframe = new UI.Checkbox( false ).onChange( update );
-	var materialWireframeLinewidth = new UI.Number( 1 ).setWidth( '60px' ).setRange( 0, 100 ).onChange( update );
+    container.add(materialOpacityRow);
 
-	materialWireframeRow.add( new UI.Text( 'Wireframe' ).setWidth( '90px' ) );
-	materialWireframeRow.add( materialWireframe );
-	materialWireframeRow.add( materialWireframeLinewidth );
 
-	container.add( materialWireframeRow );
-	
-	
-	// runtime material
+    // transparent (disabled)
 
-	var runtimeMaterialRow = new UI.Panel();
-	runtimeMaterialRow.setClass("advanced");
-	var runtimeMaterial = new UI.RuntimeMaterial(  ).onChange( update );
-	
-	runtimeMaterialRow.add( new UI.Text( 'Runtime material changes' ).setWidth( '300px' ) )
-	runtimeMaterialRow.add( runtimeMaterial );
+    var materialTransparentRow = new UI.Panel();
+    materialTransparentRow.setClass("row disabled");
+    var materialTransparent = new UI.Checkbox().setLeft('100px').onChange(update);
 
-	container.add( runtimeMaterialRow );
+    materialTransparentRow.add(new UI.Text('Transparent').setWidth('90px'));
+    materialTransparentRow.add(materialTransparent);
 
+    container.add(materialTransparentRow);
 
-	//
 
-	function update() {
+    // wireframe (disabled)
 
-		var object = editor.selected;
-		var geometry = object.geometry;
-		var material = object.material;
-		var textureWarning = false;
-		var objectHasUvs = false;
+    var materialWireframeRow = new UI.Panel();
+    materialWireframeRow.setClass("row disabled");
+    var materialWireframe = new UI.Checkbox(false).onChange(update);
+    var materialWireframeLinewidth = new UI.Number(1).setWidth('60px').setRange(0, 100).onChange(update);
 
-		if ( object instanceof THREE.Sprite ) objectHasUvs = true;
-		if ( geometry instanceof THREE.Geometry && geometry.faceVertexUvs[ 0 ].length > 0 ) objectHasUvs = true;
-		if ( geometry instanceof THREE.BufferGeometry && geometry.attributes.uv !== undefined ) objectHasUvs = true;
+    materialWireframeRow.add(new UI.Text('Wireframe').setWidth('90px'));
+    materialWireframeRow.add(materialWireframe);
+    materialWireframeRow.add(materialWireframeLinewidth);
 
-		if ( material ) {
+    container.add(materialWireframeRow);
 
-			if ( material.uuid !== undefined ) {
 
-				material.uuid = materialUUID.getValue();
+    // runtime material
 
-			}
+    var runtimeMaterialRow = new UI.Panel();
+    runtimeMaterialRow.setClass("row advanced");
+    var runtimeMaterial = new UI.RuntimeMaterial().onChange(update);
 
-			if ( material instanceof materialClasses[ materialClass.getValue() ] === false ) {
+    runtimeMaterialRow.add(new UI.Text('Runtime material changes').setWidth('300px'));
+    runtimeMaterialRow.add(runtimeMaterial);
 
-				material = new materialClasses[ materialClass.getValue() ]();
-				object.material = material;
+    container.add(runtimeMaterialRow);
 
-			}
 
-			// todo
-			if ( material.color !== undefined ) {
+    //
+    // DISABLED PROPERTIES DO NOT UPDATE TEMPLATE INSTANCES
 
-				if( object.isTemplate ){
+    function update() {
 
-					var instObjects = editor.templateManager.getInstancesOfTemplate( object.id );
 
-					for( var i = 0; i < instObjects.length; i++){
+        var object = editor.selected;
+        var geometry = object.geometry;
+        var material = object.material;
+        var textureWarning = false;
+        var objectHasUvs = false;
 
-						var instMaterial = instObjects[i].material;
+        if (object instanceof THREE.Sprite) objectHasUvs = true;
+        if (geometry instanceof THREE.Geometry && geometry.faceVertexUvs[0].length > 0) objectHasUvs = true;
+        if (geometry instanceof THREE.BufferGeometry && geometry.attributes.uv !== undefined) objectHasUvs = true;
 
-						// todo check if property of the current instance is linked to the template or not.
-						instMaterial.color.setHex( materialColor.getHexValue() );
-					}
+        if (material) {
 
-					var templMaterial = object.material;
-					templMaterial.color.setHex( materialColor.getHexValue() );
+            if (material.uuid !== undefined) {
 
-				}else{
+                material.uuid = materialUUID.getValue();
 
-					material.color.setHex( materialColor.getHexValue() );
+            }
 
-				}
+            if (material instanceof materialClasses[materialClass.getValue()] === false) {
 
-			}
-			
-			if ( edgesCheckbox.getValue() == true && object._egh == undefined ) {
-			
-				editor.setEdge( object, !object.events ? 1 : object.events.length );
-			
-			} else if ( edgesCheckbox.getValue() == false && object._egh != undefined ) {
-			
-				object.remove( object._egh );
-				delete object._egh;
-			
-			}
-			material.edges = edgesCheckbox.getValue();
-			Logger.info('EDGES', material.edges, "logged by Sidebars.Properties.Material.js, row 385");
+                material = new materialClasses[materialClass.getValue()]();
+                object.material = material;
 
-			if ( material.ambient !== undefined ) {
+            }
 
-				material.ambient.setHex( materialAmbient.getHexValue() );
 
-			}
+            // COLOR UPDATE
 
-			if ( material.emissive !== undefined ) {
+            if (material.color !== undefined) {
 
-				material.emissive.setHex( materialEmissive.getHexValue() );
+                // COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
+                if (object.isTemplate) {
 
-			}
+                    var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
 
-			if ( material.specular !== undefined ) {
+                    for (var i = 0; i < instObjects.length; i++) {
 
-				material.specular.setHex( materialSpecular.getHexValue() );
+                        var instMaterial = instObjects[i].material;
 
-			}
+                        // check if property of the current instance is linked to the template or not.
+                        if (instObjects[i].isLinked.color) {
+                            instMaterial.color.setHex(materialColor.getHexValue());
+                        }
 
-			if ( material.shininess !== undefined ) {
+                    }
+                }
 
-				material.shininess = materialShininess.getValue();
+                // COLOR UPDATE OF NORMAL OBJECT
+                material.color.setHex(materialColor.getHexValue());
 
-			}
 
-			if ( material.vertexColors !== undefined ) {
+            }
 
-				geometry.buffersNeedUpdate = true;
-				geometry.colorsNeedUpdate = true;
 
-				material.vertexColors = parseInt( materialVertexColors.getValue() );
-				material.needsUpdate = true;
+            // EDGES UPDATED
 
-			}
+            if (edgesCheckbox.getValue() == true && object._egh == undefined) {
 
-			if ( material.map !== undefined ) {
+                editor.setEdge(object, !object.events ? 1 : object.events.length);
 
-				var mapEnabled = materialMapEnabled.getValue() === true;
+            } else if (edgesCheckbox.getValue() == false && object._egh != undefined) {
 
-				if ( objectHasUvs )  {
+                object.remove(object._egh);
+                delete object._egh;
 
-					if ( geometry !== undefined ) {
+            }
+            material.edges = edgesCheckbox.getValue();
+            Logger.info('EDGES', material.edges, "logged by Sidebars.Properties.Material.js, row 385");
 
-						geometry.buffersNeedUpdate = true;
-						geometry.uvsNeedUpdate = true;
+            if (material.ambient !== undefined) {
 
-					}
+                material.ambient.setHex(materialAmbient.getHexValue());
 
-					material.map = mapEnabled ? materialMap.getValue() : null;
-					material.needsUpdate = true;
+            }
 
-				} else {
+            if (material.emissive !== undefined) {
 
-					if ( mapEnabled ) textureWarning = true;
+                material.emissive.setHex(materialEmissive.getHexValue());
 
-				}
+            }
 
-			}
+            if (material.specular !== undefined) {
 
-			/*
-			if ( material.lightMap !== undefined ) {
+                material.specular.setHex(materialSpecular.getHexValue());
 
-				var lightMapEnabled = materialLightMapEnabled.getValue() === true;
+            }
 
-				if ( objectHasUvs )  {
+            if (material.shininess !== undefined) {
 
-					geometry.buffersNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
+                material.shininess = materialShininess.getValue();
 
-					material.lightMap = lightMapEnabled ? materialLightMap.getValue() : null;
-					material.needsUpdate = true;
+            }
 
-				} else {
+            if (material.vertexColors !== undefined) {
 
-					if ( lightMapEnabled ) textureWarning = true;
+                geometry.buffersNeedUpdate = true;
+                geometry.colorsNeedUpdate = true;
 
-				}
+                material.vertexColors = parseInt(materialVertexColors.getValue());
+                material.needsUpdate = true;
 
-			}
-			*/
+            }
 
-			if ( material.bumpMap !== undefined ) {
+            // TEXTURE MAP
 
-				var bumpMapEnabled = materialBumpMapEnabled.getValue() === true;
+            if (material.map !== undefined) {
 
-				if ( objectHasUvs )  {
+                //var mapEnabled = materialMapEnabled.getValue() === true;
+                var mapEnabled = true;
 
-					geometry.buffersNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
+                // COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
+                if (object.isTemplate) {
 
-					material.bumpMap = bumpMapEnabled ? materialBumpMap.getValue() : null;
-					material.bumpScale = materialBumpScale.getValue();
-					material.needsUpdate = true;
+                    var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
 
-				} else {
+                    for (var i = 0; i < instObjects.length; i++) {
 
-					if ( bumpMapEnabled ) textureWarning = true;
+                        var instMaterial = instObjects[i].material;
+                        var instGeometry = instObjects[i].geometry;
 
-				}
+                        // check if property of the current instance is linked to the template or not.
+                        if (instObjects[i].isLinked.color) {
 
-			}
+                            if (objectHasUvs) {
 
-			if ( material.normalMap !== undefined ) {
+                                if (instGeometry !== undefined) {
 
-				var normalMapEnabled = materialNormalMapEnabled.getValue() === true;
+                                    instGeometry.buffersNeedUpdate = true;
+                                    instGeometry.uvsNeedUpdate = true;
 
-				if ( objectHasUvs )  {
+                                }
 
-					geometry.buffersNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
+                                instMaterial.map = mapEnabled ? materialMap.getValue() : null;
+                                instMaterial.needsUpdate = true;
 
-					material.normalMap = normalMapEnabled ? materialNormalMap.getValue() : null;
-					material.needsUpdate = true;
+                            } else {
 
-				} else {
+                                if (mapEnabled) textureWarning = true;
 
-					if ( normalMapEnabled ) textureWarning = true;
+                            }
+                        }
 
-				}
+                    }
+                }
 
-			}
+                if (objectHasUvs) {
 
-			if ( material.specularMap !== undefined ) {
+                    if (geometry !== undefined) {
 
-				var specularMapEnabled = materialSpecularMapEnabled.getValue() === true;
+                        geometry.buffersNeedUpdate = true;
+                        geometry.uvsNeedUpdate = true;
 
-				if ( objectHasUvs )  {
+                    }
 
-					geometry.buffersNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
+                    material.map = mapEnabled ? materialMap.getValue() : null;
+                    material.needsUpdate = true;
 
-					material.specularMap = specularMapEnabled ? materialSpecularMap.getValue() : null;
-					material.needsUpdate = true;
+                } else {
 
-				} else {
+                    if (mapEnabled) textureWarning = true;
 
-					if ( specularMapEnabled ) textureWarning = true;
+                }
 
-				}
 
-			}
+            }
 
-			if ( material.envMap !== undefined ) {
+            /*
+             if ( material.lightMap !== undefined ) {
 
-				var envMapEnabled = materialEnvMapEnabled.getValue() === true;
+             var lightMapEnabled = materialLightMapEnabled.getValue() === true;
 
-				if ( objectHasUvs )  {
+             if ( objectHasUvs )  {
 
-					geometry.buffersNeedUpdate = true;
-					geometry.uvsNeedUpdate = true;
+             geometry.buffersNeedUpdate = true;
+             geometry.uvsNeedUpdate = true;
 
-					material.envMap = envMapEnabled ? materialEnvMap.getValue() : null;
-					material.reflectivity = materialReflectivity.getValue();
-					material.needsUpdate = true;
+             material.lightMap = lightMapEnabled ? materialLightMap.getValue() : null;
+             material.needsUpdate = true;
 
-				} else {
+             } else {
 
-					if ( envMapEnabled ) textureWarning = true;
+             if ( lightMapEnabled ) textureWarning = true;
 
-				}
+             }
 
-			}
+             }
+             */
 
-			if ( material.blending !== undefined ) {
+            if (material.bumpMap !== undefined) {
 
-				material.blending = parseInt( materialBlending.getValue() );
+                var bumpMapEnabled = materialBumpMapEnabled.getValue() === true;
 
-			}
+                if (objectHasUvs) {
 
-			if ( material.side !== undefined ) {
+                    geometry.buffersNeedUpdate = true;
+                    geometry.uvsNeedUpdate = true;
 
-				material.side = parseInt( materialSide.getValue() );
+                    material.bumpMap = bumpMapEnabled ? materialBumpMap.getValue() : null;
+                    material.bumpScale = materialBumpScale.getValue();
+                    material.needsUpdate = true;
 
-			}
+                } else {
 
-			if ( material.opacity !== undefined ) {
+                    if (bumpMapEnabled) textureWarning = true;
 
-				material.opacity = materialOpacity.getValue();
-				// CUSTOM
-				material.transparent = material.opacity > 0 ? true : false;
+                }
 
-			}
+            }
 
-			/*if ( material.transparent !== undefined ) {
+            if (material.normalMap !== undefined) {
 
-				material.transparent = materialTransparent.getValue();
+                var normalMapEnabled = materialNormalMapEnabled.getValue() === true;
 
-			}*/
+                if (objectHasUvs) {
 
-			if ( material.wireframe !== undefined ) {
+                    geometry.buffersNeedUpdate = true;
+                    geometry.uvsNeedUpdate = true;
 
-				material.wireframe = materialWireframe.getValue();
+                    material.normalMap = normalMapEnabled ? materialNormalMap.getValue() : null;
+                    material.needsUpdate = true;
 
-			}
+                } else {
 
-			if ( material.wireframeLinewidth !== undefined ) {
+                    if (normalMapEnabled) textureWarning = true;
 
-				material.wireframeLinewidth = materialWireframeLinewidth.getValue();
+                }
 
-			}
-			
-			material.runtimeMaterials = runtimeMaterial.getValue();
+            }
 
-			//updateRows();
+            if (material.specularMap !== undefined) {
 
-			signals.materialChanged.dispatch( material );
+                var specularMapEnabled = materialSpecularMapEnabled.getValue() === true;
 
-		}
+                if (objectHasUvs) {
 
-		if ( textureWarning ) {
+                    geometry.buffersNeedUpdate = true;
+                    geometry.uvsNeedUpdate = true;
 
-			Logger.error( "Can't set texture, model doesn't have texture coordinates", "logged by Sidebars.Properties.Material.js, row 597" );
+                    material.specularMap = specularMapEnabled ? materialSpecularMap.getValue() : null;
+                    material.needsUpdate = true;
 
-		}
+                } else {
 
-	};
+                    if (specularMapEnabled) textureWarning = true;
 
-	function updateRows() {
+                }
 
-		var properties = {
-			'name': materialNameRow,
-			'color': materialColorRow,
-			'ambient': materialAmbientRow,
-			'emissive': materialEmissiveRow,
-			'specular': materialSpecularRow,
-			'shininess': materialShininessRow,
-			'vertexColors': materialVertexColorsRow,
-			'map': materialMapRow,
-			'lightMap': materialLightMapRow,
-			'bumpMap': materialBumpMapRow,
-			'normalMap': materialNormalMapRow,
-			'specularMap': materialSpecularMapRow,
-			'envMap': materialEnvMapRow,
-			'blending': materialBlendingRow,
-			'side': materialSideRow,
-			'opacity': materialOpacityRow,
-			'transparent': materialTransparentRow,
-			'wireframe': materialWireframeRow,
-			'runtimeMaterials': runtimeMaterialRow,
-			'edges': edgesRow
-		};
+            }
 
-		var material = editor.selected.material;
+            if (material.envMap !== undefined) {
 
-		for ( var property in properties ) {
-		
-			//var visible = material[ property ] !== undefined ? true: false;
+                var envMapEnabled = materialEnvMapEnabled.getValue() === true;
 
-			properties[ property ].setDisplay( visible ? '' : 'none' );
+                if (objectHasUvs) {
 
-		}
+                    geometry.buffersNeedUpdate = true;
+                    geometry.uvsNeedUpdate = true;
 
-	};
+                    material.envMap = envMapEnabled ? materialEnvMap.getValue() : null;
+                    material.reflectivity = materialReflectivity.getValue();
+                    material.needsUpdate = true;
 
-	// signals
-	
-	signals.defaultColorTypeChanged.add( function ( defaultColorType ) {
-		
-		update(); //TODO: maybe race condition
-		
-	} );
-	
-	// events
+                } else {
 
-	signals.objectSelected.add( function ( object ) {
+                    if (envMapEnabled) textureWarning = true;
 
-		if ( object && object.material ) {
+                }
 
-			container.setDisplay( '' );
+            }
 
-			var material = object.material;
+            if (material.blending !== undefined) {
 
-			if ( material.uuid !== undefined ) {
+                material.blending = parseInt(materialBlending.getValue());
 
-				materialUUID.setValue( material.uuid );
+            }
 
-			}
+            if (material.side !== undefined) {
 
-			if ( material.name !== undefined ) {
+                material.side = parseInt(materialSide.getValue());
 
-				materialName.setValue( material.name );
+            }
 
-			}
+            // OPACITY
 
-			materialClass.setValue( editor.getMaterialType( material ) );
+            if (material.opacity !== undefined) {
 
-			if ( material.color !== undefined ) {
+                // OPACITY UPDATE OF TEMPLATE AND ITS INSTANCES
+                if (object.isTemplate) {
 
-				materialColor.setHexValue( material.color.getHexString() );
+                    var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
 
-			}
-			
-			edgesCheckbox.setValue( object.material.edges );
-			Logger.info('HASEDGES', object.material.edges, "logged by Sidebars.Properties.Materials.js, row 679" );
-			if ( object.material.edges ) {
-				editor.setEdge( object );
-			}
+                    for (var i = 0; i < instObjects.length; i++) {
 
-			if ( material.ambient !== undefined ) {
+                        var instMaterial = instObjects[i].material;
 
-				materialAmbient.setHexValue( material.ambient.getHexString() );
+                        // check if property of the current instance is linked to the template or not.
+                        if (instObjects[i].isLinked.opacity) {
 
-			}
+                            instMaterial.opacity = materialOpacity.getValue();
+                            // CUSTOM
+                            instMaterial.transparent = material.opacity > 0 ? true : false;
 
-			if ( material.emissive !== undefined ) {
+                        }
 
-				materialEmissive.setHexValue( material.emissive.getHexString() );
+                    }
+                }
 
-			}
 
-			if ( material.specular !== undefined ) {
+                // OPACITY UPDATE OF NORMAL OBJECT
+                material.opacity = materialOpacity.getValue();
+                // CUSTOM
+                material.transparent = material.opacity > 0 ? true : false;
 
-				materialSpecular.setHexValue( material.specular.getHexString() );
 
-			}
+            }
 
-			if ( material.shininess !== undefined ) {
+            /*if ( material.transparent !== undefined ) {
 
-				materialShininess.setValue( material.shininess );
+             material.transparent = materialTransparent.getValue();
 
-			}
+             }*/
 
-			if ( material.vertexColors !== undefined ) {
+            if (material.wireframe !== undefined) {
 
-				materialVertexColors.setValue( material.vertexColors );
+                material.wireframe = materialWireframe.getValue();
 
-			}
+            }
 
-			if ( material.map !== undefined ) {
+            if (material.wireframeLinewidth !== undefined) {
 
-				materialMapEnabled.setValue( material.map !== null );
-				materialMap.setValue( material.map );
+                material.wireframeLinewidth = materialWireframeLinewidth.getValue();
 
-			}
+            }
 
-			/*
-			if ( material.lightMap !== undefined ) {
+            material.runtimeMaterials = runtimeMaterial.getValue();
 
-				materialLightMapEnabled.setValue( material.lightMap !== null );
-				materialLightMap.setValue( material.lightMap );
+            //updateRows();
 
-			}
-			*/
+            signals.materialChanged.dispatch(material);
 
-			if ( material.bumpMap !== undefined ) {
+        }
 
-				materialBumpMapEnabled.setValue( material.bumpMap !== null );
-				materialBumpMap.setValue( material.bumpMap );
-				materialBumpScale.setValue( material.bumpScale );
+        if (textureWarning) {
 
-			}
+            Logger.error("Can't set texture, model doesn't have texture coordinates", "logged by Sidebars.Properties.Material.js, row 597");
 
-			if ( material.normalMap !== undefined ) {
+        }
 
-				materialNormalMapEnabled.setValue( material.normalMap !== null );
-				materialNormalMap.setValue( material.normalMap );
+    };
 
-			}
+    function updateRows() {
 
-			if ( material.specularMap !== undefined ) {
+        var properties = {
+            'name': materialNameRow,
+            'color': materialColorRow,
+            'ambient': materialAmbientRow,
+            'emissive': materialEmissiveRow,
+            'specular': materialSpecularRow,
+            'shininess': materialShininessRow,
+            'vertexColors': materialVertexColorsRow,
+            'map': materialMapRow,
+            'lightMap': materialLightMapRow,
+            'bumpMap': materialBumpMapRow,
+            'normalMap': materialNormalMapRow,
+            'specularMap': materialSpecularMapRow,
+            'envMap': materialEnvMapRow,
+            'blending': materialBlendingRow,
+            'side': materialSideRow,
+            'opacity': materialOpacityRow,
+            'transparent': materialTransparentRow,
+            'wireframe': materialWireframeRow,
+            'runtimeMaterials': runtimeMaterialRow,
+            'edges': edgesRow
+        };
 
-				materialSpecularMapEnabled.setValue( material.specularMap !== null );
-				materialSpecularMap.setValue( material.specularMap );
+        var material = editor.selected.material;
 
-			}
+        for (var property in properties) {
 
-			if ( material.envMap !== undefined ) {
+            //var visible = material[ property ] !== undefined ? true: false;
 
-				materialEnvMapEnabled.setValue( material.envMap !== null );
-				materialEnvMap.setValue( material.envMap );
-				materialReflectivity.setValue( material.reflectivity );
+            properties[property].setDisplay(visible ? '' : 'none');
 
-			}
+        }
 
-			if ( material.blending !== undefined ) {
+    };
 
-				materialBlending.setValue( material.blending );
+    // signals
 
-			}
+    signals.defaultColorTypeChanged.add(function (defaultColorType) {
 
-			if ( material.side !== undefined ) {
+        update(); //TODO: maybe race condition
 
-				materialSide.setValue( material.side );
+    });
 
-			}
+    // events
 
-			if ( material.opacity !== undefined ) {
+    signals.objectSelected.add(function (object) {
 
-				materialOpacity.setValue( material.opacity );
+        if (object && object.material) {
 
-			}
+            container.setDisplay('');
 
-			if ( material.transparent !== undefined ) {
+            var material = object.material;
 
-				materialTransparent.setValue( material.transparent );
+            if (material.uuid !== undefined) {
 
-			}
+                materialUUID.setValue(material.uuid);
 
-			if ( material.wireframe !== undefined ) {
+            }
 
-				materialWireframe.setValue( material.wireframe );
+            if (material.name !== undefined) {
 
-			}
+                materialName.setValue(material.name);
 
-			if ( material.wireframeLinewidth !== undefined ) {
+            }
 
-				materialWireframeLinewidth.setValue( material.wireframeLinewidth );
+            materialClass.setValue(editor.getMaterialType(material));
 
-			}
-			
-			if ( material.runtimeMaterials !== undefined ) {
-			
-				runtimeMaterial.setValue( material.runtimeMaterials );
-			
-			}
+            if (material.color !== undefined) {
 
-			//updateRows();
+                materialColor.setHexValue(material.color.getHexString());
 
-		} else {
+            }
 
-			container.setDisplay( 'none' );
+            edgesCheckbox.setValue(object.material.edges);
+            Logger.info('HASEDGES', object.material.edges, "logged by Sidebars.Properties.Materials.js, row 679");
+            if (object.material.edges) {
+                editor.setEdge(object);
+            }
 
-		}
+            if (material.ambient !== undefined) {
 
-	} );
+                materialAmbient.setHexValue(material.ambient.getHexString());
 
-	signals.objectChanged.add( function ( object ) {
-	
-		if ( object._egh ) editor.setEdge( object );
-	
-	});
-	
-	return container;
+            }
+
+            if (material.emissive !== undefined) {
+
+                materialEmissive.setHexValue(material.emissive.getHexString());
+
+            }
+
+            if (material.specular !== undefined) {
+
+                materialSpecular.setHexValue(material.specular.getHexString());
+
+            }
+
+            if (material.shininess !== undefined) {
+
+                materialShininess.setValue(material.shininess);
+
+            }
+
+            if (material.vertexColors !== undefined) {
+
+                materialVertexColors.setValue(material.vertexColors);
+
+            }
+
+            if (material.map !== undefined) {
+
+                //materialMapEnabled.setValue(material.map !== null);
+                materialMap.setValue(material.map);
+
+            }
+
+            /*
+             if ( material.lightMap !== undefined ) {
+
+             materialLightMapEnabled.setValue( material.lightMap !== null );
+             materialLightMap.setValue( material.lightMap );
+
+             }
+             */
+
+            if (material.bumpMap !== undefined) {
+
+                materialBumpMapEnabled.setValue(material.bumpMap !== null);
+                materialBumpMap.setValue(material.bumpMap);
+                materialBumpScale.setValue(material.bumpScale);
+
+            }
+
+            if (material.normalMap !== undefined) {
+
+                materialNormalMapEnabled.setValue(material.normalMap !== null);
+                materialNormalMap.setValue(material.normalMap);
+
+            }
+
+            if (material.specularMap !== undefined) {
+
+                materialSpecularMapEnabled.setValue(material.specularMap !== null);
+                materialSpecularMap.setValue(material.specularMap);
+
+            }
+
+            if (material.envMap !== undefined) {
+
+                materialEnvMapEnabled.setValue(material.envMap !== null);
+                materialEnvMap.setValue(material.envMap);
+                materialReflectivity.setValue(material.reflectivity);
+
+            }
+
+            if (material.blending !== undefined) {
+
+                materialBlending.setValue(material.blending);
+
+            }
+
+            if (material.side !== undefined) {
+
+                materialSide.setValue(material.side);
+
+            }
+
+            if (material.opacity !== undefined) {
+
+                materialOpacity.setValue(material.opacity);
+
+            }
+
+            if (material.transparent !== undefined) {
+
+                materialTransparent.setValue(material.transparent);
+
+            }
+
+            if (material.wireframe !== undefined) {
+
+                materialWireframe.setValue(material.wireframe);
+
+            }
+
+            if (material.wireframeLinewidth !== undefined) {
+
+                materialWireframeLinewidth.setValue(material.wireframeLinewidth);
+
+            }
+
+            if (material.runtimeMaterials !== undefined) {
+
+                runtimeMaterial.setValue(material.runtimeMaterials);
+
+            }
+
+            //updateRows();
+
+        } else {
+
+            container.setDisplay('none');
+
+        }
+
+    });
+
+    signals.objectChanged.add(function (object) {
+
+        if (object._egh) editor.setEdge(object);
+
+    });
+
+    return container;
 
 }

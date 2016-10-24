@@ -1,51 +1,129 @@
-Editor.TemplateManager = function (editor) {
+Editor.TemplateManager = function ( editor ) {
 
 
-    this.templateInstanceMap = [];
+    this.editor = editor;
 
     this.objService = editor.objectPropertyService;
     this.signals = editor.signals;
 
-    editor.signals.objectChanged.add( updateInstancesOfTemplate.bind( this ) );
+    this.addTemplate = function ( template, instance ) {
 
+        var templateInstanceMap = editor.scene.templates || [];
 
-    this.addTemplate = function (template) {
-        // todo add only if not yet added. Otherwise throw error.
-        // todo store in localstorage
+        template.position.x = 0;
+        template.position.y = 0.5;
+        template.position.z = 0;
 
-        this.templateInstanceMap.push({
+        template.isTemplate = true;
+
+        instance.isInstance = true;
+
+        this.isLinked = {
+            'parent': true,
+            'position': true,
+            'rotation': true,
+            'scale': true,
+            'visible' : true,
+            'geometry': true,
+            'friction': true,
+            'bounciness' : true,
+            'static' : true,
+            'color' : true,
+            'edges': true,
+            'texture' : true,
+            'blending' : true,
+            'opacity' : true,
+            'runtimeMaterial' : true,
+            'rocket' : true,
+            'resurrection' : true
+        };
+
+        instance.isLinked = this.isLinked;
+
+        templateInstanceMap.push({
             template: template,
-            instances: []
+            instances: [ instance ]
         });
 
         this.signals.templateAdded.dispatch();
+
+        editor.setTemplates ( templateInstanceMap );
+
+    };
+
+
+
+    this.removeTemplate = function ( templateId ){
+
+        var templateInstanceMap = editor.scene.templates;
+
+        var templIndex = this._getIndexOfTemplate( templateInstanceMap, templateId );
+
+        templateInstanceMap.splice( templIndex, 1);
+
+        editor.setTemplates ( templateInstanceMap );
+
     };
 
 
-    this.removeTemplate = function ( template ){
 
-        var templIndex = this._getIndexOfTemplate( template.id );
-        this.templateInstanceMap.splice( templIndex, 1);
+    this.removeInstance = function ( instance ) {
 
+        var templateInstanceMap = editor.scene.templates;
+
+        for( var i = 0; i < templateInstanceMap.length; i++ ) {
+
+
+            var instances = templateInstanceMap[i].instances;
+
+            for ( var j = 0; j < instances.length; j++){
+
+
+                var index = this._getIndexOfInstance( instances, instance.id );
+
+                if( index > -1 ){
+                    instances.splice( index, 1);
+                    break;
+                }
+
+            }
+
+        }
+
+        editor.setTemplates ( templateInstanceMap );
     };
+
 
 
     this.getTemplates = function (){
+
+        var templateInstanceMap = editor.scene.templates;
+
         var templates = [];
 
-        for( var i = 0; i < this.templateInstanceMap.length; i++){
-            templates.push(this.templateInstanceMap[i].template);
+        if( templateInstanceMap ){
+
+            for( var i = 0; i < templateInstanceMap.length; i++){
+                templates.push( templateInstanceMap[i].template );
+            }
+
         }
+
 
         return templates;
     };
 
 
+
     this.getTemplateById = function ( id ) {
 
-        var templIndex = this._getIndexOfTemplate( id );
+        var templateInstanceMap = editor.scene.templates;
 
-        return this.templateInstanceMap[templIndex].template;
+        var templIndex = this._getIndexOfTemplate( templateInstanceMap, id );
+
+        if( templIndex > -1) {
+            return templateInstanceMap[templIndex].template;
+        }
 
     };
 
@@ -53,88 +131,73 @@ Editor.TemplateManager = function (editor) {
 
     this.getInstanceForTemplate = function ( templateId ) {
 
-        var index = this._getIndexOfTemplate( templateId );
+        var templateInstanceMap = editor.scene.templates;
 
-        var instance = this.templateInstanceMap[index].template.clone();
+        var index = this._getIndexOfTemplate( templateInstanceMap, templateId );
+
+        var instance = templateInstanceMap[index].template.clone();
         instance.material = instance.material.clone();
+        instance.isInstance = true;
 
-        this._addInstanceOfTemplate( instance, templateId );
+        instance.isLinked = this.isLinked;
+
+        this._addInstanceOfTemplate( templateInstanceMap, instance, templateId );
+
+        editor.setTemplates ( templateInstanceMap );
 
         return instance;
     };
 
 
+
     this.getInstancesOfTemplate = function ( templateId ) {
 
-        var templIndex = this._getIndexOfTemplate( templateId );
+        var templateInstanceMap = editor.scene.templates;
 
-        return this.templateInstanceMap[templIndex].instances;
+        var templIndex = this._getIndexOfTemplate( templateInstanceMap, templateId );
+
+        return templateInstanceMap[templIndex].instances;
     };
 
 
 
-    this._addInstanceOfTemplate = function (instanceObj, templateId) {
+    this._addInstanceOfTemplate = function ( map, instanceObj, templateId) {
 
-        var templIndex = this._getIndexOfTemplate(templateId);
+        var templIndex = this._getIndexOfTemplate( map, templateId );
 
-        this.templateInstanceMap[templIndex].instances.push(instanceObj);
+        map[templIndex].instances.push( instanceObj );
 
     };
 
 
 
-    this._getIndexOfTemplate = function ( templateId ) {
+    this._getIndexOfTemplate = function ( map, templateId ) {
 
-        for (var i = 0; i < this.templateInstanceMap.length; i++) {
-            if (this.templateInstanceMap[i].template.id == templateId) return i;
+        if( map ) {
+            for (var i = 0; i < map.length; i++) {
+
+                if (map[i].template.id == templateId) {
+
+                    return i;
+                }
+            }
         }
 
         return -1;
     };
 
 
+    this._getIndexOfInstance = function ( instances, instanceId ) {
 
-    function updateInstancesOfTemplate( templateObj ) {
+        for( var i = 0; i < instances.length; i++){
 
-        var manager = this;
-
-        var templIndex = manager._getIndexOfTemplate( templateObj.id );
-
-        // check if object is template
-        if ( templIndex > -1) {
-
-            var instances = manager.templateInstanceMap[templIndex].instances;
-            for( var i = 0; i < instances.length; i++){
-
-                var currentInstance = instances[i];
-
-                if( !manager.objService.isDetachedFromTemplate( currentInstance, manager.objService.updateableProps.FRICTION ) ){
-
-                    var templFriction = manager.objService.getFriction( templateObj );
-                    manager.objService.setFriction( currentInstance, templFriction );
-
-                }
-
-                if( !manager.objService.isDetachedFromTemplate( currentInstance, manager.objService.updateableProps.RESTITUTION ) ){
-
-                    var templRestitution = manager.objService.getRestitution( templateObj );
-                    manager.objService.setRestitution( currentInstance, templRestitution );
-
-                }
-
-                if( !manager.objService.isDetachedFromTemplate( currentInstance, manager.objService.updateableProps.STATIC ) ){
-
-                    var templIsStatic = manager.objService.getIsStatic( templateObj );
-                    manager.objService.setIsStatic( currentInstance, templIsStatic );
-
-                }
-
+            if( instances[i].id == instanceId){
+                return i;
             }
-
         }
 
-    }
-
+        return -1;
+    };
 
 
 };

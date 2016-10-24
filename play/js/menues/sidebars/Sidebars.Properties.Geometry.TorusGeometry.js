@@ -7,6 +7,7 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	// radius
 
 	var radiusRow = new UI.Panel();
+	radiusRow.setClass("row");
 	var radius = new UI.Number( geometry.parameters.radius ).onChange( update );
 
 	radiusRow.add( new UI.Text( 'Radius' ).setWidth( '90px' ) );
@@ -17,6 +18,7 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	// tube
 
 	var tubeRow = new UI.Panel();
+	tubeRow.setClass("row");
 	var tube = new UI.Number( geometry.parameters.tube ).onChange( update );
 
 	tubeRow.add( new UI.Text( 'Tube' ).setWidth( '90px' ) );
@@ -27,6 +29,7 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	// radialSegments
 
 	var radialSegmentsRow = new UI.Panel();
+	radialSegmentsRow.setClass("row");
 	var radialSegments = new UI.Integer( geometry.parameters.radialSegments ).setRange( 1, Infinity ).onChange( update );
 
 	radialSegmentsRow.add( new UI.Text( 'Radial segments' ).setWidth( '90px' ) );
@@ -37,6 +40,7 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	// tubularSegments
 
 	var tubularSegmentsRow = new UI.Panel();
+	tubularSegmentsRow.setClass("row");
 	var tubularSegments = new UI.Integer( geometry.parameters.tubularSegments ).setRange( 1, Infinity ).onChange( update );
 
 	tubularSegmentsRow.add( new UI.Text( 'Tubular segments' ).setWidth( '90px' ) );
@@ -47,6 +51,7 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	// arc
 
 	var arcRow = new UI.Panel();
+	arcRow.setClass("row");
 	var arc = new UI.Number( geometry.parameters.arc ).onChange( update );
 
 	arcRow.add( new UI.Text( 'Arc' ).setWidth( '90px' ) );
@@ -58,6 +63,27 @@ Sidebars.Properties.Geometry.TorusGeometry = function ( signals, object ) {
 	//
 
 	function update() {
+
+		if( object.isTemplate ){
+
+			var instObjects = editor.templateManager.getInstancesOfTemplate( object.id );
+
+			for( var i = 0; i < instObjects.length; i++ ){
+
+				if( instObjects[i].isLinked.geometry){
+
+					updateGeometry( instObjects[i] );
+
+				}
+			}
+
+		}
+
+		updateGeometry( object );
+
+	}
+
+	function updateGeometry( object ) {
 
 		delete object.__webglInit; // TODO: Remove hack (WebGLRenderer refactoring)
 

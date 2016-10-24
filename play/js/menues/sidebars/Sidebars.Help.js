@@ -4,6 +4,7 @@ Sidebars.Help = function ( editor ) {
 
 	var container = new UI.Panel();
 	container.setDisplay( 'none' );
+	container.setClass('Panel top');
 
 	$("<h2/>").html("Help").appendTo(container.dom);
 	var menu = new UI.Panel();

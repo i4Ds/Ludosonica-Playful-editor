@@ -15,7 +15,6 @@ Sidebars.AddTemplate = function (editor) {
     var outliner = new UI.FancySelect().setId('outliner');
     outliner.onChange(function () {
 
-        //editor.selectById(parseInt(outliner.getValue()));
         editor.selectTemplateById( parseInt(outliner.getValue()) );
 
     });
@@ -24,28 +23,29 @@ Sidebars.AddTemplate = function (editor) {
 
     // events
 
-    signals.templateAdded.add(function () {
-
+    // todo templatez
+    var templateList = function () {
         var options = [];
 
 
         (function addObjects(objects, pad) {
 
-            for (var i = 0, l = objects.length; i < l; i++) {
+            if(objects) {
 
-                var object = objects[i];
+                for (var i = 0, l = objects.length; i < l; i++) {
 
-                var html = pad + '</span> ' + '<span class="objNameDisplay">' + objService.getName(object) + '</span>';
+                    var object = objects[i];
 
-
-                html += ' <span class="icn-delete icon-del-small" title="delete template"></span>';
-                html += ' <span class="icn icon-add" title="add instance of this template"></span>';
+                    var html = pad + '</span> ' + '<span class="objNameDisplay">' + objService.getName(object) + '</span>';
 
 
-                options.push({value: object.id, html: html});
+                    html += ' <span class="icn-delete icon-del-small" title="delete template"></span>';
+                    html += ' <span class="icn icon-add" title="add instance of this template"></span>';
 
-                //addObjects( editor.getTemplates(), pad + '&nbsp;&nbsp;&nbsp;' );
 
+                    options.push({value: object.id, html: html});
+
+                }
             }
 
         })(templManager.getTemplates(), '&nbsp;&nbsp;&nbsp;');
@@ -65,34 +65,56 @@ Sidebars.AddTemplate = function (editor) {
 
             if (deleteBtn.length > 0) $(deleteBtn[0]).click(function (el) {
 
-                // todo remove all instances
-                templManager.removeTemplate(this);
+                // todo remove all instances? maybe better: detach all inst.
+                editor.removeTemplate(this.value);
+                editor.select( null );
 
             }.bind(options[x]));
 
             if(addBtn.length > 0) $(addBtn[0]).click(function ( el ){
 
                 var instanceObj = templManager.getInstanceForTemplate( this.value );
+
                 if (instanceObj.geometry.boundingBox == undefined) instanceObj.geometry.computeBoundingBox();
 
                 instanceObj.position.y = instanceObj.geometry.boundingBox.size().y / 2;
 
-                editor.addObject(instanceObj);
-                editor.select(instanceObj);
+                editor.addObject( instanceObj );
+
+                //editor.select( instanceObj );
 
             }.bind(options[x]));
         }
+    };
 
-    });
+    signals.templateAdded.add(templateList);
+    signals.templateDeleted.add(templateList);
 
 
-    signals.menuButtonClicked.add(function (name) {
+    signals.menuButtonClicked.add(function (name, attr) {
 
-        if (name == "add-template") {
+        templateList();
+
+        if (name == "add-template" && !(attr == "added")) {
+
             // Show this sidebar panel when add menu button is clicked and if there are templates
             $(container.dom).toggle(200);
-            if (templManager.getTemplates().length < 0) $(container.dom).hide();
+            //if (templManager.getTemplates().length < 0) $(container.dom).hide();
             editor.deselect();
+        } else if (name == "add-template" && attr == "added") {
+
+            // Show this sidebar panel when add menu button is clicked and if there are templates
+            $(container.dom).toggle(200);
+
+            editor.deselect();
+
+            // after template was generated select generated template in list.
+            var value = outliner.options[ outliner.options.length- 1].value;
+
+            editor.selectTemplateById( parseInt(value) );
+
+            outliner.setValue(editor.selected.id);
+
         }
         else {
             $(container.dom).hide();
@@ -100,80 +122,9 @@ Sidebars.AddTemplate = function (editor) {
 
     });
 
+    $(container.dom).addClass('top');
+
 
     return container;
 
-    //var signals = editor.signals;
-    //
-    //var templContainer = new UI.Panel();
-    //templContainer.setDisplay( 'none' );
-    //
-    //$("<h2/>").html("Add Object from Template").appendTo(templContainer.dom);
-    //var addTemplateMenu = new UI.Panel();
-    //
-    //var TemplateList = $("<ul/>")
-    //    .addClass("menu object")
-    //    .appendTo(addTemplateMenu.dom);
-    //
-    //
-    //editor.signals.templateAdded.add( function( ) {
-    //
-    //    TemplateList.empty();
-    //
-    //    var templates = editor.getTemplates();
-    //
-    //    for(var i = 0; i < templates.length; i++){
-    //
-    //        var template = templates[i];
-    //
-    //        var templateLink = $('<a><img src="' + editor.theme.currentTheme.getImage( template.getType() ) + '"/> ' + template.getName() + '</a></li>');
-    //        templateLink.click( function (e) {
-    //
-    //            var template = this;        // this holds the clicked template
-    //
-    //            var p = template.getInstance();
-    //            p.instanceChanged = template.getSignal();
-    //
-    //            //this.templatedChanged.add( function () {
-    //            //    Logger.warn("doodli doo template changed");
-    //            //});
-    //
-    //            //Logger.warn(p, "Sidebars.AddTemplate.js");
-    //            if (p.geometry.boundingBox == undefined) p.geometry.computeBoundingBox();
-    //
-    //            p.position.y = p.geometry.boundingBox.size().y / 2;
-    //
-    //            editor.templateManager.addInstanceOfTemplate( p, template);
-    //            editor.addObject( p );
-    //            editor.select( p );
-    //
-    //        }.bind( template ) );
-    //        $('<li/>').html(templateLink).appendTo( TemplateList );
-    //
-    //    }
-    //
-    //    Logger.warn("template added", editor.getTemplates());
-    //
-    //} );
-    //
-    //
-    //templContainer.add(addTemplateMenu);
-    //
-    //
-    //signals.menuButtonClicked.add( function(name) {
-    //
-    //    if(name=="add-template")
-    //    {
-    //        // Show this sidebar panel when add menu button is clicked and if there are templates
-    //        $(templContainer.dom).toggle(200);
-    //        if(editor.getTemplates().length < 0) $(templContainer.dom).hide();
-    //    }
-    //    else {
-    //        $(templContainer.dom).hide();
-    //    }
-    //
-    //});
-    //
-    //
-    //return templContainer;
 };

@@ -194,4 +194,4 @@ Sidebars.Properties.Geometry = function ( editor ) {
 
 	return container;
 
-}
+};

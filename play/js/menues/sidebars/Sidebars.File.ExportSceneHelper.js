@@ -72,4 +72,4 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 	} else {
 		createDownload();
 	}
-}
+};

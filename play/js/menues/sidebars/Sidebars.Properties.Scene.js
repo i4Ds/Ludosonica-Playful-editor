@@ -69,9 +69,8 @@ Sidebars.Properties.Scene = function ( editor ) {
 	var fogColorRow = new UI.Panel();
 	fogColorRow.setDisplay( 'none' );
 
-	var fogColor = new UI.Color().setValue( '#aaaaaa' )
+	var fogColor = new UI.Color().setValue( '#aaaaaa' );
 	fogColor.onChange( function () {
-
 		signals.fogColorChanged.dispatch( fogColor.getHexValue() );
 
 	} );

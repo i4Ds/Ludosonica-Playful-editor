@@ -28,7 +28,7 @@ _lS = {
 	/* decorate will be called on object creation, scene creation or theme selection */
 	decorate: function( object ) {
 		
-		console.log(object);
+		console.log('decorate', object.name);
 		o = object;
 		if ( object instanceof THREE.Mesh ) {
 			

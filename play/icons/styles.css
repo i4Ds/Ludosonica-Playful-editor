@@ -39,25 +39,25 @@
 }
 
 .icon-add:before {
-  content: "a";
+  content: "u";
 }
 .icon-zoom:before {
   content: "b";
 }
 .icon-del-small:before {
-  content: "c";
+  content: "C";
 }
 .icon-closed-small:before {
   content: "d";
 }
 .icon-dupli-small:before {
-  content: "e";
+  content: "q";
 }
 .icon-edit-small:before {
-  content: "f";
+  content: "r";
 }
 .icon-translate:before {
-  content: "g";
+  content: "v";
 }
 .icon-open-small:before {
   content: "h";
@@ -72,23 +72,33 @@
   content: "k";
 }
 .icon-rotate:before {
-  content: "l";
+  content: "y";
 }
 .icon-sound:before {
   content: "m";
 }
 .icon-scale:before {
-  content: "n";
+  content: "z";
 }
 .icon-file:before {
-  content: "o";
+  content: "s";
 }
 .icon-template:before {
-  content: "p";
+  content: "B";
 }
 .icon-add-template:before {
-  content: "r";
+  content: "w";
+}
+.icon-template-small:before {
+  content: "D";
 }
 .icon-scene:before {
-  content: "q";
+  content: "A";
+}
+
+.icon-link:before{
+  content: "t";
+}
+.icon-object:before{
+  content: "x";
 }

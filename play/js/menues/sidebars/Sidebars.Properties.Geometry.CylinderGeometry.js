@@ -7,6 +7,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// radiusTop
 
 	var radiusTopRow = new UI.Panel();
+	radiusTopRow.setClass("row");
 	var radiusTop = new UI.Number( geometry.parameters.radiusTop ).onChange( update );
 
 	radiusTopRow.add( new UI.Text( 'Radius top' ).setWidth( '90px' ) );
@@ -17,6 +18,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// radiusBottom
 
 	var radiusBottomRow = new UI.Panel();
+	radiusBottomRow.setClass("row");
 	var radiusBottom = new UI.Number( geometry.parameters.radiusBottom ).onChange( update );
 
 	radiusBottomRow.add( new UI.Text( 'Radius bottom' ).setWidth( '90px' ) );
@@ -27,6 +29,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// height
 
 	var heightRow = new UI.Panel();
+	heightRow.setClass("row");
 	var height = new UI.Number( geometry.parameters.height ).onChange( update );
 
 	heightRow.add( new UI.Text( 'Height' ).setWidth( '90px' ) );
@@ -37,6 +40,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// radialSegments
 
 	var radialSegmentsRow = new UI.Panel();
+	radialSegmentsRow.setClass("row");
 	var radialSegments = new UI.Integer( geometry.parameters.radialSegments ).setRange( 1, Infinity ).onChange( update );
 
 	radialSegmentsRow.add( new UI.Text( 'Radial segments' ).setWidth( '90px' ) );
@@ -47,6 +51,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// heightSegments
 
 	var heightSegmentsRow = new UI.Panel();
+	heightSegmentsRow.setClass("row");
 	var heightSegments = new UI.Integer( geometry.parameters.heightSegments ).setRange( 1, Infinity ).onChange( update );
 
 	heightSegmentsRow.add( new UI.Text( 'Height segments' ).setWidth( '90px' ) );
@@ -57,6 +62,7 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	// openEnded
 
 	var openEndedRow = new UI.Panel();
+	openEndedRow.setClass("row");
 	var openEnded = new UI.Checkbox( geometry.parameters.openEnded ).onChange( update );
 
 	openEndedRow.add( new UI.Text( 'Open ended' ).setWidth( '90px' ) );
@@ -67,6 +73,27 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 	//
 
 	function update() {
+
+		if( object.isTemplate ){
+
+			var instObjects = editor.templateManager.getInstancesOfTemplate( object.id );
+
+			for( var i = 0; i < instObjects.length; i++ ){
+
+				if( instObjects[i].isLinked.geometry){
+
+					updateGeometry( instObjects[i] );
+
+				}
+			}
+
+		}
+
+		updateGeometry( object );
+
+	}
+
+	function updateGeometry( object ) {
 
 		object.geometry.dispose();
 
@@ -88,4 +115,4 @@ Sidebars.Properties.Geometry.CylinderGeometry = function ( signals, object ) {
 
 	return container;
 
-}
+};

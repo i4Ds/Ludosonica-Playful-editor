@@ -12,6 +12,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// uuid
 
 	var objectUUIDRow = new UI.Panel();
+	objectUUIDRow.setClass("row");
 	var objectUUID = new UI.Input().setWidth( '115px' ).setColor( '#444' ).setFontSize( '12px' ).setDisabled( true );
 	var objectUUIDRenew = new UI.Button( '⟳' ).setMarginLeft( '7px' ).onClick( function () {
 
@@ -32,6 +33,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// name
 
 	var objectNameRow = new UI.Panel();
+	objectNameRow.setClass("row");
 	var objectName = new UI.Input().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( function () {
 
 			editor.setObjectName( editor.selected, objectName.getValue() );
@@ -47,7 +49,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// parent
 
 	var objectParentRow = new UI.Panel();
-	objectParentRow.setClass("advanced");
+	objectParentRow.setClass("row advanced");
 	var objectParent = new UI.Select().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
 
 	objectParentRow.add( new UI.Text( 'Parent' ).setWidth( '90px' ) );
@@ -58,7 +60,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// position
 
 	var objectPositionRow = new UI.Panel();
-	objectPositionRow.setClass("advanced");
+	objectPositionRow.setClass("row advanced");
 	var objectPositionX = new UI.Number().setWidth( '50px' ).setColor( 'red' ).onChange( update );
 	var objectPositionY = new UI.Number().setWidth( '50px' ).setColor( 'green' ).onChange( update );
 	var objectPositionZ = new UI.Number().setWidth( '50px' ).setColor( 'blue' ).onChange( update );
@@ -73,10 +75,31 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 	container.add( objectPositionRow );
 
+	signals.objectSelected.add( function ( object ){
+
+		if( object && object.isTemplate ){
+
+			$(objectPositionX.dom).prop('disabled', true);
+			$(objectPositionY.dom).prop('disabled', true);
+			$(objectPositionZ.dom).prop('disabled', true);
+
+			$(objectPositionRow.dom).addClass( 'inactive' );
+
+		} else {
+
+			$(objectPositionX.dom).prop('disabled', false);
+			$(objectPositionY.dom).prop('disabled', false);
+			$(objectPositionZ.dom).prop('disabled', false);
+
+			$(objectPositionRow.dom).removeClass( 'inactive' );
+		}
+
+	});
+
 	// rotation
 
 	var objectRotationRow = new UI.Panel();
-	objectRotationRow.setClass("advanced");
+	objectRotationRow.setClass("row advanced");
 	var objectRotationX = new UI.Number().setWidth( '50px' ).setColor( 'red' ).onChange( update );
 	var objectRotationY = new UI.Number().setWidth( '50px' ).setColor( 'green' ).onChange( update );
 	var objectRotationZ = new UI.Number().setWidth( '50px' ).setColor( 'blue' ).onChange( update );
@@ -91,18 +114,35 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 	container.add( objectRotationRow );
 
-	// scale
+	// scale all
+
+	var objectScaleAllRow = new UI.Panel();
+	objectScaleAllRow.setClass("row advanced");
+	var objectScaleLock = new UI.Checkbox();
+
+	objectScaleAllRow.add( new UI.Text( 'Scale all' ).setWidth( '90px' ) );
+	objectScaleAllRow.add( objectScaleLock );
+
+	objectScaleAllRow.setDisplay( 'none' );
+
+	container.add( objectScaleAllRow );
+
+	// scale separate
 
 	var objectScaleRow = new UI.Panel();
-	objectScaleRow.setClass("advanced");
-	var objectScaleLock = new UI.Checkbox().setPosition( 'absolute' ).setLeft( '75px' );
-	var objectScaleX = new UI.Number( 1 ).setWidth( '50px' ).onChange( updateScaleX );
-	var objectScaleY = new UI.Number( 1 ).setWidth( '50px' ).onChange( updateScaleY );
-	var objectScaleZ = new UI.Number( 1 ).setWidth( '50px' ).onChange( updateScaleZ );
+	objectScaleRow.setClass("row advanced");
+	var objectScaleX = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'red' ).onChange( updateScaleX );
+	var objectScaleY = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'green' ).onChange( updateScaleY );
+	var objectScaleZ = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'blue' ).onChange( updateScaleZ );
+	var objectScaleXLabel = new UI.Text( 'X' ).setWidth( '10px' ).setColor( 'red' );
+	var objectScaleYLabel = new UI.Text( 'Y' ).setWidth( '10px' ).setColor( 'green' );
+	var objectScaleZLabel = new UI.Text( 'Z' ).setWidth( '10px' ).setColor( 'blue' );
 
 	objectScaleRow.add( new UI.Text( 'Scale' ).setWidth( '90px' ) );
-	objectScaleRow.add( objectScaleLock );
-	objectScaleRow.add( objectScaleX, objectScaleY, objectScaleZ );
+
+	objectScaleRow.add( objectScaleXLabel, objectScaleX,
+						objectScaleYLabel, objectScaleY,
+						objectScaleZLabel, objectScaleZ );
 	
 	objectScaleRow.setDisplay('none');
 
@@ -111,7 +151,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// fov
 
 	var objectFovRow = new UI.Panel();
-	objectFovRow.setClass("advanced");
+	objectFovRow.setClass("row advanced");
 	var objectFov = new UI.Number().onChange( update );
 
 	objectFovRow.add( new UI.Text( 'Fov' ).setWidth( '90px' ) );
@@ -122,7 +162,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// near
 
 	var objectNearRow = new UI.Panel();
-	objectNearRow.setClass("advanced");
+	objectNearRow.setClass("row advanced");
 	var objectNear = new UI.Number().onChange( update );
 
 	objectNearRow.add( new UI.Text( 'Near' ).setWidth( '90px' ) );
@@ -133,7 +173,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// far
 
 	var objectFarRow = new UI.Panel();
-	objectFarRow.setClass("advanced");
+	objectFarRow.setClass("row advanced");
 	var objectFar = new UI.Number().onChange( update );
 
 	objectFarRow.add( new UI.Text( 'Far' ).setWidth( '90px' ) );
@@ -144,7 +184,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// intensity
 
 	var objectIntensityRow = new UI.Panel();
-	objectIntensityRow.setClass("advanced");
+	objectIntensityRow.setClass("row advanced");
 	var objectIntensity = new UI.Number().setRange( 0, Infinity ).onChange( update );
 
 	objectIntensityRow.add( new UI.Text( 'Intensity' ).setWidth( '90px' ) );
@@ -155,6 +195,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// color
 
 	var objectColorRow = new UI.Panel();
+	objectColorRow.setClass("row");
 	var objectColor = new UI.Color().onChange( update );
 
 	objectColorRow.add( new UI.Text( 'Color' ).setWidth( '90px' ) );
@@ -165,7 +206,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// ground color
 
 	var objectGroundColorRow = new UI.Panel();
-	objectGroundColorRow.setClass("advanced");
+	objectGroundColorRow.setClass("row advanced");
 	var objectGroundColor = new UI.Color().onChange( update );
 
 	objectGroundColorRow.add( new UI.Text( 'Ground color' ).setWidth( '90px' ) );
@@ -176,7 +217,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// distance
 
 	var objectDistanceRow = new UI.Panel();
-	objectDistanceRow.setClass("advanced");
+	objectDistanceRow.setClass("row advanced");
 	var objectDistance = new UI.Number().setRange( 0, Infinity ).onChange( update );
 
 	objectDistanceRow.add( new UI.Text( 'Distance' ).setWidth( '90px' ) );
@@ -187,7 +228,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// angle
 
 	var objectAngleRow = new UI.Panel();
-	objectAngleRow.setClass("advanced");
+	objectAngleRow.setClass("row advanced");
 	var objectAngle = new UI.Number().setPrecision( 3 ).setRange( 0, Math.PI / 2 ).onChange( update );
 
 	objectAngleRow.add( new UI.Text( 'Angle' ).setWidth( '90px' ) );
@@ -198,7 +239,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// exponent
 
 	var objectExponentRow = new UI.Panel();
-	objectExponentRow.setClass("advanced");
+	objectExponentRow.setClass("row advanced");
 	var objectExponent = new UI.Number().setRange( 0, Infinity ).onChange( update );
 
 	objectExponentRow.add( new UI.Text( 'Exponent' ).setWidth( '90px' ) );
@@ -209,18 +250,20 @@ Sidebars.Properties.Object3D = function ( editor ) {
 	// visible
 
 	var objectVisibleRow = new UI.Panel();
-	objectVisibleRow.setClass("advanced");
+	objectVisibleRow.setClass("row advanced");
 	var objectVisible = new UI.Checkbox().onChange( update );
 
 	objectVisibleRow.add( new UI.Text( 'Visible' ).setWidth( '90px' ) );
 	objectVisibleRow.add( objectVisible );
+
+	objectVisibleRow.setDisplay( 'none' );
 
 	container.add( objectVisibleRow );
 
 	// user data
 
 	var objectUserDataRow = new UI.Panel();
-	objectUserDataRow.setClass("advanced");
+	objectUserDataRow.setClass("row advanced");
 	var objectUserData = new UI.TextArea().setWidth( '150px' ).setHeight( '40px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
 	objectUserData.onKeyUp( function () {
 
@@ -300,9 +343,30 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 	}
 
-	function update() {
+
+	function update(){
+
+		console.log(' update ');
 
 		var object = editor.selected;
+
+		if( object.isTemplate ){
+
+			var instObjects = editor.templateManager.getInstancesOfTemplate( object.id );
+
+			for( var i = 0; i < instObjects.length; i++){
+
+				// todo check if property of the current instance is linked to the template or not.
+				updateObject(instObjects[i], true);
+
+			}
+		}
+
+		updateObject( object, false );
+	}
+
+
+	function updateObject( object, isInstance ) {
 
 		if ( object !== null ) {
 
@@ -318,17 +382,33 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 			}
 
-			object.position.x = objectPositionX.getValue();
-			object.position.y = objectPositionY.getValue();
-			object.position.z = objectPositionZ.getValue();
+			// POSITION
+			if( !isInstance ){
+				object.position.x = objectPositionX.getValue();
+				object.position.y = objectPositionY.getValue();
+				object.position.z = objectPositionZ.getValue();
+			}
 
-			object.rotation.x = objectRotationX.getValue();
-			object.rotation.y = objectRotationY.getValue();
-			object.rotation.z = objectRotationZ.getValue();
+			// ROTATION
+			if( !isInstance || object.rotation ){
+				object.rotation.x = objectRotationX.getValue();
+				object.rotation.y = objectRotationY.getValue();
+				object.rotation.z = objectRotationZ.getValue();
+			}
 
-			object.scale.x = objectScaleX.getValue();
-			object.scale.y = objectScaleY.getValue();
-			object.scale.z = objectScaleZ.getValue();
+			// SCALE
+			if( !isInstance || object.scale ){
+				object.scale.x = objectScaleX.getValue();
+				object.scale.y = objectScaleY.getValue();
+				object.scale.z = objectScaleZ.getValue();
+			}
+
+			if( !isInstance || object.visible ){
+				object.visible = objectVisible.getValue();
+			}
+
+
+			// ***** all the stuff below is disabled in the user interface anyway *****
 
 			if ( object.fov !== undefined ) {
 
@@ -385,7 +465,6 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 			}
 
-			object.visible = objectVisible.getValue();
 
 			try {
 
@@ -411,6 +490,7 @@ Sidebars.Properties.Object3D = function ( editor ) {
 			'parent': objectParentRow,
 			'position': objectPositionRow,
 			'rotation': objectRotationRow,
+			'scale': objectScaleAllRow,
 			'scale': objectScaleRow,
 			'fov': objectFovRow,
 			'near': objectNearRow,
@@ -420,8 +500,8 @@ Sidebars.Properties.Object3D = function ( editor ) {
 			'groundColor': objectGroundColorRow,
 			'distance' : objectDistanceRow,
 			'angle' : objectAngleRow,
-			'exponent' : objectExponentRow,
-			'visible' : objectVisibleRow
+			'exponent' : objectExponentRow
+			//'visible' : objectVisibleRow
 		};
 
 		for ( var property in properties ) {
@@ -608,4 +688,4 @@ Sidebars.Properties.Object3D = function ( editor ) {
 
 	return container;
 
-}
+};

@@ -22,11 +22,11 @@ Tools.Menu = function (editor) {
 
 
     var addPanel = new UI.ButtonHelper.createButtonPanel("menu");
-    addPanel.addButton("icon-add active", function () {
+    addPanel.addButton("icon-object active", function () {
         signals.menuButtonClicked.dispatch("add");
     });
     setButtonActivationCallback(addPanel.dom.children[0], "add");
-    addPanel.addButton("icon-add-template", function () {
+    addPanel.addButton("icon-template", function () {
         signals.menuButtonClicked.dispatch("add-template");
     });
     setButtonActivationCallback(addPanel.dom.children[1], "add-template");
@@ -65,6 +65,7 @@ Tools.Menu = function (editor) {
         if (object != null) {
 
             if (!object.isTemplate && !$(this.sceneButton).hasClass("active")) {
+
                 this.signals.menuButtonClicked.dispatch("scene-properties");
             }
 

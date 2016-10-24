@@ -16,6 +16,7 @@ Sidebars.Properties.Behaviors = function ( editor ) {
 	// rocket
 
 	var rocketRow = new UI.Panel();
+	rocketRow.setClass('row');
 	var rocket = new UI.Behavior( 'Rocket' ).onChange( update );
 	//rocket.setProperties( '' );
 
@@ -27,6 +28,7 @@ Sidebars.Properties.Behaviors = function ( editor ) {
 	// resurrection
 
 	var resurrectionRow = new UI.Panel();
+	resurrectionRow.setClass('row');
 	var resurrection = new UI.Behavior( 'Resurrection' ).onChange( update );
 	
 	var resurrectionPropertiesPanel = new UI.Panel();

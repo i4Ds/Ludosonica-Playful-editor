@@ -18,6 +18,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 	// friction
 
 	var physicsFrictionRow = new UI.Panel();
+	physicsFrictionRow.setClass("row");
 	var physicsFriction = new UI.Number( 0.5 ).setRange( 0, 1 ).onChange( update );
 
 	physicsFrictionRow.add( new UI.Text( 'Friction' ).setWidth( '90px' ) );
@@ -28,6 +29,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 	// restitution
 
 	var physicsRestitutionRow = new UI.Panel();
+	physicsRestitutionRow.setClass("row");
 	var physicsRestitution = new UI.Number( 0.5 ).setRange( 0, 1 ).onChange( update );
 
 	physicsRestitutionRow.add( new UI.Text( 'Bounciness' ).setWidth( '90px' ) );
@@ -38,6 +40,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 	// static or dynamic
 
 	var physicsModeRow = new UI.Panel();
+	physicsModeRow.setClass("row");
 	var physicsMode = new UI.Checkbox( false ).onChange( update );
 
 	physicsModeRow.add( new UI.Text( 'Static' ).setWidth( '90px' ) );
@@ -48,22 +51,42 @@ Sidebars.Properties.Physics = function ( editor ) {
 	//
 
 	function update() {
+
+		// COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
+		if (object.isTemplate) {
+
+			var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
+
+			for (var i = 0; i < instObjects.length; i++) {
+
+				var instMaterial = instObjects[i].material;
+
+				// check if property of the current instance is linked to the template or not.
+				if (instObjects[i].isLinked.color) {
+
+					var physics = instMaterial._physijs;
+
+					if ( physics ) {
+
+						physics.friction = physicsFriction.getValue();
+						physics.restitution = physicsRestitution.getValue();
+						objectSelected.isStatic = physicsMode.getValue();
+
+					}
+				}
+
+			}
+		}
 		
-			var physics = physijsSelected;
+			var physics = object.material._physijs;
 
 			if ( physics ) {
-			
+
 				physics.friction = physicsFriction.getValue();
 				physics.restitution = physicsRestitution.getValue();
 				objectSelected.isStatic = physicsMode.getValue();
 
 			}
-
-		// todo new
-		//objService.setFriction( objectSelected, physicsFriction.getValue());
-		//objService.setRestitution( objectSelected, physicsRestitution.getValue());
-		//objService.setIsStatic( objectSelected, physicsMode.getValue());
-		// oder mit return? objectSelected = objService.setFriction( objectSelected, physicsFriction.getValue());
 
 
 			signals.objectChanged.dispatch( objectSelected );
@@ -83,9 +106,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 			var physics = object.material._physijs;
 			
 			if ( physics.friction === undefined ) physics.friction = 0.5;
-			//todo new if( objService.getFriction(objectSelected) == undefined){
-			//	objService.setFriction( objectSelected, 0.5);
-			//}
+
 			physicsFriction.setValue( physics.friction );
 			
 			if ( physics.restitution === undefined ) physics.restitution = 0.5;
