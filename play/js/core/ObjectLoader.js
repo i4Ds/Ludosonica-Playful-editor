@@ -62,16 +62,25 @@ THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
             }
 
             //if physijs data was stored create a physical material instead
-            if (data.restitution) {
-                material = Physijs.createMaterial(
-                    material,
-                    data.friction,
-                    data.restitution
-                );
-            } else {
+            //if (data.restitution) {
+            //    material = Physijs.createMaterial(
+            //        material,
+            //        data.friction,
+            //        data.restitution
+            //    );
+            //} else {
+            //
+            //    console.log('no restitution', data);
+            //}
 
-                console.log('no restitution', data);
-            }
+            //create a physical material
+            var friction = data.friction || 0;
+            var restitution = data.restitution || 0;
+            material = Physijs.createMaterial(
+                material,
+                friction,
+                restitution
+            );
 
 
             if ( data.name !== undefined ) material.name = data.name;
