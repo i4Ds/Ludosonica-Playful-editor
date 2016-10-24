@@ -24,21 +24,6 @@ router.get('/play/gallery/download', function( req, res ){
 							  res.status(200).send( ""+base64data );
 							});
 							
-							// fs.stat(file, function(err, stats) {
-								// if( err === null ){
-									// fs.open(file, 'r', function(err, fd ){
-										// var buffer = new Buffer(stats.size);
-										// fs.read(fd, buffer, 0, buffer.length, null, function(error, bytesRead, buffer) {
-											
-											// //console.log(zip);
-											// fs.close(fd);
-											// //console.log(buffer);
-											// var zip = new JSZip( buffer );
-											// res.send( ""+zip.generate({type:"base64"}) );
-										// });
-									// });
-								// }
-							// });						
 						}
 					});
 				}

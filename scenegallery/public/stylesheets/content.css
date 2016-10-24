@@ -2,10 +2,9 @@
 	background-color:transparent;
 }
 
-body{
-	background-color:#000000;
-	font-size: 14px;
-	font-family: Arial,sans-serif;
+body {
+  padding-top: 20px;
+  padding-bottom: 20px;
 }
 
 .scene-entry{

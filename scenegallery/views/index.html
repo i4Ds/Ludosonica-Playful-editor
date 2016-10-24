@@ -6,6 +6,10 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"></link>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"></link>
 		<link rel="stylesheet" href="/stylesheets/content.css"></link>
+		  <link rel="stylesheet" href="/css/style.css" />
+
+
+
 			
 	</head>
 
@@ -13,22 +17,37 @@
 	
 		<div class="container">
 			<div class="row">
+			<div class="header clearfix">
+        <nav>
+          <ul class="nav nav-pills pull-right">
+          
+       <li role="presentation"><a href="/users/logout">Logout</a></li>
+          </ul>
+          
+         <h3 class="text-muted">Welcome to your Ludosonica gallery! </h3>
+        </nav>
+        
+      </div>
 				
 				<div class="col-md-1"></div>
-				<div class="col-md-10 main-row">
+				<div class="col-md-12 main-row">
+
+	
+				
 					
 					<% scenes.forEach(function(scene){ %>
 						<div class="row">
+						<h3>My own scenes</h3>
 								<div class="col-md-12 scene-entry">
+								
+	
 									
-									<h3><%= scene.name %></h3>
+										<h4>Scene name:</br> <%= scene.name %></h4>
 									
 									<div class="row">
-										<div class="col-md-6">
-											<h4><%= scene.nickname  %></h4>
-										</div>
-										<div class="col-md-6">
-											<p class="text-right"><%= scene.timestamp  %></p>
+										
+										<div class="col-md-4">
+											<p class="text-left">Created: <%= scene.timestamp  %></p>
 										</div>
 									</div>
 									
@@ -41,51 +60,70 @@
 												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
 											<% } %>											
 										</div>
-										<div class="col-md-4">
-											<% if( scene.images >= 2 ) { %>
-												<a class="fancybox" title="image1.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image1.png"></img>
-												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"</noscript>
-											<% } %>
-										</div>
-										<div class="col-md-4">
-											<% if( scene.images >= 3 ) { %>
-												<a class="fancybox" title="image2.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image2.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image2.png"></img>
-												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image2.png"</noscript>
-											<% } %>
-										</div>
-										<% for( var i = 3; i+1 <= scene.images; i++ ){ %>
-											<a class="fancybox" title="image<%= ( i ) %>.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image<%= ( i ) %>.png"></a>
-										<% } %>
+										
 									</div>
 									
 									<div class="row">
 										
-										<div class="col-md-8">
+										<div class="col-md-4">
 											<div class="panel panel-default">
 												<div class="panel-body">
+												Scene description: </br>
 													<%= scene.description  %>
 												</div>
 											</div>
 											
+										<a type="button" href="http://playfulmedia.cs.technik.fhnw.ch/playdev/"  target="_blank" class="btn btn-primary">Create new scene</a>
+										<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary">Download scene</a>
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Open in PlayfulEditor</a>
+
 										</div>
+										
+										
+											
+									</div>
+									
+								</div>
+									<div class="row">
+									</div>
+								<h3>Scenes made by someone else</h3>
+
+								<div class="col-md-12 scene-entry">
+									<h4>Scene name:</br> <%= scene.name %></h4>
+									
+									<div class="row">
 										
 										<div class="col-md-4">
-											<div class="row">
-												<div class="col-md-12">
-													<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary">Download</a 	>													
-												
-													<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Open in PlayfulEditor</a>
-												</div>
-											</div>
+											<p class="text-left">Created: <%= scene.timestamp  %></p>
 										</div>
-										
+									</div>
+									
+									<div class="row">
+										<div class="col-md-4">
+											<% if( scene.images >= 1 ) { %>
+												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
+													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
+												</a>
+												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
+											<% } %>											
+										</div>
 										
 									</div>
 									
+									<div class="row">
+										
+										<div class="col-md-4">
+											<div class="panel panel-default">
+												<div class="panel-body">
+												Scene description: </br>
+													<%= scene.description  %>
+												</div>
+											</div>
+											
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= users.id %>"  target="_blank" class="btn btn-primary">Play this scene</a>
+										<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary">Copy scene</a>
+										</div>
+							
 								</div>
 						</div>
 					<% }) %>					
@@ -100,6 +138,8 @@
 		<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
 		<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
 		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
+		<script type="text/javascript" src="/routes/index.js"></script>
+		<script type="text/javascript" src="mustache.js" ></script>
 		<script type="text/javascript">
 		
 			function loadImages(){
