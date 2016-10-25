@@ -32,7 +32,12 @@
 				<div class="col-md-1"></div>
 				<hr class="col-md-12 main-row">
 
-					<a type="button" href="http://playfulmedia.cs.technik.fhnw.ch/playdev/"  target="_blank" class="btn btn-primary">Create new scene</a>
+				<% { %>
+					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>"  target="_blank" class="btn btn-primary">Open new scene</a>
+					<% } %>
+
+					<!-- 
+					<a type="button" href="http://playfulmedia.cs.technik.fhnw.ch/playdev/"  target="_blank" class="btn btn-primary">Create new scene</a> -->
 
 					<h3>My own scenes</h3>
 
@@ -63,9 +68,9 @@
 
 									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary">Download</a>
 									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Edit</a>
-									 <form method="post" action="/users/save">
-            <button type="submit" class="btn btn-default">save</button>
-        </form>
+									 <!-- <form method="post" action="/users/save">
+            						 <button type="submit" class="btn btn-default">save</button>
+        							 </form> -->
 
 								</div>
 

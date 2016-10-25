@@ -111,7 +111,7 @@ var process = function(req, res, next) {
 	
 	console.log(req.form.data.email);
 	console.log(req.form.data.name);
-	console.log(req.form.data.scenename);
+	// console.log(req.form.data.scenename);
 	console.log('captcha:'+req.form.data.captcha);
 	
      
@@ -128,7 +128,7 @@ var process = function(req, res, next) {
 		//make directory
 		var timestamp = new Date().toUTCString();
 		var shasum = crypto.createHash('sha256');
-		shasum.update( req.form.data.email + req.form.data.name + timestamp + req.form.data.scenename );
+		shasum.update( req.form.data.email + req.form.data.name + timestamp );
 		var locationHash = shasum.digest('hex');
 		var location = 'content/'+locationHash+'/';
 		var path = './public/'+location;
@@ -139,10 +139,10 @@ var process = function(req, res, next) {
 		shasum.update( locationHash + rndm );
 		var removeHash = shasum.digest('hex');	
 		
-		//hash email
-		shasum = crypto.createHash('sha256');
-		shasum.update( req.form.data.email );
-		req.form.data.email = shasum.digest('hex');		
+		// //hash email
+		// shasum = crypto.createHash('sha256');
+		// shasum.update( req.form.data.email );
+		// req.form.data.email = shasum.digest('hex');		
 		
 		mkdirp( path, function (err) {
 			if (err) {
@@ -171,10 +171,8 @@ var process = function(req, res, next) {
 				
 				var db = new sqlite3.Database( GLOBAL.db );
 				db.serialize(function() {
-					var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
-					  // db.prepare("INSERT INTO results(id,scene_id) VALUES (NULL,?)");
-					  stmt.run(scene_id);
-					stmt.run([ req.form.data.email, req.form.data.description, req.form.data.scenename, req.form.data.name, location, timestamp, removeHash, images.length ]).finalize();
+					var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images ) VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+					stmt.run([ req.form.data.description, req.form.data.name, location, timestamp, removeHash, images.length ]).finalize();
 				});
 
 

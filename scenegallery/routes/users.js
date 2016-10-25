@@ -10,6 +10,7 @@ GLOBAL.db = './gallery.db';
 var db = new sqlite3.Database( GLOBAL.db );
 // var db = new sqlite3.Database('./database.sqlite3');
 
+
 //Register
 router.get('/register', function(req,res) {
 	res.render('register');
@@ -93,6 +94,7 @@ passport.use(new LocalStrategy({usernameField:'email'},function(email, password,
     if (!row) return done(null, false,{message: 'Unknown User'});
   db.get('SELECT * FROM users WHERE email = ? AND password = ?', email, hashPassword(password,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Invalid password'});
+    // GLOBAL.email = email;
       return done(null, row);
     });
   });
@@ -114,14 +116,16 @@ passport.deserializeUser(function(id, done) {
 
 
 router.post('/login', 
-	passport.authenticate('local',
-	{ successRedirect: '/play/gallery',failureRedirect: '/users/login',failureFlash:true }),
+	passport.authenticate('local', { 
+		successRedirect: '/play/gallery',
+		failureRedirect: '/users/login',failureFlash:true 
+	}),
 function(req,res) {
+	req.session.userid = 1;
 	res.redirect('/');
 
-	
-
 });
+
 
 router.get('/logout',function(req,res){
 	req.logout();

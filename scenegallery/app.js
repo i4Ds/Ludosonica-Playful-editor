@@ -51,7 +51,7 @@ db.serialize(function () {
     db.run('PRAGMA foreign_keys = ON');
     // db.run("DROP TABLE users");
     // db.run("DROP TABLE scene");
-    db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, email TEXT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, nickname TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL, user_id INT NOT NULL, FOREIGN KEY (user_id) REFERENCES users (id) )");
+    db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL, user_id INT NOT NULL, FOREIGN KEY (user_id) REFERENCES users (id) )");
     db.run("CREATE TABLE IF NOT EXISTS captcha_session ( token TEXT PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL )");
     db.run("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,name TEXT NOT NULL,email TEXT NOT NULL,password TEXT NOT NULL,salt TEXT NOT NULL, CONSTRAINT email_unique UNIQUE (email) ) ");
 });
