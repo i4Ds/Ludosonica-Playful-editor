@@ -7,22 +7,47 @@ var sqlite3 = require('sqlite3').verbose();
 
 router.get('/play/gallery', function(req, res) {
 	var db = new sqlite3.Database( GLOBAL.db );
-	
+
+	var scenes = [];
 	
 	db.serialize(function() {
-		var rows = [];
-		db.each("SELECT * FROM scene ORDER BY id DESC LIMIT ?", [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
-			rows.push( row );		
+
+		//db.each("SELECT * FROM scene WHERE user_id != ? ORDER BY id DESC LIMIT ?", 1, [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
+		db.each("SELECT * FROM scene WHERE user_id != ?", 1, function(err, row) {
+			if(err){
+				console.log(err);
+			}else{
+				scenes.push( row );
+			}
 		}, function(err, rowcount ){
-			res.render( 'index', { scenes: rows, host: req.headers.host } );		
+			if(err){
+				console.log(err);
+			}
 		});
-		
-	});		
+
+	});
+
+
+	db.serialize(function() {
+		var rows = [];
+		db.each("SELECT * FROM scene WHERE user_id = ?", 1, function(err, row) {
+			if(err){
+				console.log('first', err);
+			}else{
+				rows.push( row );
+			}
+		}, function(err, rowcount ){
+			if(err){
+				console.log('second', err);
+			}else{
+				res.render( 'index', { scenes: scenes, user_scenes: rows, host: req.headers.host } );
+			}
+		});
+
+	});
 	db.close();
 	
-	
-	
-	
+
 });
 
 module.exports = router;

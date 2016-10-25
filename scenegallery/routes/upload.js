@@ -174,6 +174,8 @@ var process = function(req, res, next) {
 					var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?)");
 					stmt.run([ req.form.data.email, req.form.data.description, req.form.data.scenename, req.form.data.name, location, timestamp, removeHash, images.length ]).finalize();
 				});
+
+
 				db.close();
 				s['link']   = 'http://'+req.headers.host+'/'+location;
 				s['remove'] = 'http://'+req.headers.host+'/play/gallery/remove?hash='+removeHash;

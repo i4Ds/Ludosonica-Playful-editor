@@ -22,6 +22,22 @@ router.get('/login', function(req,res) {
 
 });
 
+
+//Register User
+router.post('/save', function(req,res,call) {
+
+	var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
+	stmt.run([ 'text', 'text', 'text', 'text', 'text', 'text', 'text', 123, 4 ],function(error){
+		if(error) {
+			console.log(error);
+		} else {
+			console.log('success');
+		}
+	}).finalize();
+
+});
+
+
 //Register User
 router.post('/register', function(req,res,call) {
 	var email = req.body.email;
