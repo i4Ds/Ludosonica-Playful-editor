@@ -27,12 +27,12 @@ router.get('/login', function(req,res) {
 //Register User
 router.post('/save', function(req,res,call) {
 
-	var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
+	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
 		if(error) {
 			console.log(error);
 		} else {
-			console.log('success');
+			res.render('save')
 		}
 	}).finalize();
 
@@ -94,7 +94,7 @@ passport.use(new LocalStrategy({usernameField:'email'},function(email, password,
     if (!row) return done(null, false,{message: 'Unknown User'});
   db.get('SELECT * FROM users WHERE email = ? AND password = ?', email, hashPassword(password,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Invalid password'});
-    // GLOBAL.email = email;
+    GLOBAL.email = email;
       return done(null, row);
     });
   });

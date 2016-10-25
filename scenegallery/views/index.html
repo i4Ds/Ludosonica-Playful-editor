@@ -32,8 +32,12 @@
 				<div class="col-md-1"></div>
 				<hr class="col-md-12 main-row">
 
+				<form method="post" action="/users/save">
+            						 <button type="submit" class="btn btn-primary">Save the scene</button>
+        							 </form>
+
 				<% { %>
-					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>"  target="_blank" class="btn btn-primary">Open new scene</a>
+					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>"  target="_blank" class="btn btn-primary">Create new scene</a>
 					<% } %>
 
 					<!-- 

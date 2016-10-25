@@ -171,7 +171,7 @@ var process = function(req, res, next) {
 				
 				var db = new sqlite3.Database( GLOBAL.db );
 				db.serialize(function() {
-					var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images ) VALUES (NULL, ?, ?, ?, ?, ?, ?)");
+					var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?)");
 					stmt.run([ req.form.data.description, req.form.data.name, location, timestamp, removeHash, images.length ]).finalize();
 				});
 

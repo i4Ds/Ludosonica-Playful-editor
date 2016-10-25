@@ -15,7 +15,7 @@ router.get('/play/gallery', function(req, res) {
 	db.serialize(function() {
 
 		//db.each("SELECT * FROM scene WHERE user_id != ? ORDER BY id DESC LIMIT ?", 1, [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
-		db.each("SELECT user_id FROM scene JOIN users on scene.user_id <> users.id", function(err, row) {
+		db.each("SELECT * FROM scene WHERE user_id != (SELECT id FROM users WHERE email = ?)",GLOBAL.email, function(err, row) {
 			if(err){
 				console.log(err);
 			}else{
@@ -32,7 +32,7 @@ router.get('/play/gallery', function(req, res) {
 
 	db.serialize(function() {
 		var rows = [];
-		db.each("SELECT user_id FROM scene JOIN users on scene.user_id = users.id", function(err, row) {
+		db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?)", GLOBAL.email, function(err, row) {
 			if(err){
 				console.log('first', err);
 			}else{
