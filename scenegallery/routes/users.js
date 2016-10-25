@@ -27,7 +27,7 @@ router.get('/login', function(req,res) {
 router.post('/save', function(req,res,call) {
 
 	var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 'text', 'text', 123, 4 ],function(error){
+	stmt.run([ 'text', 'text', 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
 		if(error) {
 			console.log(error);
 		} else {
@@ -63,7 +63,7 @@ router.post('/register', function(req,res,call) {
 
 	} else {
 		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
-					stmt.run([ name, email, hashPassword(password,'salt'), 'salt'],function(error){
+				   stmt.run([ name, email, hashPassword(password,'salt'), 'salt'],function(error){
 						if(error) {
 							res.render('register', {
 								error: 'Email is already taken'								
