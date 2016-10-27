@@ -24,15 +24,17 @@ router.get('/login', function(req,res) {
 });
 
 
-//Register User
+
+
+//Save scene
 router.post('/save', function(req,res,call) {
 
 	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
+	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 2 ],function(error){
 		if(error) {
 			console.log(error);
 		} else {
-			res.render('save')
+			console.log('success');
 		}
 	}).finalize();
 
@@ -79,6 +81,27 @@ router.post('/register', function(req,res,call) {
 	}
 });
 
+//Copy scene
+router.post('/copy', function(req,res,call) {
+
+	if( req.param('scene') !== undefined ){
+
+db.serialize(function () {
+
+	 db.run("CREATE TABLE temp_table as SELECT * FROM scene where id=?", req.param('scene'));
+	 db.run("UPDATE temp_table SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
+	 db.run("INSERT INTO scene SELECT * FROM temp_table");
+	 db.run("DROP TABLE temp_table");
+	 // res.render('/copy');
+		if(error) {
+			console.log(error);
+		} 
+});
+
+db.close();
+
+}
+});
 
 
 // LOGIN 
@@ -121,7 +144,8 @@ router.post('/login',
 		failureRedirect: '/users/login',failureFlash:true 
 	}),
 function(req,res) {
-	req.session.userid = 1;
+	// req.session.userid = 1;
+	req.session.userid;
 	res.redirect('/');
 
 });
