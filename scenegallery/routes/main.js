@@ -32,7 +32,7 @@ router.get('/play/gallery', function(req, res) {
 
 	db.serialize(function() {
 		var rows = [];
-		db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?)", GLOBAL.email, function(err, row) {
+		db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?)",GLOBAL.email, function(err, row) {
 			if(err){
 				console.log('first', err);
 			}else{

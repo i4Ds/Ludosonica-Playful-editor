@@ -23,22 +23,26 @@ router.get('/login', function(req,res) {
 
 });
 
+//  //Copy
+// router.get('/copy', function(req,res) {
+// 	res.render('copy');
+
+// });
 
 
+// //Save scene
+// router.post('/save', function(req,res,call) {
 
-//Save scene
-router.post('/save', function(req,res,call) {
+// 	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+// 	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 2 ],function(error){
+// 		if(error) {
+// 			console.log(error);
+// 		} else {
+// 			console.log('success');
+// 		}
+// 	}).finalize();
 
-	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 2 ],function(error){
-		if(error) {
-			console.log(error);
-		} else {
-			console.log('success');
-		}
-	}).finalize();
-
-});
+// });
 
 
 //Register User

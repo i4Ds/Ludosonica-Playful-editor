@@ -29,15 +29,15 @@
         
       </div>
 				
-				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </br></br>Enjoy this experience! :)</p></div>
+				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
 				<hr class="col-md-12 main-row">
 
-				<form method="post" action="/users/save">
+				<!-- <form method="post" action="/users/save">
             						 <button type="submit" class="btn btn-primary">Save the scene</button>
-        							 </form>
+        							 </form> -->
 
 				<% { %>
-					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>"  target="_blank" class="btn btn-primary">Create new scene</a>
+					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn btn-primary">Create new scene</a>
 					<% } %>
 
 					<!-- 
@@ -82,8 +82,8 @@
 										</div>
 									</div>
 
-									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary">Download</a>
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Edit in editor</a></br></br>
+									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn btn-primary">Edit in editor</a></br></br>
 									 <!-- <form method="post" action="/users/save">
             						 <button type="submit" class="btn btn-default">save</button>
         							 </form> -->
@@ -100,7 +100,7 @@
 
 					</div>
 
-					<hr class="col-md-12" />
+					<hr class="col-md-12 main-row" />
 
 						<h3>Scenes made by someone else</h3>
 						<div class="row">
@@ -138,12 +138,15 @@
 												</div>
 											</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= users.id %>"  target="_blank" class="btn btn-primary">Play this scene</a></br></br>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn btn-primary">Play this scene</a></br></br>
 
 
-									<form method="post" action="/users/copy?scene=<%= scene.id %>">
+								<form method="post" action="/users/copy?scene=<%= scene.id %>">
             						 <button type="submit" class="btn btn-primary">Copy the scene</button>
         							 </form></br>
+
+
+        							 
 										
 										</div>
 
@@ -164,8 +167,6 @@
 		<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
 		<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
 		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
-		<script type="text/javascript" src="/routes/index.js"></script>
-		<script type="text/javascript" src="mustache.js" ></script>
 		<script type="text/javascript">
 		
 			function loadImages(){
