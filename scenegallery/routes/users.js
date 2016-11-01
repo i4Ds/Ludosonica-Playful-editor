@@ -23,20 +23,26 @@ router.get('/login', function(req,res) {
 
 });
 
+//  //Copy
+// router.get('/copy', function(req,res) {
+// 	res.render('copy');
 
-//Register User
-router.post('/save', function(req,res,call) {
+// });
 
-	var stmt = db.prepare("INSERT INTO scene ( id, email, description, name, nickname, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?, ?, ?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
-		if(error) {
-			console.log(error);
-		} else {
-			console.log('success');
-		}
-	}).finalize();
 
-});
+// //Save scene
+// router.post('/save', function(req,res,call) {
+
+// 	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
+// 	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 2 ],function(error){
+// 		if(error) {
+// 			console.log(error);
+// 		} else {
+// 			console.log('success');
+// 		}
+// 	}).finalize();
+
+// });
 
 
 //Register User
@@ -79,6 +85,27 @@ router.post('/register', function(req,res,call) {
 	}
 });
 
+//Copy scene
+router.post('/copy', function(req,res,call) {
+
+	if( req.param('scene') !== undefined ){
+
+db.serialize(function () {
+
+	 db.run("CREATE TABLE temp_table as SELECT * FROM scene where id=?", req.param('scene'));
+	 db.run("UPDATE temp_table SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
+	 db.run("INSERT INTO scene SELECT * FROM temp_table");
+	 db.run("DROP TABLE temp_table");
+	 // res.render('/copy');
+		if(error) {
+			console.log(error);
+		} 
+});
+
+db.close();
+
+}
+});
 
 
 // LOGIN 
@@ -94,7 +121,7 @@ passport.use(new LocalStrategy({usernameField:'email'},function(email, password,
     if (!row) return done(null, false,{message: 'Unknown User'});
   db.get('SELECT * FROM users WHERE email = ? AND password = ?', email, hashPassword(password,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Invalid password'});
-    // GLOBAL.email = email;
+    GLOBAL.email = email;
       return done(null, row);
     });
   });
@@ -121,7 +148,8 @@ router.post('/login',
 		failureRedirect: '/users/login',failureFlash:true 
 	}),
 function(req,res) {
-	req.session.userid = 1;
+	// req.session.userid = 1;
+	req.session.userid;
 	res.redirect('/');
 
 });
