@@ -78,6 +78,7 @@ var Editor = function () {
 	this.templateManager = new Editor.TemplateManager( this );
 	
 	this.omittedObjects = [ "Skybox", "Helper" ]; // objects which don't appear in the scenegraph
+	this.notDeletableObjects = [ 'DirectionalLight default', 'AmbientLight default', 'Ground'];  // objects that can not be deleted in scenegraph
 
 
 };
@@ -421,8 +422,6 @@ Editor.prototype = {
 			this.config.setKey( 'selected', null );
 
 		}
-
-		console.log( this.selected );
 
 		this.signals.objectSelected.dispatch( object );
 

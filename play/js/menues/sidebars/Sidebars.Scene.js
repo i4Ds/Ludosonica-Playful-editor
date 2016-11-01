@@ -42,6 +42,7 @@ Sidebars.Scene = function ( editor ) {
 
 					var html;
 
+					// add icons for object instances if instance
 					if( object.isInstance ){
 
 						html = ' <span class="icn left icon-template-small" title="Duplicate object"></span>';
@@ -49,18 +50,26 @@ Sidebars.Scene = function ( editor ) {
 
 					} else {
 
+						// add name of object in any case
 						html = pad + '<span class="type ' + objectType + '"></span> ' + '<span class="objNameDisplay">' + object.name + '</span>';
 
 					}
 
-					html += ' <span class="icn-delete icon-del-small" title="Delete object"></span>';
+					// add icons to delete, duplicate and generate template if object is deletable
+					if( editor.notDeletableObjects.indexOf( object.name ) === -1){
 
-					if( !object.isInstance ){
+						html += ' <span class="icn-delete icon-del-small" title="Delete object"></span>';
 
-						html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
-						html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
+						if( !object.isInstance ){
+
+							html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
+							html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
+
+						}
 
 					}
+
+
 
 					/*if ( object instanceof THREE.Mesh ) {
 
@@ -139,6 +148,8 @@ Sidebars.Scene = function ( editor ) {
 
 				var clone = object.clone();
 				clone.material = clone.material.clone();
+
+				console.log('clone', clone);
 
 				editor.templateManager.addTemplate( clone, object );
 
