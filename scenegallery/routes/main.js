@@ -47,7 +47,7 @@ router.get('/play/gallery', function(req, res) {
 		});
 
 	});
-	db.close();
+	
 	
 
 });

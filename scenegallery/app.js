@@ -49,8 +49,6 @@ var db = new sqlite3.Database(GLOBAL.db);
 
 db.serialize(function () {
     db.run('PRAGMA foreign_keys = ON');
-    // db.run("DROP TABLE users");
-    // db.run("DROP TABLE scene");
     db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL, user_id INT NOT NULL, FOREIGN KEY (user_id) REFERENCES users (id) )");
     db.run("CREATE TABLE IF NOT EXISTS captcha_session ( token TEXT PRIMARY KEY NOT NULL, timestamp INTEGER NOT NULL )");
     db.run("CREATE TABLE IF NOT EXISTS users ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,name TEXT NOT NULL,email TEXT NOT NULL,password TEXT NOT NULL,salt TEXT NOT NULL, CONSTRAINT email_unique UNIQUE (email) ) ");
@@ -118,8 +116,21 @@ app.use(function (req, res, next) {
 
 var routes = require('./routes/index');
 app.use('/', routes);
+
 var users = require('./routes/users');
 app.use('/users', users);
+
+var copy_other = require('./routes/copy_other');
+app.use('/copy_other', copy_other);
+
+var copy_own = require('./routes/copy_own');
+app.use('/copy_own', copy_own);
+
+var save = require('./routes/save');
+app.use('/save', save);
+
+var all_scenes = require('./routes/all_scenes');
+app.get('/play/all_scenes', all_scenes);
 
 // show newest Scenes
 var main = require('./routes/main');

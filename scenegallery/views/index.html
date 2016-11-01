@@ -32,9 +32,9 @@
 				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
 				<hr class="col-md-12 main-row">
 
-				<!-- <form method="post" action="/users/save">
-            						 <button type="submit" class="btn btn-primary">Save the scene</button>
-        							 </form> -->
+				<form method="post" action="/save/save">
+            						 <button type="submit" class="btn btn-primary">Save new scene</button>
+        							 </form>
 
 				<% { %>
 					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn btn-primary">Create new scene</a>
@@ -81,6 +81,10 @@
 											<%= scene.description  %>
 										</div>
 									</div>
+
+										<form method="post" action="/copy_own/copy_own?scene=<%= scene.id %>">
+            						 <button type="submit" class="btn btn-primary">Clone this scene</button>
+        							 </form>
 
 									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
 									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn btn-primary">Edit in editor</a></br></br>
@@ -141,12 +145,11 @@
 									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn btn-primary">Play this scene</a></br></br>
 
 
-								<form method="post" action="/users/copy?scene=<%= scene.id %>">
-            						 <button type="submit" class="btn btn-primary">Copy the scene</button>
+									<form method="post" action="/copy_other/copy_other?scene=<%= scene.id %>">
+            						 <button type="submit" class="btn btn-primary">Copy to my scenes</button>
         							 </form></br>
 
 
-        							 
 										
 										</div>
 

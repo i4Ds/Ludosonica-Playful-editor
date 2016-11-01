@@ -7,6 +7,7 @@ var path = require('path');
 
 
 router.get('/play/gallery/download', function( req, res ){
+	console.log(req.param('load_scene'));
 	//console.log("want:"+req.param( 'load_scene' ));
 	if( req.param('load_scene') !== undefined ){
 	

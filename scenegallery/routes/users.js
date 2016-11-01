@@ -23,27 +23,6 @@ router.get('/login', function(req,res) {
 
 });
 
-//  //Copy
-// router.get('/copy', function(req,res) {
-// 	res.render('copy');
-
-// });
-
-
-// //Save scene
-// router.post('/save', function(req,res,call) {
-
-// 	var stmt = db.prepare("INSERT INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)");
-// 	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 2 ],function(error){
-// 		if(error) {
-// 			console.log(error);
-// 		} else {
-// 			console.log('success');
-// 		}
-// 	}).finalize();
-
-// });
-
 
 //Register User
 router.post('/register', function(req,res,call) {
@@ -70,7 +49,7 @@ router.post('/register', function(req,res,call) {
 
 	} else {
 		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
-				   stmt.run([ name, email, hashPassword(password,'salt'), 'salt'],function(error){
+				   stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'],function(error){
 						if(error) {
 							res.render('register', {
 								error: 'Email is already taken'								
@@ -85,27 +64,6 @@ router.post('/register', function(req,res,call) {
 	}
 });
 
-//Copy scene
-router.post('/copy', function(req,res,call) {
-
-	if( req.param('scene') !== undefined ){
-
-db.serialize(function () {
-
-	 db.run("CREATE TABLE temp_table as SELECT * FROM scene where id=?", req.param('scene'));
-	 db.run("UPDATE temp_table SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
-	 db.run("INSERT INTO scene SELECT * FROM temp_table");
-	 db.run("DROP TABLE temp_table");
-	 // res.render('/copy');
-		if(error) {
-			console.log(error);
-		} 
-});
-
-db.close();
-
-}
-});
 
 
 // LOGIN 
@@ -116,12 +74,19 @@ function hashPassword(password, salt) {
   return hash.digest('hex');
 }
 
+function hashEmail(email, salt) {
+  var hash = crypto.createHash('sha256');
+  hash.update(email);
+  hash.update(salt);
+  return hash.digest('hex');
+}
+
 passport.use(new LocalStrategy({usernameField:'email'},function(email, password, done) {
-  db.get('SELECT * FROM users WHERE email = ?', email, function(err, row) {
+  db.get('SELECT * FROM users WHERE email = ?', hashEmail(email,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Unknown User'});
-  db.get('SELECT * FROM users WHERE email = ? AND password = ?', email, hashPassword(password,'salt'), function(err, row) {
+  db.get('SELECT * FROM users WHERE email = ? AND password = ?', hashEmail(email,'salt'), hashPassword(password,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Invalid password'});
-    GLOBAL.email = email;
+    GLOBAL.email = hashEmail(email,'salt');
       return done(null, row);
     });
   });
@@ -148,7 +113,7 @@ router.post('/login',
 		failureRedirect: '/users/login',failureFlash:true 
 	}),
 function(req,res) {
-	// req.session.userid = 1;
+	// req.session.userid = 1; // not sure about this
 	req.session.userid;
 	res.redirect('/');
 
@@ -162,6 +127,7 @@ router.get('/logout',function(req,res){
 
 	res.redirect('/users/login');
 })
+
 
 
 module.exports = router;
