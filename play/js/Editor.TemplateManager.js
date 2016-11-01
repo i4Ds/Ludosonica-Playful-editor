@@ -3,7 +3,6 @@ Editor.TemplateManager = function ( editor ) {
 
     this.editor = editor;
 
-    this.objService = editor.objectPropertyService;
     this.signals = editor.signals;
 
     this.addTemplate = function ( template, instance ) {

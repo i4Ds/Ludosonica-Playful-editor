@@ -12,6 +12,11 @@
     opacity: 0.4;
 }
 
+.Input.inactive {
+    background-color: #e6e6e6;
+    opacity: 1;
+}
+
 .inactive span, .inactive input {
     cursor: default !important;
 }

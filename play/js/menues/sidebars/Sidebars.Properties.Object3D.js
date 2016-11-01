@@ -590,7 +590,16 @@ Sidebars.Properties.Object3D = function ( editor ) {
 			objectType.setValue( editor.getObjectType( object ) );
 
 			objectUUID.setValue( object.uuid );
+
 			objectName.setValue( object.name );
+
+			if( editor.notDeletableObjects.indexOf( object.name ) !== -1){
+				$(objectName.dom).prop('disabled', true);
+				$(objectName.dom).addClass('inactive');
+			}else {
+				$(objectName.dom).prop('disabled', false);
+				$(objectName.dom).removeClass('inactive');
+			}
 
 			if ( object.parent !== undefined ) {
 

@@ -4,7 +4,6 @@
 Sidebars.AddTemplate = function (editor) {
 
     var signals = editor.signals;
-    var objService = editor.objectPropertyService;
     var templManager = editor.templateManager;
 
     var container = new UI.Panel();
@@ -36,7 +35,7 @@ Sidebars.AddTemplate = function (editor) {
 
                     var object = objects[i];
 
-                    var html = pad + '</span> ' + '<span class="objNameDisplay">' + objService.getName(object) + '</span>';
+                    var html = pad + '</span> ' + '<span class="objNameDisplay">' + object.name + '</span>';
 
 
                     html += ' <span class="icn-delete icon-del-small" title="delete template"></span>';
