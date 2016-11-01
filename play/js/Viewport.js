@@ -251,6 +251,8 @@ var Viewport = function (editor) {
 
     }
 
+    this.addLeapBox = addLeapBox;
+
     function updateLeapBoxVisibility() {
 
         if (leapBoxWalls) {
@@ -275,10 +277,18 @@ var Viewport = function (editor) {
     signals.leapBoxChanged.add(function (val) {
 
         editor.scene.hasLeapBox = val;
-        if (val === false) removeLeapBox();
-        else if (container.play === true) addLeapBox();
+        if (val === false || container.play === true) removeLeapBox();
+        //else if (container.play === true) addLeapBox();
+        else if ( !leapBoxWalls ) addLeapBox();
+        updateLeapBoxVisibility();
+
+        signals.sceneGraphChanged.dispatch();
 
     });
+
+    console.log('leap box', editor.scene.hasLeapBox);
+        addLeapBox();
+        updateLeapBoxVisibility();
 
     signals.play.add(function () {
 
@@ -306,6 +316,7 @@ var Viewport = function (editor) {
         editor._activeControls.setTranslate(new THREE.Vector3(0, 4.3, 8.5));
 
         //if ( editor.scene.skybox ) editor.scene.skybox.alignWithCamera( editor._activeCamera );
+        if (editor.scene.hasLeapBox !== false) removeLeapBox();
         render();
 
         //reset simulation deltas in order to have a fresh start!
@@ -313,7 +324,7 @@ var Viewport = function (editor) {
         //scene.resetSimulation();
         editor.startPlay();
         scene.add(playCamera);
-        if (editor.scene.hasLeapBox !== false) addLeapBox();
+
         container.play = true;
 
     });
@@ -326,8 +337,6 @@ var Viewport = function (editor) {
         //scene.remove( yawObject );
         scene.remove(playCamera);
 
-        removeLeapBox();
-
         container.play = false;
 
         //give the simulation time to run out
@@ -335,8 +344,14 @@ var Viewport = function (editor) {
             editor.resetPlay();
             editor._activeControls = transformControls;
 
+            if(editor.scene.hasLeapBox){
+                addLeapBox();
+                updateLeapBoxVisibility();
+            }
+
             // Call resize method to make sure that viewport is rendered correctly after play mode in 3D
             signals.windowResize.dispatch();
+
         }, 100);
 
     });
@@ -1053,7 +1068,7 @@ var Viewport = function (editor) {
 
             //editor._activeControls.update( delta );
 
-            updateLeapBoxVisibility();
+            //updateLeapBoxVisibility();
 
             editor.play._playLoop(delta);
 
@@ -1066,7 +1081,7 @@ var Viewport = function (editor) {
             //console.log(editor.scene.children[0].rotation);
         }
 
-    };
+    }
 
 
     function render() {
@@ -1090,6 +1105,10 @@ var Viewport = function (editor) {
 
     }
 
-    return container;
+    //return container;
 
-}
+    this.getContainer = function () {
+        return container;
+    }
+
+};

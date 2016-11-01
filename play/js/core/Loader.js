@@ -451,6 +451,7 @@ var Loader = function ( editor ) {
 			if ( result instanceof THREE.Scene ) {
 
 				// result is normally scene
+				console.log('set scene');
 				editor.setScene( result );
 
 			} else {

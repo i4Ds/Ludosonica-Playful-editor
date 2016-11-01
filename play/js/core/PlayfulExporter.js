@@ -251,11 +251,7 @@ THREE.PlayfulExporter.prototype = {
 
                 data.type = 'Scene';
 
-                if (object.hasLeapBox === false) {
-
-                    data.hasLeapBox = object.hasLeapBox;
-
-                }
+                data.hasLeapBox = object.hasLeapBox;
 
                 if (object.fog != undefined) {
                     data.fog = {

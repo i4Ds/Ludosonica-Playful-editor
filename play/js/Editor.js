@@ -77,9 +77,8 @@ var Editor = function () {
 
 	this.templateManager = new Editor.TemplateManager( this );
 	
-	this.omittedObjects = [ "Skybox", "Helper" ]; // objects which don't appear in the scenegraph
+	this.omittedObjects = [ "Skybox", "Helper", 'LeapBoxWall0', 'LeapBoxWall1', 'LeapBoxWall2', 'LeapBoxWall3', 'LeapBoxWall4', '' ]; // objects which don't appear in the scenegraph and are not exported
 	this.notDeletableObjects = [ 'DirectionalLight default', 'AmbientLight default', 'Ground'];  // objects that can not be deleted in scenegraph
-
 
 };
 
@@ -134,6 +133,8 @@ Editor.prototype = {
 
 		this.signals.sceneGraphChanged.active = true;
 		this.signals.sceneGraphChanged.dispatch();
+
+		this.signals.leapBoxChanged.dispatch( this.scene.hasLeapBox );
 
 
 	},

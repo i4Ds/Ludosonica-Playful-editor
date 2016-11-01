@@ -187,7 +187,10 @@
 
     var editor = new Editor();
 
-    var viewport = new Viewport(editor).setId('viewport');
+    var viewportParent = new Viewport(editor);
+    var viewport = viewportParent.getContainer();
+
+    viewport.setId('viewport');
     document.body.appendChild(viewport.dom);
 
     /*var menubar = new Menubar( editor ).setId( 'menubar' );
@@ -267,7 +270,8 @@
 
                 //default scene
                 generateDefaultScene();
-
+//                // add leap box to scene
+//                editor.signals.leapBoxChanged.dispatch( true );
             }
 
             var selected = editor.config.getKey('selected');
@@ -341,7 +345,6 @@
         signals.fogColorChanged.add(saveState);
         signals.fogParametersChanged.add(saveState);
 
-
     });
 
     function generateDefaultScene() {
@@ -367,13 +370,12 @@
 
         editor.addObject(light);
 
-
+        // default fog color is set in themes
         editor.scene.fog = new THREE.Fog(0xAAAAAA, 0.01, 50);
         editor.scene.hasLeapBox = true;
         editor.scene._gravity = new THREE.Vector3(0, -16, 0);
         editor.scene.setGravity(editor.scene._gravity);
         editor.scene.maxVelocity = Infinity;
-
 
         var color = 0x222222;
 
@@ -382,6 +384,7 @@
 
         editor.addObject(light);
 
+        // GROUND
 
         var width = 100;
         var height = 0.1;
@@ -391,11 +394,14 @@
         var heightSegments = 1;
         var depthSegments = 1;
 
+        var friction = 0.8;
+        var restitution = 1;
+
         var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
         var material = Physijs.createMaterial(
-                new THREE.MeshPhongMaterial({color: 0x555555}),
-                0.8,
-                1
+                new THREE.MeshPhongMaterial({color: 0x9AFFBE}),
+                friction,
+                restitution
         );
         var mesh = new Physijs.BoxMesh(geometry, material);
         mesh.name = 'Ground';
@@ -405,8 +411,10 @@
 
         editor.addObject(mesh);
 
+
         // add default objects to add to scene
         editor.setTheme(editor.config.getKey('theme'));
+
     }
 
     //

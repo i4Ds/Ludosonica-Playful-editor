@@ -7,7 +7,7 @@ _lS = {
 	
 		if ( !editor._isLoadingFile ) {
 			Logger.info(' set theme fog ', '_LS');
-			var fogColor = new THREE.Color( 0x0099bb );
+			var fogColor = new THREE.Color( 0xAFEAFC );
 			editor.signals.fogTypeChanged.dispatch( 'Fog' );
 			editor.signals.fogColorChanged.dispatch( fogColor.getHex() );
 			editor.signals.fogParametersChanged.dispatch( 0.01, 50, 0.00025 );
@@ -33,7 +33,7 @@ _lS = {
 		if ( object instanceof THREE.Mesh ) {
 			
 			if ( object.name != "Ground" ) {
-				object.material.opacity = 0.4;
+				object.material.opacity = 0.8;
 				object.material.transparent = true;
 				object.material.needsUpdate = true;
 			}
@@ -51,7 +51,7 @@ _lS = {
 			
 			if ( object._physijs && object._egh ) {
 			
-				oject.material.opacity = 1.0;
+				object.material.opacity = 1.0;
 			
 				object.remove( object._egh );
 				delete object._egh;

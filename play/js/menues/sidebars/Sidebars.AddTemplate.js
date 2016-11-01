@@ -22,7 +22,6 @@ Sidebars.AddTemplate = function (editor) {
 
     // events
 
-    // todo templatez
     var templateList = function () {
         var options = [];
 

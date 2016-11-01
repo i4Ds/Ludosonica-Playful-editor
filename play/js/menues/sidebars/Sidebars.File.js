@@ -24,7 +24,15 @@ Sidebars.File = function ( editor ) {
 	
 	var importButton = $("<a/>").html("Import").on("click",function(e)
 	{
+
+		// todo rerender cleared scene before import of new scene
+		//editor.storage.clear( function () {
+		//	signals.windowResize.dispatch();
+		//	signals.sceneGraphChanged.dispatch();
+		//} );
+
 		fileInput.click();
+
 	});
 		
 		// create file input element for scene import
