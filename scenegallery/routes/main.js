@@ -56,42 +56,95 @@ router.get('/', function(req, res) {
 
 	});
 
-});
+
+	// Copy my scenes
+	router.post('/copy_own', function(req,res) {
+
+		if( req.param('scene') !== undefined ){
+
+			db.serialize(function () {
+
+				db.run("CREATE TEMPORARY TABLE temp_table_own as SELECT * FROM scene where id=?", req.param('scene'));
+				db.run("UPDATE temp_table_own SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
+				db.run("INSERT INTO scene SELECT * FROM temp_table_own");
+				db.run("DROP TABLE temp_table_own",
+					function(error){
+						if(error) {
+							console.log(error);
+							var err = new Error(error);
+							next(err);
+						}else{
+							console.log('success');
+							res.redirect('/play/gallery/main');
+						}}
+				);
+
+			});
+
+		}
+	});
 
 
 // Copy scenes of others
 router.post('/copy_other', function(req,res) {
 
 	console.log('before');
+	console.log(req.param('scene'));
 
 	if( req.param('scene') !== undefined ){
 
 		db.serialize(function () {
 
-			db.run("CREATE TEMPORARY TABLE temp_table_other as SELECT * FROM scene where id=?", req.param('scene'));
-			db.run("UPDATE temp_table_other SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
-			db.run("INSERT INTO scene SELECT * FROM temp_table_other");
-			db.run("DROP TABLE temp_table_other");
+			db.run("CREATE TEMPORARY TABLE temp_table_other as SELECT * FROM scene where id=?",
+				req.param('scene'),
+				function(error){
+					if(error) {
+						console.log(error);
+						var err = new Error(error);
+						next(err);
+					}else{
+						console.log('success create temp');
+					}}
+			);
+			db.run("UPDATE temp_table_other SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",
+				GLOBAL.email,
+				function(error){
+					if(error) {
+						console.log(error);
+						var err = new Error(error);
+						next(err);
+					}else{
+						console.log('success update');
+					}}
+			);
+			db.run("INSERT INTO scene SELECT * FROM temp_table_other",
+				function(error){
+					if(error) {
+						console.log(error);
+						var err = new Error(error);
+						next(err);
+					}else {
+						console.log('success instert');
+					}}
+			);
+			db.run("DROP TABLE temp_table_other",
+				function(error){
+					if(error) {
+						console.log(error);
+						var err = new Error(error);
+						next(err);
+					}else{
+						console.log('success');
+						res.redirect('/play/gallery/main');
+					}}
+			);
 
 		});
 
-
-		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
-		stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'], function(error){
-			if(error) {
-				res.render('register', {
-					error: 'Email is already taken'
-				});
-			} else {
-				req.flash('success_msg','You are registered and can now login');
-				res.redirect('/play/gallery/login');
-			}
-		}).finalize();
-
-		console.log('after');
-		res.render('index');
-
 	}
 });
+
+});
+
 
 module.exports = router;
