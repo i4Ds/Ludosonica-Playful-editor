@@ -38,7 +38,7 @@ router.post('/save', function(req,res,call) {
 
 });
 
-	res.redirect('/play/gallery');
+	res.redirect('/play/gallery/main');
 
 });
 

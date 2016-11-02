@@ -5,7 +5,7 @@ var glob = require('glob');
 
 var sqlite3 = require('sqlite3').verbose();
 
-router.get('/play/all_scenes', function(req, res) {
+router.get('/play/gallery/all_scenes', function(req, res) {
 	var db = new sqlite3.Database( GLOBAL.db );
 
 

@@ -8,6 +8,12 @@ var path = require('path');
 
 var app = express();
 
+GLOBAL.db = './gallery.db';
+GLOBAL.captchaSessionTime = 600000; // 10 minutes
+GLOBAL.maxSize = 50000000; // ~50 MByte
+GLOBAL.maxScenesOnFrontPage = 100;
+GLOBAL.root = __dirname;
+
 
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
@@ -18,26 +24,13 @@ var session = require('express-session');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-
-
 var crypto = require('crypto');
-
-
-
-GLOBAL.db = './gallery.db';
-GLOBAL.captchaSessionTime = 600000; // 10 minutes
-GLOBAL.maxSize = 50000000; // ~50 MByte
-GLOBAL.maxScenesOnFrontPage = 100;
-GLOBAL.root = __dirname;
-
-
 
 var sqlite3 = require('sqlite3').verbose();
 
 
-
-app.set('views', path.join(__dirname, 'views'));
 app.engine('.html', require('ejs').__express);
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
@@ -115,26 +108,30 @@ app.use(function (req, res, next) {
 
 
 var routes = require('./routes/index');
-app.use('/', routes);
+app.use('/play/gallery', routes);
 
 var users = require('./routes/users');
-app.use('/users', users);
+app.use('/play/gallery', users);
 
-var copy_other = require('./routes/copy_other');
-app.use('/copy_other', copy_other);
+//var copy_other = require('./routes/copy_other');
+//app.use('/play/gallery/copy_other', copy_other);
 
 var copy_own = require('./routes/copy_own');
-app.use('/copy_own', copy_own);
+app.use('/play/gallery/copy_own', copy_own);
 
 var save = require('./routes/save');
-app.use('/save', save);
+app.use('/play/gallery/save', save);
 
 var all_scenes = require('./routes/all_scenes');
-app.get('/play/all_scenes', all_scenes);
+app.get('/play/gallery/all_scenes', all_scenes);
 
 // show newest Scenes
 var main = require('./routes/main');
-app.get('/play/gallery', main);
+app.use('/play/gallery/main', main);
+
+
+//var test = require('./routes/test');
+//app.get('/play/gallery', test);
 
 
 // //upload Scenes
@@ -145,20 +142,20 @@ app.get('/play/gallery', main);
 // var captcha = require('./routes/captcha' );
 // app.get('/play/gallery/captchacheck', captcha);
 
-// //download Scenes
-// var download = require('./routes/download' );
-// app.get('/play/gallery/download', download);
+ //download Scenes
+ var download = require('./routes/download' );
+ app.get('/play/gallery/download', download);
 
 // //remove Scenes
 // var remove = require('./routes/remove');
 // app.route('/play/gallery/remove').all(remove);
 
-// // catch 404 and forward to error handler
-// app.use(function(req, res, next) {
-//     var err = new Error('Not Found');
-//     err.status = 404;
-//     next(err);
-// });
+ // catch 404 and forward to error handler
+ app.use(function(req, res, next) {
+     var err = new Error('Not Found');
+     err.status = 404;
+     next(err);
+ });
 
 
 
@@ -170,10 +167,10 @@ app.get('/play/gallery', main);
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         res.status(err.status || 500);
-        // res.render('error', {
-        // message: err.message,
-        // error: err
-        // });
+         //res.render('error', {
+         //message: err.message,
+         //error: err
+         //});
     });
 }
 
@@ -181,18 +178,18 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err, req, res, next) {
     res.status(err.status || 500);
-    // res.render('error', {
-    // message: err.message,
-    // error: {}
-    // });
+     res.render('error', {
+     message: err.message,
+     error: err
+     });
 });
 
 
-app.set('port', (process.env.PORT || 3000));
-
-app.listen(app.get('port'), function () {
-    console.log('Server is running on port ' + app.get('port'));
-});
+//app.set('port', (process.env.PORT || 3000));
+//
+//app.listen(app.get('port'), function () {
+//    console.log('Server is running on port ' + app.get('port'));
+//});
 
 
 // app.post('/login', passport.authenticate('local', { successRedirect: '/good-login',

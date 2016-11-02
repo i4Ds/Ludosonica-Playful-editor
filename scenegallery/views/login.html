@@ -2,10 +2,11 @@
 <html>
 
   <head>
-    <link rel="stylesheet" href="/css/bootstrap.css" />
-	<link rel="stylesheet" href="/css/style.css" />
-  
-      
+      <link rel="stylesheet" href="/stylesheets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+      <link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+      <link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/>
+      <link rel="stylesheet" href="/stylesheets/content.css"/>
+      <link rel="stylesheet" href="/css/style.css" />
   </head>
     <body>
     <div class="container">
@@ -13,8 +14,8 @@
         <nav>
           <ul class="nav nav-pills pull-right">
           
-        <li role="presentation"><a href="/users/register">Register</a></li>
-        <li role="presentation"><a href="/play/all_scenes">View all scenes</a></li>
+        <li role="presentation"><a href="/play/gallery/register">Register</a></li>
+        <li role="presentation"><a href="/play/gallery/all_scenes">View all scenes</a></li>
        
           </ul>
        
@@ -42,7 +43,7 @@
 
  <% } %>
 
-<form method="post" action="/users/login">
+<form method="post" action="/play/gallery/login">
  <div class="form-group">
  	<label>Email</label>
  	<input type="email" class="form-control" name="email" placeholder="Email">

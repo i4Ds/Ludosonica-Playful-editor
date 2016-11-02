@@ -49,15 +49,15 @@ router.post('/register', function(req,res,call) {
 
 	} else {
 		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
-				   stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'],function(error){
+				   stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'], function(error){
 						if(error) {
 							res.render('register', {
 								error: 'Email is already taken'								
 							});
 						} else {
 							req.flash('success_msg','You are registered and can now login');
-					 		res.redirect('/users/login');
-						};
+					 		res.redirect('/play/gallery/login');
+						}
 					}).finalize();
 				
 			
@@ -109,12 +109,12 @@ passport.deserializeUser(function(id, done) {
 
 router.post('/login', 
 	passport.authenticate('local', { 
-		successRedirect: '/play/gallery',
-		failureRedirect: '/users/login',failureFlash:true 
+		successRedirect: '/play/gallery/main',
+		failureRedirect: '/play/gallery/login',failureFlash:true
 	}),
 function(req,res) {
 	// req.session.userid = 1; // not sure about this
-	req.session.userid;
+	//req.session.userid;
 	res.redirect('/');
 
 });
@@ -125,8 +125,8 @@ router.get('/logout',function(req,res){
 
 	req.flash('success_msg','You succesfully logged out');
 
-	res.redirect('/users/login');
-})
+	res.redirect('/play/gallery/login');
+});
 
 
 

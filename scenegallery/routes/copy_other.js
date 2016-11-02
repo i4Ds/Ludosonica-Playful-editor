@@ -12,14 +12,14 @@ var db = new sqlite3.Database( GLOBAL.db );
 
 
  //Copy
-router.get('/copy_other', function(req,res) {
-	res.render('copy_other');
-
-});
+//router.get('/play/gallery/copy_other', function(req,res) {
+//	res.render('copy_other');
+//
+//});
 
 
 // Copy scenes of others
-router.post('/copy_other', function(req,res) {
+router.post('/play/gallery/copy_other', function(req,res) {
 
 	if( req.param('scene') !== undefined ){
 
@@ -32,7 +32,7 @@ db.serialize(function () {
 	 
 });
 	
-res.redirect('/play/gallery');
+res.redirect('/play/gallery/main');
 
 }
 });

@@ -10,7 +10,7 @@ var GalleryPanel = function( editor ){
 	//update iframe content after every reload
 	frame.load(function(){
 		injectNewButton();
-		$('#gallery > iframe').contents().find('body').css('background-color','transparent');;
+		$('#gallery > iframe').contents().find('body').css('background-color','transparent');
 		iFrameLoadImages();
 	});
 	
@@ -39,5 +39,5 @@ var GalleryPanel = function( editor ){
 	container.dom.appendChild( frame[0] );
     return container;
 
-}
+};
 
