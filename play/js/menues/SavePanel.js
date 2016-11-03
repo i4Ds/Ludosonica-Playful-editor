@@ -150,7 +150,7 @@ var SavePanel = function( editor ){
 
                     // todo change url: to gallery/upload for deploy
                     $.ajax({
-                        url: "scenegallery/gallery/upload",
+                        url: "gallery/upload",
                         type: "POST",
                         dataType: 'json',
                         data: formData,

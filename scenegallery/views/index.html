@@ -22,13 +22,13 @@
        <li role="presentation"><a href="/play/gallery/logout">Logout</a></li>
           </ul>
           
-         <h3 class="text-muted">Welcome to the Ludosonica gallery! </h3>
+         <h3 class="text-muted">Welcome to your gallery! </h3>
         </nav>
 
         
       </div>
 				
-				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
+				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
 
 				<hr class="col-md-12 main-row"/> </div>
 
@@ -43,15 +43,12 @@
             						 <button type="submit" class="btn btn-primary">Save new scene</button>
         							 </form>
 
-
 				<% { %>
 					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn button-royal"><i class="fa fa-plus"></i> </a><br/>
 					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn btn-primary">Create new scene  <i class="fa fa-plus"></i> </a>
 					<% } %>
 					
 
-					<!-- 
-					<a type="button" href="http://playfulmedia.cs.technik.fhnw.ch/playdev/"  target="_blank" class="btn btn-primary">Create new scene</a> -->
 
 					<h3>My own scenes</h3>
 
