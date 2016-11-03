@@ -70,11 +70,12 @@ router.get('/', function(req, res) {
 				db.run("DROP TABLE temp_table_own",
 					function(error){
 						if(error) {
+							req.flash('error_msg','Opps, something went wrong please try again');
 							console.log(error);
 							var err = new Error(error);
 							next(err);
 						}else{
-							console.log('success');
+							req.flash('success_msg','Your scene has been succesfully cloned');
 							res.redirect('/play/gallery/main');
 						}}
 				);
@@ -88,9 +89,6 @@ router.get('/', function(req, res) {
 // Copy scenes of others
 router.post('/copy_other', function(req,res) {
 
-	console.log('before');
-	console.log(req.param('scene'));
-
 	if( req.param('scene') !== undefined ){
 
 		db.serialize(function () {
@@ -103,7 +101,6 @@ router.post('/copy_other', function(req,res) {
 						var err = new Error(error);
 						next(err);
 					}else{
-						console.log('success create temp');
 					}}
 			);
 			db.run("UPDATE temp_table_other SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",
@@ -114,7 +111,6 @@ router.post('/copy_other', function(req,res) {
 						var err = new Error(error);
 						next(err);
 					}else{
-						console.log('success update');
 					}}
 			);
 			db.run("INSERT INTO scene SELECT * FROM temp_table_other",
@@ -124,17 +120,17 @@ router.post('/copy_other', function(req,res) {
 						var err = new Error(error);
 						next(err);
 					}else {
-						console.log('success instert');
 					}}
 			);
 			db.run("DROP TABLE temp_table_other",
 				function(error){
 					if(error) {
+						req.flash('error_msg','Opps, something went wrong please try again');
 						console.log(error);
 						var err = new Error(error);
 						next(err);
 					}else{
-						console.log('success');
+						req.flash('success_msg','Scene has been succesfully copied');
 						res.redirect('/play/gallery/main');
 					}}
 			);
@@ -142,6 +138,38 @@ router.post('/copy_other', function(req,res) {
 		});
 
 	}
+});
+
+//Save scene
+router.post('/save', function(req,res,call) {
+	
+	db.serialize(function () {
+	db.run("CREATE TEMPORARY TABLE scene_temp ( id INTEGER, description TEXT , name TEXT , location TEXT , timestamp TEXT  , removehash TEXT  , images INT  , user_id INT, FOREIGN KEY (user_id) REFERENCES users (id) )");
+	db.run("CREATE TEMPORARY TABLE temp_table_save AS SELECT id FROM users where id= (SELECT id FROM users WHERE email =?)", GLOBAL.email);
+
+
+		var stmt = db.prepare("INSERT INTO scene_temp ( id, description, name, location, timestamp, removehash, images,user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)");
+	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
+		
+	}).finalize();
+	 db.run("UPDATE scene_temp SET id=NULL, user_id = (SELECT id FROM temp_table_save)");
+	 db.run("INSERT INTO scene SELECT * FROM scene_temp");
+	 db.run("DROP TABLE temp_table_save");
+	 db.run("DROP TABLE scene_temp",
+	 	function(error){
+					if(error) {
+						req.flash('error_msg','Opps, something went wrong please try again');
+						console.log(error);
+						var err = new Error(error);
+						next(err);
+					}else{
+						req.flash('success_msg','Scene has been succesfully created');
+						res.redirect('/play/gallery/main');
+					}}
+	 	);
+
+});
+
 });
 
 });

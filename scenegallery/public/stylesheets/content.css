@@ -8,9 +8,13 @@ body {
 }
 
 .scene-entry{
+	display: block;
 	background-color: #EEE;
 	margin-top: 10px;
-	border-radius: 20px;
+	border-radius: 3px;
+	height: 500px;
+	float: left;
+	
 	
 }
 
@@ -59,4 +63,5 @@ a.btn{
 	font-weight: bold;
 	font-family: Arial,sans-serif;
 	padding: 6px 10px;
+	border-radius: 2px;
 }

@@ -119,8 +119,8 @@ app.use('/play/gallery', users);
 //var copy_own = require('./routes/copy_own');
 //app.use('/play/gallery/copy_own', copy_own);
 
-var save = require('./routes/save');
-app.use('/play/gallery/save', save);
+// var save = require('./routes/save');
+// app.use('/play/gallery/save', save);
 
 var all_scenes = require('./routes/all_scenes');
 app.get('/play/gallery/all_scenes', all_scenes);
