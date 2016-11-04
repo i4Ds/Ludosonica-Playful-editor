@@ -48,7 +48,7 @@ router.post('/register', function(req,res,call) {
 							});
 
 	} else {
-		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
+		var stmt = db.prepare('INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)');
 				   stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'], function(error){
 						if(error) {
 							res.render('register', {

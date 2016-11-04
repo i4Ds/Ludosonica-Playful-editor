@@ -85,3 +85,48 @@ body {
   margin-top:0;
   font-size: 500;
 }
+/*BUTTONS */
+
+/*.button-square {
+  border-radius: 0; }
+
+
+/*
+* Size Adjustment for equal height & widht buttons
+*
+* Remove padding and set a fixed width.
+*/
+
+.button-royal {
+  padding: 0 !important;
+  width: 70px; }
+
+.button-royal {
+  font-size: 28px;
+  height: 70px;
+  line-height: 70px;
+  padding: 0 70px; }
+
+
+    .button-royal,
+.button-royal-flat {
+  background-color: #E57245;
+  border-color: #E57245;
+  color: white; }
+  .button-royal:visited,
+  .button-royal-flat:visited {
+    color: white; }
+  .button-royal:hover, .button-royal:focus,
+  .button-royal-flat:hover,
+  .button-royal-flat:focus {
+    background-color: #ed925c;
+    border-color: #ed925c;
+    color: white; }
+  .button-royal:active, .button-royal.active, .button-royal.is-active,
+  .button-royal-flat:active,
+  .button-royal-flat.active,
+  .button-royal-flat.is-active {
+    background-color: #E57245;
+    border-color: #E57245;
+    color: #af6234; }
+
