@@ -80,32 +80,37 @@ var SavePanel = function( editor ){
         if( checkFields() ){
 
             lockPanel();
-            if( $('.imageContainer > a > canvas' ).length == 0 ){
-                //addCameras
-                var addCameraButton = $('#cameraPanel > button:eq(0)');
-                for(var i = 0; i < 3; i++) addCameraButton.click();
-
-                //rearrange cameras
-                var rearrangeCameraButton = $('#cameraPanel > button:eq(1)');
-                rearrangeCameraButton.click();
-
-                //take screenshots
-                $('#imagePanel > button')[1].click();
-
-            }
+            //if( $('.imageContainer > a > canvas' ).length == 0 ){
+            //    //addCameras
+            //    var addCameraButton = $('#cameraPanel > button:eq(0)');
+            //    for(var i = 0; i < 3; i++) addCameraButton.click();
+            //
+            //    //rearrange cameras
+            //    var rearrangeCameraButton = $('#cameraPanel > button:eq(1)');
+            //    rearrangeCameraButton.click();
+            //
+            //    //take screenshots
+            //    $('#imagePanel > button')[1].click();
+            //
+            //}
 
             var complete = function(){
                 unlockPanel();
-                $('#gallery > iframe')[0].contentWindow.location.reload();
+                //$('#gallery > iframe')[0].contentWindow.location.reload();
             };
 
             var error = function(a,b,c){
                 complete();
 
+                console.log('error', a);
+
                 var json = $.parseJSON(a.responseText);
+
+                console.log(a.responseText);
 
                 statusLabel.css('color','red');
                 statusLabel.text( json['error-codes'] );
+
             };
 
 
@@ -115,14 +120,14 @@ var SavePanel = function( editor ){
 
                 var userId = sessionStorage.getItem('user');
                 var sceneId = sessionStorage.getItem('scene');
+
                 console.log('upload scene', sceneId, 'of user', userId);
+                console.log(document.cookie);
 
                 formData.append("scenename",  	inputSceneName.val() );
                 formData.append("description", 	inputDescription.val() );
-                formData.append('scene', sceneId);
-                formData.append('user', userId);
-
-                console.log(sceneId, userId);
+                formData.append("scene", sceneId);
+                formData.append("user", userId);
 
                 editor.storage.createZip( function(blob){
 
@@ -139,16 +144,17 @@ var SavePanel = function( editor ){
                     formData.append("playful",     	blob );
 
 
-                    var success = function(a,b,c){
+                    var success = function( a, b, c){
                         complete();
 
+                        console.log(a, b, c);
+
                         statusLabel.css('color','green');
-                        statusLabel.text("Upload Successful!");
+                        statusLabel.text( "Upload Successful!");
                     };
 
                     //console.log('send gallery');
 
-                    // todo change url: to gallery/upload for deploy
                     $.ajax({
                         url: "gallery/upload",
                         type: "POST",
