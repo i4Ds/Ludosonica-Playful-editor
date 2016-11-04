@@ -26,7 +26,7 @@ router.get('/login', function(req,res) {
 
 //Register User
 router.post('/register', function(req,res,call) {
-	var email = sqlEscapeString(req.body.email);
+	var email = req.body.email;
 	var name = req.body.name;
 	var password = req.body.password;
 	var password2 = req.body.password2;

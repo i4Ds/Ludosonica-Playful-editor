@@ -138,37 +138,37 @@ router.post('/copy_other', function(req,res) {
 	}
 });
 
-//Save scene
-router.post('/save', function(req,res,call) {
+// //Save scene
+// router.post('/save', function(req,res,call) {
 	
-	db.serialize(function () {
-	db.run("CREATE TEMPORARY TABLE scene_temp ( id INTEGER, description TEXT , name TEXT , location TEXT , timestamp TEXT  , removehash TEXT  , images INT  , user_id INT, FOREIGN KEY (user_id) REFERENCES users (id) )");
-	db.run("CREATE TEMPORARY TABLE temp_table_save AS SELECT id FROM users where id= (SELECT id FROM users WHERE email =?)", GLOBAL.email);
+// 	db.serialize(function () {
+// 	db.run("CREATE TEMPORARY TABLE scene_temp ( id INTEGER, description TEXT , name TEXT , location TEXT , timestamp TEXT  , removehash TEXT  , images INT  , user_id INT, FOREIGN KEY (user_id) REFERENCES users (id) )");
+// 	db.run("CREATE TEMPORARY TABLE temp_table_save AS SELECT id FROM users where id= (SELECT id FROM users WHERE email =?)", GLOBAL.email);
 
 
-		var stmt = db.prepare("INSERT INTO scene_temp ( id, description, name, location, timestamp, removehash, images,user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)");
-	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
+// 		var stmt = db.prepare("INSERT INTO scene_temp ( id, description, name, location, timestamp, removehash, images,user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)");
+// 	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
 		
-	}).finalize();
-	 db.run("UPDATE scene_temp SET id=NULL, user_id = (SELECT id FROM temp_table_save)");
-	 db.run("INSERT INTO scene SELECT * FROM scene_temp");
-	 db.run("DROP TABLE temp_table_save");
-	 db.run("DROP TABLE scene_temp",
-	 	function(error){
-					if(error) {
-						req.flash('error_msg','Opps, something went wrong please try again');
-						console.log(error);
-						var err = new Error(error);
-						next(err);
-					}else{
-						req.flash('success_msg','Scene has been succesfully created');
-						res.redirect('/play/gallery/main');
-					}}
-	 	);
+// 	}).finalize();
+// 	 db.run("UPDATE scene_temp SET id=NULL, user_id = (SELECT id FROM temp_table_save)");
+// 	 db.run("INSERT INTO scene SELECT * FROM scene_temp");
+// 	 db.run("DROP TABLE temp_table_save");
+// 	 db.run("DROP TABLE scene_temp",
+// 	 	function(error){
+// 					if(error) {
+// 						req.flash('error_msg','Opps, something went wrong please try again');
+// 						console.log(error);
+// 						var err = new Error(error);
+// 						next(err);
+// 					}else{
+// 						req.flash('success_msg','Scene has been succesfully created');
+// 						res.redirect('/play/gallery/main');
+// 					}}
+// 	 	);
 
-});
+// });
 
-});
+// });
 
 });
 

@@ -88,7 +88,7 @@
 										</div>
 									</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn1 btn-primary1">Edit</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.removehash %>&user=<%= users.email %>"  target="_blank" class="btn1 btn-primary1">Edit</a>
 										<form method="post" action="main/copy_own?scene=<%= scene.id %>">
             						 <button type="submit" class="btn btn-primary">Clone</button>
             						 <a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
