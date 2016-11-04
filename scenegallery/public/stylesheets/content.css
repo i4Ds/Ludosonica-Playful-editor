@@ -60,6 +60,42 @@ a.btn1{
     color: #af4d0f;
 }
 
+.tlacitko{
+	text-align: center;
+	margin-top:10px;
+	color: #fff;
+	background-color: #E57245;
+	border-color: #e28561;
+}
+
+a.tlacitko{
+	text-align: center;
+	margin-top:10px;
+	color: #fff;
+	background-color: #E57245;
+}
+
+.tlacitko:hover {
+	background-color: #e28561;
+    border-color: #e28561;
+	color: white;
+}
+.tlacitko:visited {
+	background-color: #fec04e;
+    border-color: #fec04e;
+    color: white;
+}
+.tlacitko:focus {
+	background-color: #e28561;
+    border-color: #e28561;
+    color: white;
+}
+.tlacitko:active {
+	background-color: #e28561;
+    border-color: #e28561;
+    color: #af4d0f;
+}
+
 .g-recaptcha{
 	margin-top: 10px;
 	margin-left: -4px;
