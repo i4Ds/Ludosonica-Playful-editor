@@ -12,7 +12,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 450px;
+	height: 480px;
 	float: left;
 	
 	
@@ -28,6 +28,36 @@ h3{
 
 a.btn{
 	margin-top:10px;
+	color: #fff;
+	background-color: #E57245;
+}
+
+a.btn1{
+	text-align: center;
+	margin-top:10px;
+	color: #fff;
+	background-color: #E57245;
+}
+
+.btn1:hover {
+	background-color: #e28561;
+    border-color: #e28561;
+	color: white;
+}
+.btn1:visited {
+	background-color: #fec04e;
+    border-color: #fec04e;
+    color: white;
+}
+.btn1:focus {
+	background-color: #e28561;
+    border-color: #e28561;
+    color: white;
+}
+.btn1:active {
+	background-color: #e28561;
+    border-color: #e28561;
+    color: #af4d0f;
 }
 
 .g-recaptcha{
@@ -52,9 +82,9 @@ a.btn{
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
     background-color: #E57245;
-	border-color: #E57245;
-	
+	border-color: #E57245;	
 }
+
 
 .btn-primary {
     background-image: linear-gradient(to bottom, #E57245 0px, #E57245 100%);
@@ -64,4 +94,15 @@ a.btn{
 	font-family: Arial,sans-serif;
 	padding: 6px 10px;
 	border-radius: 2px;
+}
+
+.btn-primary1 {
+    /*background-image: linear-gradient(to bottom, #E57245 0px, #E57245 100%);*/
+    background-repeat: repeat-x;
+    border-color: #E57245;
+	font-weight: bold;
+	font-family: Arial,sans-serif;
+	padding: 6px 10px;
+	border-radius: 2px;
+	display: block;
 }

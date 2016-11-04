@@ -26,7 +26,7 @@ router.get('/login', function(req,res) {
 
 //Register User
 router.post('/register', function(req,res,call) {
-	var email = req.body.email;
+	var email = sqlEscapeString(req.body.email);
 	var name = req.body.name;
 	var password = req.body.password;
 	var password2 = req.body.password2;
@@ -48,7 +48,7 @@ router.post('/register', function(req,res,call) {
 							});
 
 	} else {
-		var stmt = db.prepare("INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)");
+		var stmt = db.prepare('INSERT INTO users ( id, name, email, password, salt) VALUES (NULL, ?, ?, ?, ?)');
 				   stmt.run([ name, hashEmail(email,'salt'), hashPassword(password,'salt'), 'salt'], function(error){
 						if(error) {
 							res.render('register', {

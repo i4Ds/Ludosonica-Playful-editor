@@ -8,13 +8,11 @@ var sqlite3 = require('sqlite3').verbose();
 router.get('/', function(req, res) {
 	var db = new sqlite3.Database( GLOBAL.db );
 
-	// console.log(req.session.userid);
 
 	var scenes = [];
 	
 	db.serialize(function() {
 
-		//db.each("SELECT * FROM scene WHERE user_id != ? ORDER BY id DESC LIMIT ?", 1, [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
 		db.each("SELECT * FROM scene WHERE user_id != (SELECT id FROM users WHERE email = ?)", GLOBAL.email, function(err, row) {
 			if(err){
 				console.log(err);
