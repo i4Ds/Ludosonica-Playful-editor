@@ -134,9 +134,9 @@ app.use('/play/gallery/main', main);
 //app.get('/play/gallery', test);
 
 
-// //upload Scenes
-// var upload = require('./routes/upload' );
-// app.post('/play/gallery/upload', upload);
+ //upload Scenes
+ var upload = require('./routes/upload' );
+ app.post('/play/gallery/upload', upload);
 
 // //check captcha
 // var captcha = require('./routes/captcha' );

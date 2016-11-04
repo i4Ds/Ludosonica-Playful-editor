@@ -139,6 +139,77 @@ Editor.prototype = {
 
 	},
 
+	generateDefaultScene: function() {
+
+		var editor = this;
+
+	var color = 0xffffff;
+	var intensity = 1.0;
+
+	var light = new THREE.DirectionalLight(color, intensity);
+	light.name = 'DirectionalLight default';
+	light.target.name = 'DirectionalLight default Target';
+	light.shadowCameraNear = 0.5;
+	light.shadowCameraFar = 30;
+	light.shadowCameraLeft = -5;
+	light.shadowCameraRight = 5;
+	light.shadowCameraTop = 5;
+	light.shadowCameraBottom = -3;
+	light.castShadow = true;
+	//dl.shadowCameraVisible = true;
+
+	//editor.scene.traverse( function(el) { if (el._physijs) { el.castShadow = true; el.receiveShadow = true; } });
+
+	light.position.set(2, 9, 2.5);
+
+	editor.addObject(light);
+
+	// default fog color is set in themes
+	editor.scene.fog = new THREE.Fog(0xAAAAAA, 0.01, 50);
+	editor.scene.hasLeapBox = true;
+	editor.scene._gravity = new THREE.Vector3(0, -16, 0);
+	editor.scene.setGravity(editor.scene._gravity);
+	editor.scene.maxVelocity = Infinity;
+
+	var color = 0x222222;
+
+	var light = new THREE.AmbientLight(color);
+	light.name = 'AmbientLight default';
+
+	editor.addObject(light);
+
+	// GROUND
+
+	var width = 100;
+	var height = 0.1;
+	var depth = 100;
+
+	var widthSegments = 1;
+	var heightSegments = 1;
+	var depthSegments = 1;
+
+	var friction = 0.8;
+	var restitution = 1;
+
+	var geometry = new THREE.BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments);
+	var material = Physijs.createMaterial(
+		new THREE.MeshPhongMaterial({color: 0x9AFFBE}),
+		friction,
+		restitution
+	);
+	var mesh = new Physijs.BoxMesh(geometry, material);
+	mesh.name = 'Ground';
+	mesh.position.set(0, -0.1, 0);
+	mesh.receiveShadow = true;
+	mesh.isStatic = true;
+
+	editor.addObject(mesh);
+
+
+	// add default objects to add to scene
+	editor.setTheme(editor.config.getKey('theme'));
+
+	},
 	//
 
 	addObject: function ( object ) {

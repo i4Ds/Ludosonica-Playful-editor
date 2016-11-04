@@ -85,6 +85,31 @@ router.get('/', function(req, res) {
 	});
 
 
+	//Save scene
+	router.post('/upload_test', function(req,res,call) {
+
+		db.serialize(function() {
+			var stmt = db.prepare("INSERT OR REPLACE INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+			stmt.run([ undefined, 'descr', 'wuhuu', 'text', 'text', 'text', 0, 16 ], function(error){
+				if(error) {
+					//s['error-codes'] = error;
+					//return res.status(400).send(s);
+					console.log(error);
+					//var err = new Error(err);
+					//next(err);
+				}else {
+					//s['input'] = 'wuhu no error!';
+					console.log('wuhu saved');
+				}
+			}).finalize();
+		});
+
+
+		db.close();
+
+	});
+
+
 // Copy scenes of others
 router.post('/copy_other', function(req,res) {
 

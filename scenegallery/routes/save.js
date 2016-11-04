@@ -11,13 +11,6 @@ var db = new sqlite3.Database( GLOBAL.db );
 // var db = new sqlite3.Database('./database.sqlite3');
 
 
- //Save
-router.get('/save', function(req,res) {
-	res.render('save');
-
-});
-
-
 //Save scene
 router.post('/save', function(req,res,call) {
 	

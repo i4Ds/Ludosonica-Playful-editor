@@ -9,6 +9,10 @@ var Loader = function ( editor ) {
 	
 	this.loadRemotePlayful = function( sceneId ){
 
+		editor.config.clear();
+		editor.storage.clear( function () {
+			console.log('storage cleared');
+
 		var self = this;
 		editor._isLoadingFile = true;
 		
@@ -17,8 +21,14 @@ var Loader = function ( editor ) {
 			url: "gallery/download"+sceneId,						
 			type: "GET",
 			crossDomain: true,
-			error: function(a,b,c){   console.log("a"+a); console.log("b"+b); console.log("c"+c); },
-			success: function(a,b,c){ loadBase64Playful(a) },
+			error: function(a,b,c){   console.log('error occured. loaded default');
+				editor.generateDefaultScene();
+				console.log("a"+a); console.log("b"+b); console.log("c"+c); },
+			success: function(a,b,c){
+				loadBase64Playful(a);
+
+				location.href = location.pathname;
+			},
 			//success: function(a,b,c){ console.log(a);console.log(b);console.log(c);},
 			processData: false,  // tell jQuery not to process the data
 			contentType: false   // tell jQuery not to set contentType
@@ -53,7 +63,9 @@ var Loader = function ( editor ) {
 			}
 			//add dummy name + filename
 			handleJSON( data, { name:'playful' }, 'playful.playful' );
-		}	
+		}
+
+		} );
 	};
 	
 	this.loadFile = function ( file ) {

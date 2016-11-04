@@ -287,18 +287,26 @@
         //load remote scene
 //        var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);
 //        if (sceneId !== null) {
+//            console.log('haaalllooo', sceneId[0]);
 //            editor.loader.loadRemotePlayful(sceneId[0]);
 //        }
 
         var sceneId = getParameterByName('load_scene');
         var userId = getParameterByName('user');
         if (sceneId !== null) {
-            editor.loader.loadRemotePlayful(sceneId);
+            editor.loader.loadRemotePlayful( '?load_scene='+sceneId);
         }
         console.log('user: ', userId, ', scene: ', sceneId);
 
-        sessionStorage.setItem('user', userId);
-        sessionStorage.setItem('scene', sceneId);
+        if(userId){
+            sessionStorage.setItem('user', userId);
+        }
+
+        if(sceneId){
+            sessionStorage.setItem('scene', sceneId);
+        }
+
+        document.cookie = 'user='+userId;
 
 
         var timeout;

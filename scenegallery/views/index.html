@@ -29,7 +29,7 @@
 				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
 				<hr class="col-md-12 main-row">
 
-				<form method="post" action="play/gallery/save/save">
+				<form method="post" action="/play/gallery/main/upload_test">
             						 <button type="submit" class="btn btn-primary">Save new scene</button>
         							 </form>
 
@@ -63,7 +63,7 @@
 												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
 													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
 												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
+												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"/></noscript>
 											<% } %>
 										</div>
 

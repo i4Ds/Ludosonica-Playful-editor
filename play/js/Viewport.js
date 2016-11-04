@@ -209,7 +209,7 @@ var Viewport = function (editor) {
                     specular: 0xffffff,
                     shininess: 50,
                     shading: THREE.SmoothShading,
-                    opacity: 0.2,
+                    opacity: 0.5,
                     transparent: true,
                     side: THREE.BackSide
                 }),
@@ -217,35 +217,35 @@ var Viewport = function (editor) {
                 0.5
             );
             //var planeGeom = new THREE.BoxGeometry( 1, 10, 10, 1, 1, 1 );
-            var planeGeom = new THREE.BoxGeometry(10, 10, 0.1, 1, 1);
+            var planeGeom = new THREE.BoxGeometry(50, 12, 0.1, 1, 1);
             leapBoxWalls = [
                 new Physijs.BoxMesh(planeGeom, planeMat, 0),
                 new Physijs.BoxMesh(planeGeom, planeMat, 0),
                 new Physijs.BoxMesh(planeGeom, planeMat, 0),
-                new Physijs.BoxMesh(planeGeom, planeMat, 0),
                 new Physijs.BoxMesh(planeGeom, planeMat, 0)
+                //new Physijs.BoxMesh(planeGeom, planeMat, 0)
             ];
             for (var x = 0; x < leapBoxWalls.length; x++) leapBoxWalls[x].name = 'LeapBoxWall' + x;
-            leapBoxWalls[0].position.x = 5;
+            leapBoxWalls[0].position.x = 25;
             leapBoxWalls[0].position.y = 5;
             leapBoxWalls[0].rotation.y = Math.PI / 2;
-            leapBoxWalls[1].position.z = 5;
+            leapBoxWalls[1].position.z = 25;
             leapBoxWalls[1].position.y = 5;
             leapBoxWalls[1].rotation.y = 0;
-            leapBoxWalls[2].position.x = -5;
+            leapBoxWalls[2].position.x = -25;
             leapBoxWalls[2].position.y = 5;
             leapBoxWalls[2].rotation.y = -Math.PI / 2;
-            leapBoxWalls[3].position.z = -5;
+            leapBoxWalls[3].position.z = -25;
             leapBoxWalls[3].position.y = 5;
             leapBoxWalls[3].rotation.y = Math.PI;
-            leapBoxWalls[4].position.y = 10;
-            leapBoxWalls[4].rotation.x = Math.PI / 2;
-            leapBoxWalls[4].rotation.y = Math.PI;
+            //leapBoxWalls[4].position.y = 12;
+            //leapBoxWalls[4].rotation.x = Math.PI / 2;
+            //leapBoxWalls[4].rotation.y = Math.PI;
             editor.scene.add(leapBoxWalls[0]);
             editor.scene.add(leapBoxWalls[1]);
             editor.scene.add(leapBoxWalls[2]);
             editor.scene.add(leapBoxWalls[3]);
-            editor.scene.add(leapBoxWalls[4]);
+            //editor.scene.add(leapBoxWalls[4]);
 
         }
 
@@ -256,11 +256,11 @@ var Viewport = function (editor) {
     function updateLeapBoxVisibility() {
 
         if (leapBoxWalls) {
-            leapBoxWalls[0].visible = editor._activeCamera.position.x < 4.8;
-            leapBoxWalls[2].visible = editor._activeCamera.position.x > -4.8;
-            leapBoxWalls[1].visible = editor._activeCamera.position.z < 4.8;
-            leapBoxWalls[3].visible = editor._activeCamera.position.z > -4.8;
-            leapBoxWalls[4].visible = editor._activeCamera.position.y < 9.8;
+            leapBoxWalls[0].visible = editor._activeCamera.position.x < 24.8;
+            leapBoxWalls[2].visible = editor._activeCamera.position.x > -24.8;
+            leapBoxWalls[1].visible = editor._activeCamera.position.z < 24.8;
+            leapBoxWalls[3].visible = editor._activeCamera.position.z > -24.8;
+            //leapBoxWalls[4].visible = editor._activeCamera.position.y < 11.8;
         }
 
     }
