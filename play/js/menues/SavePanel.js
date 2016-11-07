@@ -4,30 +4,33 @@
 var SavePanel = function( editor ){
     var signals = editor.signals;
 
+    var sceneId = sessionStorage.getItem('scene');
+
     var container = new UI.Panel().setDisplay('none');
 
     var inputPanel = new UI.Panel().setClass('sceneSavePanel');
 
+    if(sceneId !== 'null'){
+        var labelSceneName = $( document.createElement('label') ).text('Scenename:');
+        inputPanel.dom.appendChild( labelSceneName[0] );
+        inputPanel.dom.appendChild( document.createElement("br") );
+        var inputSceneName = $( document.createElement('input') ).attr('type','text').attr('name','scenename').attr('size','100');
+        deactivateEventListener( inputSceneName[0], 'keydown' );
+        inputPanel.dom.appendChild( inputSceneName[0] );
 
-    var labelSceneName = $( document.createElement('label') ).text('Scenename:');
-    inputPanel.dom.appendChild( labelSceneName[0] );
-    inputPanel.dom.appendChild( document.createElement("br") );
-    var inputSceneName = $( document.createElement('input') ).attr('type','text').attr('name','scenename').attr('size','100');
-    deactivateEventListener( inputSceneName[0], 'keydown' );
-    inputPanel.dom.appendChild( inputSceneName[0] );
-
-    inputPanel.dom.appendChild( document.createElement("br") );
+        inputPanel.dom.appendChild( document.createElement("br") );
 
 
-    var labelDescription = $( document.createElement('label') ).text('Description:');
-    inputPanel.dom.appendChild( labelDescription[0] );
+        var labelDescription = $( document.createElement('label') ).text('Description:');
+        inputPanel.dom.appendChild( labelDescription[0] );
 
-    inputPanel.dom.appendChild( document.createElement("br") );
+        inputPanel.dom.appendChild( document.createElement("br") );
 
-    var inputDescription = $( document.createElement('textarea') ).attr('name','description').attr('rows','5').attr('cols','100');
-    deactivateEventListener( inputDescription[0], 'keydown' );
-    inputPanel.dom.appendChild( inputDescription[0] );
-    container.add( inputPanel  );
+        var inputDescription = $( document.createElement('textarea') ).attr('name','description').attr('rows','5').attr('cols','100');
+        deactivateEventListener( inputDescription[0], 'keydown' );
+        inputPanel.dom.appendChild( inputDescription[0] );
+        container.add( inputPanel  );
+    }
 
     //----------------------------------------------------------------------------------------
 
@@ -122,7 +125,6 @@ var SavePanel = function( editor ){
                 var sceneId = sessionStorage.getItem('scene');
 
                 console.log('upload scene', sceneId, 'of user', userId);
-                console.log(document.cookie);
 
                 formData.append("scenename",  	inputSceneName.val() );
                 formData.append("description", 	inputDescription.val() );
@@ -151,6 +153,9 @@ var SavePanel = function( editor ){
 
                         statusLabel.css('color','green');
                         statusLabel.text( "Upload Successful!");
+
+                        // todo
+                        //showHide('sceneSave');
                     };
 
                     //console.log('send gallery');
@@ -176,6 +181,9 @@ var SavePanel = function( editor ){
         }
 
 
+        if(sceneId === 'null'){
+            uploadButton.click();
+        }
 
     });
 
@@ -196,4 +204,16 @@ function deactivateEventListener( dom, type ){
         event.stopPropagation();
 
     }, false );
+}
+
+
+function showHide ( id) {
+    var panel = $('#'+id);
+    if(panel.css('display') == 'none'){
+
+        panel.css('display','block');
+    }else{
+
+        panel.css('display','none');
+    }
 }

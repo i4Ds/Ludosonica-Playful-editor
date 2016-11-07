@@ -74,9 +74,9 @@
 										<div class="col-md-12">
 											<% if( scene.images >= 1 ) { %>
 												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
+													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"/>
 												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
+												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"/></noscript>
 											<% } %>
 										</div>
 
@@ -92,7 +92,7 @@
 										</div>
 									</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  target="_blank" class="btn1 btn-primary1">Edit</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  class="btn1 btn-primary1">Edit</a>
 										<form method="post" action="main/copy_own?scene=<%= scene.id %>">
             						 <button type="submit" class="btn btn-primary">Clone</button>
             						 <a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
@@ -139,9 +139,9 @@
 										<div class="col-md-12">
 											<% if( scene.images >= 1 ) { %>
 												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
+													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"/>
 												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
+												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"/></noscript>
 											<% } %>
 										</div>
 
@@ -157,7 +157,7 @@
 												</div>
 											</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Play this scene</a></br></br>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>" class="btn btn-primary">Play this scene</a></br></br>
 
 
 									<form method="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">

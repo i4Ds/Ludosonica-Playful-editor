@@ -40,6 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var db = new sqlite3.Database(GLOBAL.db);
 
+//db.run("DROP table scene");
+
 db.serialize(function () {
     db.run('PRAGMA foreign_keys = ON');
     db.run("CREATE TABLE IF NOT EXISTS scene ( id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, description TEXT NOT NULL, name TEXT NOT NULL, location TEXT NOT NULL, timestamp TEXT NOT NULL, removehash TEXT NOT NULL, images INT NOT NULL, user_id INT NOT NULL, FOREIGN KEY (user_id) REFERENCES users (id) )");

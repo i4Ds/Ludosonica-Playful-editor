@@ -143,6 +143,7 @@
 
 
 
+
 </script>
 
 <!-- fragment shader a.k.a. pixel shader -->
@@ -154,6 +155,7 @@
 			vec3 glow = glowColor * intensity;
 			gl_FragColor = vec4( glow, 1.0 );
 		}
+
 
 
 
@@ -294,19 +296,12 @@
         var sceneId = getParameterByName('load_scene');
         var userId = getParameterByName('user');
         if (sceneId !== null) {
-            editor.loader.loadRemotePlayful( '?load_scene='+sceneId);
-        }
-        console.log('user: ', userId, ', scene: ', sceneId);
-
-        if(userId){
-            sessionStorage.setItem('user', userId);
+            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
         }
 
-        if(sceneId){
-            sessionStorage.setItem('scene', sceneId);
-        }
-
-        document.cookie = 'user='+userId;
+        sessionStorage.setItem('user', userId);
+        sessionStorage.setItem('scene', sceneId);
+        console.log('scene', sceneId);
 
 
         var timeout;
@@ -511,6 +506,12 @@
 
         window.CustomEvent = CustomEvent;
     })();
+
+
+    window.onbeforeunload = function () {
+//        alert("Dude, are you sure you want to leave? Think of the kittens!");
+        return "Dude, are you sure you want to leave? Think of the kittens!";
+    }
 
 </script>
 </body>

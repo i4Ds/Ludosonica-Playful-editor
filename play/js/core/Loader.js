@@ -26,8 +26,6 @@ var Loader = function ( editor ) {
 				console.log("a"+a); console.log("b"+b); console.log("c"+c); },
 			success: function(a,b,c){
 				loadBase64Playful(a);
-
-				location.href = location.pathname;
 			},
 			//success: function(a,b,c){ console.log(a);console.log(b);console.log(c);},
 			processData: false,  // tell jQuery not to process the data
