@@ -1,5 +1,8 @@
 .main-row{
 	background-color:transparent;
+	margin-right: -15px;
+	margin-left: -15px;
+
 }
 
 body {
@@ -45,8 +48,8 @@ a.btn1{
 	color: white;
 }
 .btn1:visited {
-	background-color: #fec04e;
-    border-color: #fec04e;
+	background-color: #af4d0f;
+    border-color: #af4d0f;
     color: white;
 }
 .btn1:focus {

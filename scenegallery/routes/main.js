@@ -62,8 +62,11 @@ router.get('/', function(req, res) {
 
 			db.serialize(function () {
 
+				var timestamp = new Date().toString();
 				db.run("CREATE TEMPORARY TABLE temp_table_own as SELECT * FROM scene where id=?", req.param('scene'));
 				db.run("UPDATE temp_table_own SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
+				db.run("UPDATE temp_table_own SET timestamp = ?",timestamp);
+				db.run("UPDATE temp_table_own SET name = name || '_clone' WHERE user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
 				db.run("INSERT INTO scene SELECT * FROM temp_table_own");
 				db.run("DROP TABLE temp_table_own",
 					function(error){
@@ -84,29 +87,29 @@ router.get('/', function(req, res) {
 	});
 
 
-	//Save scene
-	router.post('/upload_test', function(req,res,call) {
+	// //Save scene
+	// router.post('/upload_test', function(req,res,call) {
 
-		db.serialize(function() {
-			var stmt = db.prepare("INSERT OR REPLACE INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-			stmt.run([ undefined, 'descr', 'wuhuu', 'text', 'text', 'text', 0, 16 ], function(error){
-				if(error) {
-					//s['error-codes'] = error;
-					//return res.status(400).send(s);
-					console.log(error);
-					//var err = new Error(err);
-					//next(err);
-				}else {
-					//s['input'] = 'wuhu no error!';
-					console.log('wuhu saved');
-				}
-			}).finalize();
-		});
+	// 	db.serialize(function() {
+	// 		var stmt = db.prepare("INSERT OR REPLACE INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+	// 		stmt.run([ undefined, 'descr', 'wuhuu', 'text', 'text', 'text', 0, 16 ], function(error){
+	// 			if(error) {
+	// 				//s['error-codes'] = error;
+	// 				//return res.status(400).send(s);
+	// 				console.log(error);
+	// 				//var err = new Error(err);
+	// 				//next(err);
+	// 			}else {
+	// 				//s['input'] = 'wuhu no error!';
+	// 				console.log('wuhu saved');
+	// 			}
+	// 		}).finalize();
+	// 	});
 
 
-		db.close();
+	// 	db.close();
 
-	});
+	// });
 
 
 // Copy scenes of others
@@ -115,7 +118,7 @@ router.post('/copy_other', function(req,res) {
 	if( req.param('scene') !== undefined ){
 
 		db.serialize(function () {
-
+			var timestamp = new Date().toString();
 			db.run("CREATE TEMPORARY TABLE temp_table_other as SELECT * FROM scene where id=?",
 				req.param('scene'),
 				function(error){
@@ -136,6 +139,8 @@ router.post('/copy_other', function(req,res) {
 					}else{
 					}}
 			);
+			db.run("UPDATE temp_table_other SET timestamp = ?",timestamp);
+			db.run("UPDATE temp_table_other SET name = name || '_copy' WHERE user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
 			db.run("INSERT INTO scene SELECT * FROM temp_table_other",
 				function(error){
 					if(error) {
@@ -163,37 +168,6 @@ router.post('/copy_other', function(req,res) {
 	}
 });
 
-// //Save scene
-// router.post('/save', function(req,res,call) {
-	
-// 	db.serialize(function () {
-// 	db.run("CREATE TEMPORARY TABLE scene_temp ( id INTEGER, description TEXT , name TEXT , location TEXT , timestamp TEXT  , removehash TEXT  , images INT  , user_id INT, FOREIGN KEY (user_id) REFERENCES users (id) )");
-// 	db.run("CREATE TEMPORARY TABLE temp_table_save AS SELECT id FROM users where id= (SELECT id FROM users WHERE email =?)", GLOBAL.email);
-
-
-// 		var stmt = db.prepare("INSERT INTO scene_temp ( id, description, name, location, timestamp, removehash, images,user_id ) VALUES (NULL, ?, ?, ?, ?, ?, ?,?)");
-// 	stmt.run([ 'text', 'text', 'text', 'text', 'text', 123, 1 ],function(error){
-		
-// 	}).finalize();
-// 	 db.run("UPDATE scene_temp SET id=NULL, user_id = (SELECT id FROM temp_table_save)");
-// 	 db.run("INSERT INTO scene SELECT * FROM scene_temp");
-// 	 db.run("DROP TABLE temp_table_save");
-// 	 db.run("DROP TABLE scene_temp",
-// 	 	function(error){
-// 					if(error) {
-// 						req.flash('error_msg','Opps, something went wrong please try again');
-// 						console.log(error);
-// 						var err = new Error(error);
-// 						next(err);
-// 					}else{
-// 						req.flash('success_msg','Scene has been succesfully created');
-// 						res.redirect('/play/gallery/main');
-// 					}}
-// 	 	);
-
-// });
-
-// });
 
 });
 

@@ -6,7 +6,8 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"></link>
 		<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"></link>
 		<link rel="stylesheet" href="/stylesheets/content.css"></link>
-		  <link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/stylesheets/style.css"/>
+
       
   </head>
     <body>
@@ -23,11 +24,12 @@
          <h3 class="text-muted">All the scenes in one place </h3>
         </nav>
         
-      </div>
+     	</div>
 
 					<h3>Scenes overview</h3>
 
-					<div class="row">
+
+						<hr class="col-md-12 main-row" />
 
 					<% scenes.forEach(function(scene){ %>
 
@@ -48,7 +50,7 @@
 												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
 													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
 												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"</noscript>
+												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"></noscript>
 											<% } %>
 										</div>
 
@@ -80,7 +82,7 @@
 
 						<% }) %>
 
-					</div>
+				
 
 					<hr class="col-md-12 main-row" />
 
