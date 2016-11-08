@@ -5,6 +5,31 @@
 
 }
 
+.button.active {
+    color: #E57245;
+    text-decoration: underline;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+.button {
+    color: #777;
+    font-size: 16px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.button:hover {
+    color: #E57245;
+    text-decoration: underline;
+    
+}
+
+.toggle_buttons {
+	text-align: center;
+}
+
+
 body {
   padding-top: 20px;
   padding-bottom: 20px;
@@ -15,7 +40,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 470px;
+	height: 380px;
 	float: left;
 }
 
