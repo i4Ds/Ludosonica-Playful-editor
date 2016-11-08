@@ -16,7 +16,7 @@ UI.MenubarHelper = {
 		return container;
 
 	},
-	
+
 	createOption: function ( name, callbackHandler ) {
 
 		var option = new UI.Panel();
@@ -54,14 +54,16 @@ UI.ButtonHelper = {
 	createButtonPanel: function ( name, toggle ) {
 
 		var toggle = toggle===true ? true : false;
-		
+
 		var container = new UI.Panel();
 		container.setClass( 'buttongroup' );
 		container.setId( name );
-		
-		container.addButton = function ( styleclass, callback ) {
-	
+
+		container.addButton = function ( styleclass, callback, id ) {
+
 			var button = $('<a/>').addClass('button '+styleclass);
+			button.attr('id', id);
+
 			button.on( 'click', function(e)
 			{
 				callback(e);
@@ -71,8 +73,9 @@ UI.ButtonHelper = {
 					$(this).addClass("active");
 				}
 			});
-				
+
 			button.appendTo( container.dom );
+
 		};
 
 		return container;

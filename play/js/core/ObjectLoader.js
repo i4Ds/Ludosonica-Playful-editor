@@ -25,7 +25,7 @@ THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
 
             // load textures
             if ( data.map ) {
-                var loadedFile = editor.loader.loadedTexturesFolder.file( data.map );
+                var loadedFile = editor.loadedTexturesFolder.file( data.map );
                 if ( loadedFile ) {
                     material.map = new THREE.Texture(); //shim so that uv buffers get allocated at init
 
@@ -99,14 +99,17 @@ THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
 var traverseForSound = function ( object ) {
 
     for (var k in object) {
+
         if (object.hasOwnProperty( k )) {
 
             if ( k == 'sound' && object[ k ] != undefined ) {
 
                 var soundName = object[ k ];
-                var loadedFile = editor.loader.loadedSoundsFolder.file( soundName );
-                if ( loadedFile ) {
 
+
+                var loadedFile = editor.loadedSoundsFolder.file( soundName );
+
+                if ( loadedFile ) {
                     var loadedSound = loadedFile.asArrayBuffer();
                     object[ k ] = new Blob([loadedSound]);
                     object[ k ].name = soundName;
@@ -118,6 +121,7 @@ var traverseForSound = function ( object ) {
                 }
 
             } else if ( typeof object[ k ] == 'object' ) {
+                //console.log('else');
                 traverseForSound( object[ k ]);
             }
 
@@ -180,7 +184,7 @@ THREE.ObjectLoader.prototype.parseObject = function () {
                         var textureList = [];
                         for (var i = 0; i < 6; i++) {
 
-                            var loadedFile = editor.loader.loadedTexturesFolder.file(data.skybox.textures[i]);
+                            var loadedFile = editor.loadedTexturesFolder.file(data.skybox.textures[i]);
                             if (loadedFile) {
 
                                 var loadedTexture = loadedFile.asArrayBuffer();
