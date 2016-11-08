@@ -29,7 +29,7 @@ body {
 	border-radius: 2px;
 	margin-top: 10px;
 	display: block;
-	height: 482px;
+	height: 410px;
 	width: 280px;
 }
 .scene-entry_own{
@@ -37,7 +37,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 482px;
+	height: 410px;
 	float: left;
 	width: 280px;
 	
@@ -48,7 +48,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 495px;
+	height: 415px;
 	float: left;
 	width: 280px;
 	
@@ -79,9 +79,9 @@ a.btn1{
 	margin-top: 5px;
 	text-align: center;
 	color: #E57245;
-	height: 455px;
+	height: 380px;
 	vertical-align: middle;
-	line-height: 400px; 
+	line-height: 350px; 
 	font-size: 16px;
 
 }
