@@ -51,6 +51,15 @@ db.serialize(function () {
 db.close();
 
 
+app.use(function noCacheForRoot(req, res, next) {
+    if (req.url === '/') {
+      res.header("Cache-Control", "no-cache, no-store, must-revalidate");
+      res.header("Pragma", "no-cache");
+      res.header("Expires", 0);
+    }
+    next();
+});
+
 // BodyParser
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
