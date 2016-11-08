@@ -9,14 +9,16 @@
     color: #E57245;
     text-decoration: underline;
     font-size: 20px;
-    font-weight: bold;
-    margin-right: 10px;
+    font-weight: normal;
+    margin-right: 40px;
+    letter-spacing: 1px;
 }
 .button {
     color: #777;
     font-size: 16px;
-    font-weight: bold;
-    margin-right: 10px;
+    font-weight: normal;
+    margin-right: 40px;
+    letter-spacing: 1px;
 }
 
 .button:hover {
@@ -26,7 +28,8 @@
 }
 
 .toggle_buttons {
-	text-align: center;
+	/*text-align: left;*/
+	margin-bottom: 30px;
 }
 
 

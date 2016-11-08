@@ -23,15 +23,15 @@
        <li role="presentation"><a href="/play/gallery/logout">Logout</a></li>
           </ul>
           
-         <h3 class="text-muted">Welcome to your gallery! </h3>
+       
         </nav>
 
         
       </div>
 				
-				<div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div>
+				<!-- <div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div> -->
 
-				<hr class="col-md-12 main-row"/> </div>
+		 </div>
 
 
 					<% if (success_msg.length > 0){ %>
@@ -52,14 +52,9 @@
         <a class="button" data-rel="#others" href="#">SCENES BY OTHERS</a>
    			</ul>
    			</div>
-			<hr class="col-md-12 main-row" />
+		
 
 			<div class='toggle' id="own" style='display:block;'>
-					
-
-					<h3>My own scenes</h3>
-
-				
 
 					<div class="row">
 					<div class="col-md-3 scene">
@@ -133,7 +128,6 @@
 			
 			<div class='toggle' id="others" style='display:none;'>		
 
-						<h3>Scenes made by someone else</h3>
 						<div class="row">
 
 					<% scenes.forEach(function(scene){ %>
@@ -170,7 +164,7 @@
 												</div>
 											</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>" class="btn btn-primary_play">Play this scene</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-primary_play">Play</a>
 
 
 									<form method="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">
