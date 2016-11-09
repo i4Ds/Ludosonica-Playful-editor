@@ -86,8 +86,14 @@
     border-bottom-right-radius: 2px;
 }
 
-.buttongroup .button.icon-play {
-    color: #5365d3;
+.buttongroup .button.icon-play, .buttongroup .button.icon-stop {
+    /*color: #5365d3;*/
+    background-color: #5365d3;
+    color: #fff;
+}
+
+.buttongroup .button.icon-play:hover, .buttongroup .button.icon-stop:hover {
+    background-color: #7884D3;
 }
 
 .buttongroup .button:hover {
@@ -99,7 +105,7 @@
     background-color: #e57245;
 }
 
-.buttongroup .button.icon-play.active {
+.buttongroup .button.icon-play.active, .buttongroup .button.icon-stop.active {
     background-color: #5365d3;
 }
 

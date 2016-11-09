@@ -59,10 +59,15 @@ UI.ButtonHelper = {
 		container.setClass( 'buttongroup' );
 		container.setId( name );
 
-		container.addButton = function ( styleclass, callback, id ) {
+		container.addButton = function ( styleclass, callback, id, tooltipText ) {
 
 			var button = $('<a/>').addClass('button '+styleclass);
-			button.attr('id', id);
+			if(id){
+				button.attr('id', id);
+			}
+			if(tooltipText){
+				button.attr('title', tooltipText);
+			}
 
 			button.on( 'click', function(e)
 			{

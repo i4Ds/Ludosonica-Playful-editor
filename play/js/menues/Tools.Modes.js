@@ -31,10 +31,12 @@ Tools.Modes = function ( editor ) {
 	buttonpanel.addButton( "icon-translate active", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'translate' ); }, 'modes-translate' );
 	buttonpanel.addButton( "icon-scale", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'scale' ); }, 'modes-scale' );
 	buttonpanel.addButton( "icon-rotate", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'rotate' ); }, 'modes-rotate' );
-	var playbutton = buttonpanel.addButton( "icon-play", function() {
+	buttonpanel.addButton( "icon-play", function() {
 
 		if( playing ){
+
 			stopPlaying();
+
 			$('#menu-gallery').show();
 			$('#menu-file').show();
 			$('#menu-save').show();
@@ -43,9 +45,14 @@ Tools.Modes = function ( editor ) {
 			$('#modes-translate').show();
 			$('#modes-scale').show();
 			$('#modes-rotate').show();
+
+			$('#modes-play').addClass("icon-play");
+			$('#modes-play').removeClass("icon-stop");
 		}
 		else{
+
 			startPlaying();
+
 			$('#menu-gallery').hide();
 			$('#menu-file').hide();
 			$('#menu-save').hide();
@@ -54,6 +61,9 @@ Tools.Modes = function ( editor ) {
 			$('#modes-translate').hide();
 			$('#modes-scale').hide();
 			$('#modes-rotate').hide();
+
+			$('#modes-play').removeClass("icon-play");
+			$('#modes-play').addClass("icon-stop");
 		}
 
 	}, 'modes-play');

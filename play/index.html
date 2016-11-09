@@ -186,7 +186,7 @@
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
     var workMode = 'easy';
-    var IS_DEV_MODE = false;
+    var IS_DEV_MODE = true;
 
     var editor = new Editor();
 
@@ -311,6 +311,8 @@
         var userId = getParameterByName('user');
         var play = getParameterByName('mode');
 
+        console.log('play', play);
+
         sessionStorage.setItem('user', userId);
         sessionStorage.setItem('scene', sceneId);
         sessionStorage.setItem('mode', play);
@@ -321,6 +323,7 @@
                 $('#modes-play').click();
                 $('#modes-play').hide();
                 $('#menu-gallery').show();
+                console.log('play?! :(')
             });
 
         }else if(sceneId !== null){

@@ -63,7 +63,8 @@ Sidebars.Scene = function ( editor ) {
 						if( !object.isInstance ){
 
 							html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
-							html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
+							// todo AFTER MAEKSHOP
+							//html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
 
 						}
 
