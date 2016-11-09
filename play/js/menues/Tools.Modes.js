@@ -28,9 +28,9 @@ Tools.Modes = function ( editor ) {
 		}
 	};
 
-	buttonpanel.addButton( "icon-translate active", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'translate' ); }, 'modes-translate' );
-	buttonpanel.addButton( "icon-scale", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'scale' ); }, 'modes-scale' );
-	buttonpanel.addButton( "icon-rotate", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'rotate' ); }, 'modes-rotate' );
+	buttonpanel.addButton( "icon-translate active", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'translate' ); }, 'modes-translate', 'translate the object' );
+	buttonpanel.addButton( "icon-scale", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'scale' ); }, 'modes-scale', 'scale the object' );
+	buttonpanel.addButton( "icon-rotate", function() { stopPlaying(); signals.transformModeChanged.dispatch( 'rotate' ); }, 'modes-rotate', 'rotate the object' );
 	buttonpanel.addButton( "icon-play", function() {
 
 		if( playing ){
