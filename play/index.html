@@ -186,6 +186,7 @@
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
     var workMode = 'easy';
+    var IS_DEV_MODE = true;
 
     var editor = new Editor();
 
@@ -244,37 +245,50 @@
 
         editor.storage.get(function (state) {
 
-            // state is the scene file
-            if (state !== undefined) {
+            // new: 2016 for CMT:
+            // always genrate default scene. otherwise load remote.
+            // the saved state is not needed anymore
 
-                /*var loader = new THREE.ObjectLoader();
-                 var scene = loader.parse( state.sceneobjects );
+            if(IS_DEV_MODE){
+                // state is the scene file
+                if (state !== undefined) {
 
-                 editor.setScene( scene );*/
-                state.type = 'application/zip';
+                    /*var loader = new THREE.ObjectLoader();
+                     var scene = loader.parse( state.sceneobjects );
 
-                // before load select theme, as it may alter the (default/loaded) scene and objects
-                editor.setTheme(editor.config.getKey('theme'));
+                     editor.setScene( scene );*/
+                    state.type = 'application/zip';
 
-                if (!editor.theme.isLoading) {
+                    // before load select theme, as it may alter the (default/loaded) scene and objects
+                    editor.setTheme(editor.config.getKey('theme'));
 
-                    editor.loader.loadFile(state);
+                    if (!editor.theme.isLoading) {
+
+                        editor.loader.loadFile(state);
+
+                    } else {
+
+                        editor.signals.themeLoaded.addOnce(function () {
+                            editor.loader.loadFile(this);
+                        }.bind(state));
+
+                    }
 
                 } else {
 
-                    editor.signals.themeLoaded.addOnce(function () {
-                        editor.loader.loadFile(this);
-                    }.bind(state));
-
+                    //default scene
+                    // new 2016 for CMT
+                    // there is always a default scene generated on reload
+                    generateDefaultScene();
+                    // add leap box to scene
+                    editor.signals.leapBoxChanged.dispatch( true );
                 }
 
-            } else {
 
-                //default scene
+            }else{
                 generateDefaultScene();
-//                // add leap box to scene
-//                editor.signals.leapBoxChanged.dispatch( true );
             }
+
 
             var selected = editor.config.getKey('selected');
 
@@ -295,13 +309,41 @@
 
         var sceneId = getParameterByName('load_scene');
         var userId = getParameterByName('user');
-        if (sceneId !== null) {
-            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
-        }
+        var play = getParameterByName('mode');
+
+        console.log('play', play);
 
         sessionStorage.setItem('user', userId);
         sessionStorage.setItem('scene', sceneId);
-        console.log('scene', sceneId);
+        sessionStorage.setItem('mode', play);
+
+        if (sceneId !== null && play) {
+
+            editor.loader.loadRemotePlayful('?load_scene=' + sceneId, function () {
+                $('#modes-play').click();
+                $('#modes-play').hide();
+                $('#menu-gallery').show();
+                console.log('play?! :(')
+            });
+
+        }else if(sceneId !== null){
+
+            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
+
+        }else {
+            console.log('dont load scene');
+        }
+
+
+        if(!IS_DEV_MODE){
+            if( sceneId === null && userId === null){
+
+                window.onbeforeunload = null;
+                var galleryPath = location.origin+'/play/gallery/login';
+                location.href = galleryPath;
+
+            }
+        }
 
 
         var timeout;
@@ -508,9 +550,11 @@
     })();
 
 
-    window.onbeforeunload = function () {
+    if(!IS_DEV_MODE){
+        window.onbeforeunload = function () {
 //        alert("Dude, are you sure you want to leave? Think of the kittens!");
-        return "Dude, are you sure you want to leave? Think of the kittens!";
+            return "Dude, are you sure you want to leave? Think of the kittens!";
+        }
     }
 
 </script>

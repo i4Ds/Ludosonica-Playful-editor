@@ -2,12 +2,20 @@ var Loader = function ( editor ) {
 
 	var scope = this;
 	var signals = editor.signals;
-	
+
+	editor.loadedSoundsFolder;
+	editor.loadedTexturesFolder;
+
 	this.loadedSoundsFolder;
 	this.loadedTexturesFolder;
-	
-	
-	this.loadRemotePlayful = function( sceneId ){
+
+
+	this.setLoadedSounds = function (sounds){
+		this.loadedSoundsFolder = sounds;
+		console.log('loaded sounds set', sounds);
+	};
+
+	this.loadRemotePlayful = function( sceneId, callback ){
 
 		editor.config.clear();
 		editor.storage.clear( function () {
@@ -15,26 +23,32 @@ var Loader = function ( editor ) {
 
 		var self = this;
 		editor._isLoadingFile = true;
-		
-		console.log('load remote scene:'+sceneId);
+
 		$.ajax({
-			url: "gallery/download"+sceneId,						
+			url: "gallery/download"+sceneId,
 			type: "GET",
 			crossDomain: true,
-			error: function(a,b,c){   console.log('error occured. loaded default');
+			error: function(a,b,c){
+
+				console.log('error occured. loaded default');
 				editor.generateDefaultScene();
 				console.log("a"+a); console.log("b"+b); console.log("c"+c); },
+
 			success: function(a,b,c){
-				loadBase64Playful(a);
+
+				loadBase64Playful(a, self);
+
+				if(callback){
+					callback();
+				}
 			},
 			//success: function(a,b,c){ console.log(a);console.log(b);console.log(c);},
 			processData: false,  // tell jQuery not to process the data
 			contentType: false   // tell jQuery not to set contentType
 		});
-		
-		var loadBase64Playful = function( baseData ){
-			//console.log("loading successful");
-			
+
+		var loadBase64Playful = function( baseData, self ){
+
 			var binary_string =  window.atob( baseData.replace(/\s/g, '') );
 			var len = binary_string.length;
 			var bytes = new Uint8Array( len );
@@ -45,31 +59,37 @@ var Loader = function ( editor ) {
 
 			//dies on large files...
 			//var zip = new JSZip(baseData,{base64:true});
-	
+
 			var contents = zip.file("Sceneobjects.json").asText();
+
 			var data;
 			try {
-				//console.log(  zip.folder("sounds") );
-				self.loadedSoundsFolder = zip.folder("sounds");
-				self.loadedTexturesFolder = zip.folder("textures");
+
 				data = JSON.parse( contents );
-				
+
+				editor.loadedSoundsFolder = zip.folder("sounds");
+				//self.setLoadedSounds( zip.folder("sounds") );
+
+				//self.loadedTexturesFolder = zip.folder("textures");
+				editor.loadedTexturesFolder = zip.folder("textures");
+
 			} catch ( error ) {
-				
+
 				alert( error );
 				return;
 			}
+
 			//add dummy name + filename
 			handleJSON( data, { name:'playful' }, 'playful.playful' );
 		}
 
 		} );
 	};
-	
+
 	this.loadFile = function ( file ) {
 
 		editor._isLoadingFile = true; // fix to not decorate imported objects...
-	
+
 		var filename = file.name || 'playful.playful';
 		var extension = filename.split( '.' ).pop().toLowerCase();
 
@@ -206,20 +226,20 @@ var Loader = function ( editor ) {
 				reader.readAsText( file );
 
 				break;
-			
+
 			// CUSTOM
 			case 'playful':
-			
+
 				var self = this;
-			
+
 				var reader = new FileReader();
 				reader.addEventListener( 'load', function ( event ) {
-					
+
 					var zip = new JSZip();
 					zip.load(this.result);
-					
+
 					//read the json and build up the scene
-					
+
 					var contents = zip.file("Sceneobjects.json").asText();
 
 					var data;
@@ -228,8 +248,11 @@ var Loader = function ( editor ) {
 
 						data = JSON.parse( contents );
 
-						self.loadedSoundsFolder = zip.folder("sounds");
-						self.loadedTexturesFolder = zip.folder("textures");
+						//self.loadedSoundsFolder = zip.folder("sounds");
+						editor.loadedSoundsFolder = zip.folder("sounds");
+
+						//self.loadedTexturesFolder = zip.folder("textures");
+						editor.loadedTexturesFolder = zip.folder("textures");
 
 					} catch ( error ) {
 
@@ -465,7 +488,7 @@ var Loader = function ( editor ) {
 				editor.setScene( result );
 
 			} else {
-			
+
 				editor.addObject( result );
 				editor.select( result );
 
@@ -476,7 +499,7 @@ var Loader = function ( editor ) {
 			// DEPRECATED
 
 			var loader = new THREE.SceneLoader();
-			
+
 			loader.parse( data, function ( result ) {
 
 				editor.setScene( result.scene );
@@ -484,7 +507,7 @@ var Loader = function ( editor ) {
 			}, '' );
 
 		}
-		
+
 		editor._isLoadingFile = false;
 
 	};

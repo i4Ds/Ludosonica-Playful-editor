@@ -59,7 +59,7 @@
     margin: 0.3em;
 }
 
-#menu.buttongroup {
+#menu.buttongroup, #menu-gallery.buttongroup, #menu-scene.buttongroup {
     float: left;
     margin: 0.3em;
 }
@@ -86,8 +86,14 @@
     border-bottom-right-radius: 2px;
 }
 
-.buttongroup .button.icon-play {
-    color: #5365d3;
+.buttongroup .button.icon-play, .buttongroup .button.icon-stop {
+    /*color: #5365d3;*/
+    background-color: #5365d3;
+    color: #fff;
+}
+
+.buttongroup .button.icon-play:hover, .buttongroup .button.icon-stop:hover {
+    background-color: #7884D3;
 }
 
 .buttongroup .button:hover {
@@ -99,7 +105,7 @@
     background-color: #e57245;
 }
 
-.buttongroup .button.icon-play.active {
+.buttongroup .button.icon-play.active, .buttongroup .button.icon-stop.active {
     background-color: #5365d3;
 }
 
@@ -574,6 +580,14 @@
     border: 1px solid transparent;
     box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.15) inset, 0px 1px 1px rgba(0, 0, 0, 0.075);
     text-shadow: 0px -1px 0px rgba(0, 0, 0, 0.2);
+}
+
+.sceneSavePanel > button.saving{
+    background: #DDD;
+    color: #E57245;
+    box-shadow: none;
+    text-shadow: none;
+    font-size: 14px;
 }
 
 #gallery {

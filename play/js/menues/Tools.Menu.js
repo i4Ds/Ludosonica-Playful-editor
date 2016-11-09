@@ -1,6 +1,7 @@
 Tools.Menu = function (editor) {
 
     var signals = editor.signals;
+    this.signals = editor.signals;
 
     //var buttonpanel = new UI.ButtonHelper.createButtonPanel( "menu" );
     //
@@ -16,7 +17,8 @@ Tools.Menu = function (editor) {
     var backPanel = new UI.ButtonHelper.createButtonPanel("menu");
     backPanel.addButton("icon-back", function () {
         signals.menuButtonClicked.dispatch("back-to-gallery");
-    });
+    }, 'menu-gallery', 'go back to gallery');
+
     this.sceneButton = backPanel.dom.children[0];
     setButtonActivationCallback(this.sceneButton, "back-to-gallery");
 
@@ -25,7 +27,8 @@ Tools.Menu = function (editor) {
     signals.menuButtonClicked.add( function(name) {
         if(name=="back-to-gallery")
         {
-            window.history.back();
+            //window.history.back();
+            location.href = location.origin+'/play/gallery/main';
         }
     });
 
@@ -34,13 +37,16 @@ Tools.Menu = function (editor) {
     var editPanel = new UI.ButtonHelper.createButtonPanel("menu");
     editPanel.addButton("icon-file", function () {
         signals.menuButtonClicked.dispatch("file+help");
-    });
+    }, 'menu-file');
+
     setButtonActivationCallback(editPanel.dom.children[0], "file+help");
+
 
     editPanel.addButton("icon-save", function () {
         signals.menuButtonClicked.dispatch("save");
-    });
-    setButtonActivationCallback(editPanel.dom.children[0], "save");
+    }, 'menu-save', 'save the scene');
+
+    setButtonActivationCallback(editPanel.dom.children[1], "save");
 
     buttonPanels.push(editPanel);
 
@@ -56,25 +62,34 @@ Tools.Menu = function (editor) {
     var addPanel = new UI.ButtonHelper.createButtonPanel("menu");
     addPanel.addButton("icon-object active", function () {
         signals.menuButtonClicked.dispatch("add");
-    });
+    }, 'menu-object', 'open panel to add objects');
+
     setButtonActivationCallback(addPanel.dom.children[0], "add");
 
-    addPanel.addButton("icon-template", function () {
-        signals.menuButtonClicked.dispatch("add-template");
-    });
-    setButtonActivationCallback(addPanel.dom.children[1], "add-template");
+    // todo AFTER MAKESHOP
+    //addPanel.addButton("icon-template", function () {
+    //    signals.menuButtonClicked.dispatch("add-template");
+    //}, 'menu-template', 'open panel to add and edit templates');
+    //setButtonActivationCallback(addPanel.dom.children[1], "add-template");
+
+    addPanel.addButton("icon-scene", function () {
+        signals.menuButtonClicked.dispatch("scene-properties");
+    }, 'menu-scene', 'open scene panel');
+
+    this.sceneButton = addPanel.dom.children[1];
+    setButtonActivationCallback(this.sceneButton, "scene-properties");
 
     buttonPanels.push(addPanel);
 
 
-
-    var scenePanel = new UI.ButtonHelper.createButtonPanel("menu");
-    scenePanel.addButton("icon-scene", function () {
-        signals.menuButtonClicked.dispatch("scene-properties");
-    });
-    this.sceneButton = scenePanel.dom.children[0];
-    setButtonActivationCallback(this.sceneButton, "scene-properties");
-    buttonPanels.push(scenePanel);
+    // todo AFTER MAKESHOP
+    //var scenePanel = new UI.ButtonHelper.createButtonPanel("menu");
+    //scenePanel.addButton("icon-scene", function () {
+    //    signals.menuButtonClicked.dispatch("scene-properties");
+    //});
+    //this.sceneButton = scenePanel.dom.children[0];
+    //setButtonActivationCallback(this.sceneButton, "scene-properties");
+    //buttonPanels.push(scenePanel);
 
 
     function setButtonActivationCallback(button, key) {
@@ -97,12 +112,26 @@ Tools.Menu = function (editor) {
 
     function showHide ( id ) {
         var panel = $('#'+id);
+        var inputs = $('.'+id);
+
         if(panel.css('display') == 'none'){
-
             panel.css('display','block');
-        }else{
 
+            if( sessionStorage.getItem('scene') !== 'null'){
+                inputs.hide();
+
+                var uploadButton = $('.galleryUploadButton');
+                uploadButton.text('Saving...').addClass('saving');
+                uploadButton.click();
+
+            }else {
+                inputs.show();
+            }
+
+        }else{
             panel.css('display','none');
+
+            inputs.hide();
         }
     }
 

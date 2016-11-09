@@ -68,6 +68,9 @@
 .icon-play:before {
   content: "F";
 }
+.icon-stop:before {
+  content: "G";
+}
 .icon-play-small:before {
   content: "k";
 }
@@ -105,9 +108,9 @@
 
 .icon-save:before{
   content:"H";
+  /*content: "I";*/
 }
 
 .icon-back:before{
-  content: "d";
-  transform: rotate(180deg);
+  content: "E";
 }

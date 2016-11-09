@@ -1117,7 +1117,7 @@ UI.EventList = function (  ) {
 		<option>Change Static</option>\
 	</select>\
 	<button style="display: none;">+</button>\
-	<button class="icon-del-small eventDeleteButton">\
+	<button class="icon-del-small eventDeleteButton"></button>\
 	<div class="eventProperties" style="display: none;"></div>';
 
 
