@@ -7,6 +7,7 @@
 		<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/>
 		<link rel="stylesheet" href="/stylesheets/content.css"/>
 		<link rel="stylesheet" href="/stylesheets/style.css"/>
+		<script src="https://use.fontawesome.com/9fd99ea3f3.js"></script>
 
 		<!-- <link href="//netdna.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.css" rel="stylesheet"> -->
 
@@ -29,10 +30,6 @@
         
       </div>
 				
-				<!-- <div class="col-md-12"><p>Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. </p></div> -->
-
-		 </div>
-
 
 					<% if (success_msg.length > 0){ %>
 					   <div class="alert alert-success"><%= success_msg %></div>
@@ -40,18 +37,24 @@
 				<% { %>
 
 
-				
-					
-					
+
 			<!-- <input type='button' class="btn btn-primary" id='Own' value='My own scenes' />
 			<input type='button' class="btn btn-primary" id='Others' value='Scenes by others' />
 			 -->
-			 <div class="toggle_buttons">
-			 <ul>
-        <a class="button active" data-rel="#own" href="#">MY OWN SCENES</a>
-        <a class="button" data-rel="#others" href="#">SCENES BY OTHERS</a>
-   			</ul>
+	<div class="toggle_buttons">
+			
+        <a class="button active" data-rel="#own" href="#">My own scenes</a>
+        <a class="button" data-rel="#others" href="#">Scenes by others</a>
+   		<a class="info_toggle" data-rel="#collapse1" href="#"><button class="btn btn-default">info</button></a>
+   		<div class="info_toggle_div" id="collapse1" style="display:none">
+               Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. 
+    	
+    	
    			</div>
+
+   	
+   			</div>
+   		</div>	
 		
 
 			<div class='toggle' id="own" style='display:block;'>
@@ -99,7 +102,7 @@
 										</div>
 									</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  class="btn btn-primary_edit">Edit</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  class="btn btn-default_edit">Edit</a>
 										<form method="post" action="main/copy_own?scene=<%= scene.id %>">
             						 <button type="submit" class="btn btn-primary">Clone</button>
             						 <a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
@@ -164,7 +167,7 @@
 												</div>
 											</div>
 
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-primary_play">Play</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-default_edit">Play</a>
 
 
 									<form method="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">
@@ -240,19 +243,14 @@ function setContent($el) {
     $($el.data('rel')).show();
 }
 		</script>
-		<!-- <script type="text/javascript">
-		$(document).ready(function(){
-    $("#Own").click(function(){
-        $('#Own_scenes').toggle();
+		<script>
+			$(function () {
+    $('.info_toggle').click(function () {
+        $(this).next('div').slideToggle();
+        return false;
     });
 });
-		$(document).ready(function(){
-    $("#Others").click(function(){
-        $('#Other_scenes').toggle();
-    });
-});
-
-		</script> -->
+		</script>
 		
 
 	</body>
