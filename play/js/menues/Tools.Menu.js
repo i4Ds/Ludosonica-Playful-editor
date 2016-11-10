@@ -27,8 +27,10 @@ Tools.Menu = function (editor) {
     signals.menuButtonClicked.add( function(name) {
         if(name=="back-to-gallery")
         {
-            window.history.back();
+            console.log(document.referrer);
+            //window.history.back();
             //location.href = location.origin+'/play/gallery/main';
+            location.href = document.referrer;
         }
     });
 
