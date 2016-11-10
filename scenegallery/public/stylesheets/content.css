@@ -1,24 +1,25 @@
 .main-row{
 	background-color:transparent;
-	margin-right: -15px;
-	margin-left: -15px;
+/*	margin-right: -15px;
+	margin-left: -15px;*/
 
 }
 
 .button.active {
     color: #E57245;
     text-decoration: underline;
-    font-size: 20px;
-    font-weight: normal;
-    margin-right: 40px;
-    letter-spacing: 1px;
+    font-size: 25px;
+ /*   font-weight: normal;*/
+    margin-right: 112px;
+    /*margin-left: 0px;*/
+    /*letter-spacing: 1px;*/
 }
 .button {
     color: #777;
-    font-size: 16px;
-    font-weight: normal;
-    margin-right: 40px;
-    letter-spacing: 1px;
+    font-size: 20px;
+  /*  font-weight: normal;*/
+    margin-right: 148px;
+    /*letter-spacing: 1px;*/
 }
 
 .button:hover {
@@ -28,9 +29,10 @@
 }
 
 .toggle_buttons {
-	/*text-align: left;*/
-	margin-bottom: 30px;
+	margin-right: 15px;
+	
 }
+
 
 
 body {
@@ -45,6 +47,7 @@ body {
 	border-radius: 3px;
 	height: 380px;
 	float: left;
+	width: 282px;
 }
 
 .scene {
@@ -58,7 +61,7 @@ body {
 	margin-top: 10px;
 	display: block;
 	height: 410px;
-	width: 280px;
+	width: 282px;
 }
 .scene-entry_own{
 	display: block;
@@ -67,7 +70,7 @@ body {
 	border-radius: 3px;
 	height: 410px;
 	float: left;
-	width: 280px;
+	width: 282px;
 	
 	
 }
@@ -78,7 +81,7 @@ body {
 	border-radius: 3px;
 	height: 415px;
 	float: left;
-	width: 280px;
+	width: 282px;
 	
 	
 }
@@ -94,7 +97,7 @@ h3{
 a.btn{
 	/*margin-top:9px;*/
 	color: #fff;
-	background-color: #E57245;
+	/*background-color: #E57245;*/
 }
 .btn:active {
 	background-color: #e28561;
@@ -136,9 +139,9 @@ a.btn1{
 	left: 50%;
 }
 
-.lazy{
-	display:none;
-}
+/*.lazy{
+	display:block;
+}*/
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary.focus, .btn-primary:active, .btn-primary.active, .open > .dropdown-toggle.btn-primary {
     background-color: #e28561;
@@ -157,7 +160,7 @@ a.btn1{
 .btn-primary_play:active {
 	color: #af4d0f;
 }
-.btn-primary_play:hover, .btn-primary_play:focus, .btn-primary_play.focus, .btn-primary_play:active {
+.btn-primary_play:hover, .btn-primary_play.focus, .btn-primary_play:active {
     background-color: #e28561;
 	border-color: #e28561;	
 	color: white;
@@ -178,14 +181,14 @@ a.btn1{
 .btn-primary_copy {
     /*background-image: linear-gradient(to bottom, #E57245 0px, #E57245 100%);*/
     background-repeat: repeat-x;
-    border-color: #E57245;
+    border-color: #777;
 	font-weight: bold;
 	font-family: Arial,sans-serif;
 	padding: 6px 10px;
 	border-radius: 2px;
 	margin-top: 5px;
 	width: 100%;
-	background-color: #E57245;
+	background-color: #777;
 	color: white;
 }
 
@@ -194,7 +197,7 @@ a.btn1{
 .btn-primary {
     /*background-image: linear-gradient(to bottom, #E57245 0px, #E57245 100%);*/
     background-repeat: repeat-x;
-    border-color: #E57245;
+    border-color: #777;
 	font-weight: bold;
 	font-family: Arial,sans-serif;
 	padding: 6px 10px;
@@ -214,8 +217,7 @@ a.btn1{
 	display: block;
 }
 
-.btn-primary_edit {
-    /*background-image: linear-gradient(to bottom, #E57245 0px, #E57245 100%);*/
+/*.btn-primary_edit {
     background-repeat: repeat-x;
     border-color: #E57245;
 	font-weight: bold;
@@ -240,7 +242,7 @@ a.btn1{
     border-color: #e28561;
     color: #af4d0f;
     text-decoration: none;
-}
+}*/
 
 .btn-default {
     background-color: #E57245;
@@ -273,4 +275,51 @@ a.btn1{
     color: #af4d0f;
     outline: 0 !important;	
    
+}
+
+.btn-default_edit {
+    background-color: #E57245;
+	color: white;
+    background-repeat: repeat-x;
+    border-color: #E57245;
+	font-weight: bold;
+	font-family: Arial,sans-serif;
+	padding: 6px 10px;
+	border-radius: 2px;
+	margin-top: 10px;
+	display: block;
+	
+}
+
+.btn-default_edit:hover {
+     background-color: #e28561;
+	border-color: #e28561;
+	color: #fff;
+	outline: 0 !important;	
+}
+.btn-default_edit:focus {
+	background-color: #e28561;
+    border-color: #e28561;
+    color: white;
+    text-decoration: none;
+    outline: 0 !important;	
+}
+
+.btn-default_edit:active {
+    color: #af4d0f;
+    outline: 0 !important;	
+   
+}
+
+/* CONTACT TOGGLE */
+
+.info_toggle {
+	float: right;
+	color: #fff;
+}
+
+.info_toggle_div {
+	text-align: left;
+	margin-bottom: 10px;
+	margin-top: 10px;
 }

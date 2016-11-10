@@ -21,7 +21,7 @@
         <li role="presentation"><a href="/play/gallery/register">Register</a></li>
           </ul>
           
-         <h3 class="text-muted">All the scenes in one place </h3>
+      <!--    <h3 class="text-muted">All the scenes in one place </h3> -->
         </nav>
         
      	</div>
@@ -29,7 +29,7 @@
 					<h3>Scenes overview</h3>
 
 
-						<hr class="col-md-12 main-row" />
+						<!-- <hr class="col-md-12 main-row" /> -->
 
 					<% scenes.forEach(function(scene){ %>
 
@@ -69,7 +69,7 @@
 										
 
 									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>"  target="_blank" class="btn btn-primary">Play</a>
+									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-primary">Play</a>
 								
 
 								</div>
