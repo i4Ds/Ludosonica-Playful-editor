@@ -186,7 +186,7 @@
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
     var workMode = 'easy';
-    var IS_DEV_MODE = true;
+    var IS_DEV_MODE = false;
 
     var editor = new Editor();
 
@@ -286,7 +286,9 @@
 
 
             }else{
+
                 generateDefaultScene();
+                console.log('new scene created');
             }
 
 
