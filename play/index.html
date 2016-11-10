@@ -326,6 +326,8 @@
                 console.log('play?! :(')
             });
 
+            window.onbeforeunload = null;
+
         }else if(sceneId !== null){
 
             editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
