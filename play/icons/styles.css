@@ -107,8 +107,8 @@
 }
 
 .icon-save:before{
-  content:"H";
-  /*content: "I";*/
+  /*content:"H";*/
+  content: "I";
 }
 
 .icon-back:before{
