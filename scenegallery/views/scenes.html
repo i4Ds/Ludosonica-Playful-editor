@@ -36,6 +36,7 @@
 						<div class="col-md-3 scene-entry_all">
 
 							<h4><%= scene.name %></h4>
+							<h5>By: <b><%= scene.user_name  %></b></h5>
 
 							<div class="row">
 
@@ -76,6 +77,8 @@
 
 							</div>
 
+
+
 						</div>
 
 						<div class="col-md-1"></div>
@@ -102,6 +105,14 @@
 		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
 		<script type="text/javascript">
 		
+		$(function() {
+			$("img.lazy").lazyload({
+				event : "click",
+					effect : "fadeIn",
+					threshold : 200
+		});
+		});
+
 			function loadImages(){
 				
 				$("img.lazy").show().lazyload({

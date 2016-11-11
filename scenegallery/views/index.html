@@ -36,8 +36,6 @@
 					 <% } %>
 				<% { %>
 
-
-
 			<!-- <input type='button' class="btn btn-primary" id='Own' value='My own scenes' />
 			<input type='button' class="btn btn-primary" id='Others' value='Scenes by others' />
 			 -->
@@ -72,6 +70,9 @@
 						<div class="col-md-3 scene-entry_own">
 
 							<h4><%= scene.name %></h4>
+							<h5>By: <b><%= scene.user_name  %></b></h5>
+								
+									
 
 							<div class="row">
 
@@ -108,11 +109,6 @@
             						 <a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
         							 </form>
 
-									
-									
-									 <!-- <form method="post" action="/users/save">
-            						 <button type="submit" class="btn btn-default">save</button>
-        							 </form> -->
 
 								</div>
 
@@ -129,7 +125,7 @@
 					
 
 			
-			<div class='toggle' id="others" style='display:none;'>		
+			<div class='toggle' id="others" style='display:block;'>		
 
 						<div class="row">
 
@@ -137,6 +133,7 @@
 
 								<div class="col-md-3 scene-entry_other">
 									<h4><%= scene.name %></h4>
+									<h5>By: <b><%= scene.user_name  %></b></h5>
 
 									<div class="row">
 
@@ -172,13 +169,15 @@
 
 									<form method="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">
             						 <button type="submit" class="btn btn-primary_copy">Copy to my scenes</button>
-        							 </form></br>
+        							 </form>
 
 
 										
 										</div>
 
 								</div>
+
+							
 								</div>
 
 							<div class="col-md-1"></div>
@@ -197,12 +196,13 @@
 		<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
 		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
 		<script type="text/javascript">
-		
+
+
 			function loadImages(){
 				
 				$("img.lazy").show().lazyload({
 					effect : "fadeIn",
-					threshold : 200
+					threshold : 500
 				});
 			}
 			
@@ -241,7 +241,9 @@ function setContent($el) {
     
     $el.addClass('active');
     $($el.data('rel')).show();
+
 }
+
 		</script>
 		<script>
 			$(function () {

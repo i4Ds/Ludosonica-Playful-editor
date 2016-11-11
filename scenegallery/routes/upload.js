@@ -48,8 +48,8 @@ var formconfig = {
     },
 	scenename:{
 		rules: [
-               { test: /^.{1,50}$/,
-                 error: 'Scenename  must be between 1 and 50 characters' }
+               { test: /^.{1,25}$/,
+                 error: 'Scenename  must be between 1 and 25 characters' }
              ]
     },
 	description:{
@@ -92,9 +92,9 @@ var check = function(err, req, res, next) {
 var process = function(req, res, next) {
 
 	if (req.form.error) {
-			console.log('Form error for field "' + req.form.error.key+ '": '+ req.form.error);
+			// console.log('Form error for field "' + req.form.error.key+ '": '+ req.form.error);
 
-			return res.status(400).send({'error-codes':'Form error for field "'+ req.form.error.key + '": '+ req.form.error});
+			return res.status(400).send({'error-codes':' '+ req.form.error});
 	}
 
 	//console.log('captcha:'+req.form.data.captcha);
@@ -115,7 +115,7 @@ var process = function(req, res, next) {
 
 		//make directory
 		//var timestamp = new Date().toUTCString();
-		var timestamp = new Date().toString();
+		var timestamp = new Date(new Date().setDate(new Date().getDate()-1)).toString().replace(' GMT+0100 (CET)', '');
 		var shasum = crypto.createHash('sha256');
 		//shasum.update( req.form.data.email + req.form.data.name + timestamp );
 		shasum.update( req.form.data.scenename + timestamp );
@@ -190,6 +190,10 @@ var process = function(req, res, next) {
 						}).finalize();
 					});
 				}
+
+				// db.serialize(function(){
+				// 	db.run("ALTER TABLE scene ADD user_name TEXT");
+				// });
 
                 //
 

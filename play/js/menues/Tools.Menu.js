@@ -27,9 +27,7 @@ Tools.Menu = function (editor) {
     signals.menuButtonClicked.add( function(name) {
         if(name=="back-to-gallery")
         {
-
             location.href = document.referrer;
-
         }
     });
 

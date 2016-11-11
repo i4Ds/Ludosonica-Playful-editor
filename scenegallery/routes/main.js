@@ -12,8 +12,8 @@ router.get('/', function(req, res) {
 	var scenes = [];
 	
 	db.serialize(function() {
-
-		db.each("SELECT * FROM scene WHERE user_id != (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", GLOBAL.email, function(err, row) {
+		   db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id WHERE user_id != (SELECT id FROM users WHERE email = ?) ORDER BY datetime(timestamp) DESC LIMIT ?",GLOBAL.email,[ GLOBAL.maxScenesOnFrontPage ],function(err,row){
+		// db.each("SELECT * FROM scene WHERE user_id != (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", GLOBAL.email, function(err, row) {
 			if(err){
 				console.log(err);
 				var error = new Error(err);
@@ -28,13 +28,12 @@ router.get('/', function(req, res) {
 				next(error);
 			}
 		});
-
 	});
-
 
 	db.serialize(function() {
 		var rows = [];
-		db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", GLOBAL.email, function(err, row) {
+		db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id WHERE user_id = (SELECT id FROM users WHERE email = ?) ORDER BY datetime(timestamp) DESC LIMIT ?",GLOBAL.email,[ GLOBAL.maxScenesOnFrontPage ], function(err,row) {
+		// db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", GLOBAL.email, function(err, row) {
 			if(err){
 				console.log('first', err);
 				var error = new Error(err);
@@ -54,7 +53,6 @@ router.get('/', function(req, res) {
 
 	});
 
-
 	// Copy my scenes
 	router.post('/copy_own', function(req,res) {
 
@@ -62,7 +60,7 @@ router.get('/', function(req, res) {
 
 			db.serialize(function () {
 
-				var timestamp = new Date().toString();
+				var timestamp = new Date().toString().replace(' GMT+0100 (CET)', '');
 				db.run("CREATE TEMPORARY TABLE temp_table_own as SELECT * FROM scene where id=?", req.param('scene'));
 				db.run("UPDATE temp_table_own SET id = NULL, user_id = (SELECT id FROM users WHERE email =?)",GLOBAL.email);
 				db.run("UPDATE temp_table_own SET timestamp = ?",timestamp);
@@ -81,35 +79,13 @@ router.get('/', function(req, res) {
 						}}
 				);
 
+				// db.run("ALTER TABLE scene ADD user_name TEXT");
+				// db.run("UPDATE TABLE scene INNER JOIN users ON scene.user_id = users.id SET scene.user_name = users.name");
+
 			});
 
 		}
 	});
-
-
-	// //Save scene
-	// router.post('/upload_test', function(req,res,call) {
-
-	// 	db.serialize(function() {
-	// 		var stmt = db.prepare("INSERT OR REPLACE INTO scene ( id, description, name, location, timestamp, removehash, images, user_id ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
-	// 		stmt.run([ undefined, 'descr', 'wuhuu', 'text', 'text', 'text', 0, 16 ], function(error){
-	// 			if(error) {
-	// 				//s['error-codes'] = error;
-	// 				//return res.status(400).send(s);
-	// 				console.log(error);
-	// 				//var err = new Error(err);
-	// 				//next(err);
-	// 			}else {
-	// 				//s['input'] = 'wuhu no error!';
-	// 				console.log('wuhu saved');
-	// 			}
-	// 		}).finalize();
-	// 	});
-
-
-	// 	db.close();
-
-	// });
 
 
 // Copy scenes of others
@@ -118,7 +94,7 @@ router.post('/copy_other', function(req,res) {
 	if( req.param('scene') !== undefined ){
 
 		db.serialize(function () {
-			var timestamp = new Date().toString();
+			var timestamp = new Date().toString().replace(' GMT+0100 (CET)', '');
 			db.run("CREATE TEMPORARY TABLE temp_table_other as SELECT * FROM scene where id=?",
 				req.param('scene'),
 				function(error){

@@ -11,7 +11,7 @@ var app = express();
 GLOBAL.db = './gallery.db';
 GLOBAL.captchaSessionTime = 600000; // 10 minutes
 GLOBAL.maxSize = 50000000; // ~50 MByte
-GLOBAL.maxScenesOnFrontPage = 100;
+GLOBAL.maxScenesOnFrontPage = 200;
 GLOBAL.root = __dirname;
 
 
@@ -40,7 +40,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 var db = new sqlite3.Database(GLOBAL.db);
 
-//db.run("DROP table scene");
+// db.run("DROP table scene");
+// db.run("DROP table users");
 
 db.serialize(function () {
     db.run('PRAGMA foreign_keys = ON');

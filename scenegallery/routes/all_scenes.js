@@ -12,7 +12,7 @@ router.get('/play/gallery/all_scenes', function(req, res) {
 	
 	db.serialize(function() {
 		var rows = [];
-		db.each("SELECT * FROM scene ORDER BY timestamp DESC LIMIT ?", [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
+		db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id ORDER BY timestamp DESC LIMIT ?", [ GLOBAL.maxScenesOnFrontPage ], function(err, row) {
 			rows.push( row );		
 		}, function(err, rowcount ){
 			res.render( 'scenes', { scenes: rows, host: req.headers.host } );		

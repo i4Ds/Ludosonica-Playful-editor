@@ -45,7 +45,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 380px;
+	height: 360px;
 	float: left;
 	width: 282px;
 }
@@ -60,7 +60,7 @@ body {
 	border-radius: 2px;
 	margin-top: 10px;
 	display: block;
-	height: 410px;
+	height: 395px;
 	width: 282px;
 }
 .scene-entry_own{
@@ -68,7 +68,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 410px;
+	height: 395px;
 	float: left;
 	width: 282px;
 	
@@ -79,7 +79,7 @@ body {
 	background-color: #EEE;
 	margin-top: 10px;
 	border-radius: 3px;
-	height: 415px;
+	height: 395px;
 	float: left;
 	width: 282px;
 	
@@ -110,9 +110,9 @@ a.btn1{
 	margin-top: 5px;
 	text-align: center;
 	color: #E57245;
-	height: 380px;
+	height: 365px;
 	vertical-align: middle;
-	line-height: 350px; 
+	line-height: 340px; 
 	font-size: 16px;
 
 }

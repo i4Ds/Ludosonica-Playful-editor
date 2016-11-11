@@ -91,8 +91,8 @@ var GalleryUploadPanel = function( editor ){
 			inputName.css('border','');
 		}
 
-		if( inputSceneName.val().length == 0 || inputSceneName.val().length > 50 ){
-			statusLabel.text('Scenename must be between 1 and 50 characters');
+		if( inputSceneName.val().length == 0 || inputSceneName.val().length > 25 ){
+			statusLabel.text('Scenename must be between 1 and 25 characters');
 			statusLabel.css('color','red');
 			inputSceneName.css('border','1px solid red');
 			return false;
