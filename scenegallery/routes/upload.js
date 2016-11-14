@@ -115,7 +115,7 @@ var process = function(req, res, next) {
 
 		//make directory
 		//var timestamp = new Date().toUTCString();
-		var timestamp = new Date(new Date().setDate(new Date().getDate()-1)).toString().replace(' GMT+0100 (CET)', '');
+		var timestamp = new Date().toString().replace(' GMT+0100 (CET)', '');
 		var shasum = crypto.createHash('sha256');
 		//shasum.update( req.form.data.email + req.form.data.name + timestamp );
 		shasum.update( req.form.data.scenename + timestamp );

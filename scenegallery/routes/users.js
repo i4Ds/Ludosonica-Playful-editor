@@ -19,7 +19,7 @@ router.get('/register', function(req,res) {
 
  //Login
 router.get('/login', function(req,res) {
-	res.render('login');
+	res.render('login', {user: req.user});
 
 });
 
@@ -86,21 +86,21 @@ passport.use(new LocalStrategy({usernameField:'email'},function(email, password,
     if (!row) return done(null, false,{message: 'Unknown User'});
   db.get('SELECT * FROM users WHERE email = ? AND password = ?', hashEmail(email,'salt'), hashPassword(password,'salt'), function(err, row) {
     if (!row) return done(null, false,{message: 'Invalid password'});
-    GLOBAL.email = hashEmail(email,'salt');
+    // GLOBAL.email = hashEmail(email,'salt');
       return done(null, row);
     });
   });
 }));
 
-
 // SERIALIZE AND DESERIALIZE USER
 passport.serializeUser(function(user, done) {
   return done(null, user.id);
-});
+ });
 
 passport.deserializeUser(function(id, done) {
   db.get('SELECT id, email FROM users WHERE id = ?', id, function(err, row) {
     if (!row) return done(null, false);
+    console.log('deserializing user:',row);
     return done(null, row);
   });
 });
@@ -113,11 +113,12 @@ router.post('/login',
 		failureRedirect: '/play/gallery/login',failureFlash:true
 	}),
 function(req,res) {
-	// req.session.userid = 1; // not sure about this
-	//req.session.userid;
-	res.redirect('/');
+	// req.session.userid = userid;
+
+	res.redirect('/', req.user.id);
 
 });
+
 
 
 router.get('/logout',function(req,res){

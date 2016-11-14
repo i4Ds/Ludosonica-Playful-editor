@@ -6,7 +6,6 @@ var path = require('path');
 //var cookieParser = require('cookie-parser');
 //var bodyParser = require('body-parser');
 
-var app = express();
 
 GLOBAL.db = './gallery.db';
 GLOBAL.captchaSessionTime = 600000; // 10 minutes
@@ -27,6 +26,8 @@ var LocalStrategy = require('passport-local').Strategy;
 var crypto = require('crypto');
 
 var sqlite3 = require('sqlite3').verbose();
+
+var app = express();
 
 
 app.engine('.html', require('ejs').__express);
@@ -119,8 +120,8 @@ app.use(function (req, res, next) {
 
 
 
-var routes = require('./routes/index');
-app.use('/play/gallery', routes);
+// var routes = require('./routes/index');
+// app.use('/play/gallery', routes);
 
 var users = require('./routes/users');
 app.use('/play/gallery', users);
