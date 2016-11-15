@@ -150,7 +150,6 @@ THREE.ObjectLoader.prototype.parseObject = function () {
                     Logger.info('loaded fog', object.fog, "logged by play/index.html, row 295");
                 }
 
-                // todo templatez
 
                 if (data.templates !== undefined) {
 
@@ -185,6 +184,7 @@ THREE.ObjectLoader.prototype.parseObject = function () {
                         for (var i = 0; i < 6; i++) {
 
                             var loadedFile = editor.loadedTexturesFolder.file(data.skybox.textures[i]);
+                            console.log('loaded File', loadedFile);
                             if (loadedFile) {
 
                                 var loadedTexture = loadedFile.asArrayBuffer();

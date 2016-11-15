@@ -271,13 +271,14 @@ THREE.PlayfulExporter.prototype = {
 
                 }
 
+                console.log(object.skybox);
                 if (object.skybox) {
 
                     data.skybox = {
                         type: object.skybox.type
                     };
 
-                    if (object.skybox.type == 'Custom') {
+                    if (object.skybox.type == 'custom') {
 
                         // add the images
                         data.skybox.textures = [];
@@ -287,7 +288,9 @@ THREE.PlayfulExporter.prototype = {
                                 object.skybox.materials[i].map.sourceFile = 'skybox_' + Skybox.prototype.endings[i] + '_' + object.skybox.materials[i].map.sourceFile;
 
                             if (object.skybox.materials[i].map.sourceBlob) textures.push(object.skybox.materials[i].map);
-                            data.skybox.textures.push(object.skybox.materials[i].map.sourceFile);
+                            if(object.skybox.materials[i].map.sourceFile) data.skybox.textures.push(object.skybox.materials[i].map.sourceFile);
+
+                            console.log('skybox', data.skybox.textures);
 
                         }
 
