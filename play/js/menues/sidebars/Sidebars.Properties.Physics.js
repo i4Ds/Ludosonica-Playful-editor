@@ -1,8 +1,6 @@
 Sidebars.Properties.Physics = function ( editor ) {
 
 	var signals = editor.signals;
-
-	var objService = editor.objectPropertyService;
 	
 	var objectSelected = undefined;
 	var physijsSelected = undefined;
@@ -52,10 +50,11 @@ Sidebars.Properties.Physics = function ( editor ) {
 
 	function update() {
 
-		// COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
-		if (object.isTemplate) {
 
-			var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
+		// COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
+		if (objectSelected.isTemplate) {
+
+			var instObjects = editor.templateManager.getInstancesOfTemplate(objectSelected.id);
 
 			for (var i = 0; i < instObjects.length; i++) {
 
@@ -78,7 +77,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 			}
 		}
 		
-			var physics = object.material._physijs;
+			var physics = objectSelected.material._physijs;
 
 			if ( physics ) {
 
