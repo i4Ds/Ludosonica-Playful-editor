@@ -48,8 +48,8 @@ var formconfig = {
     },
 	scenename:{
 		rules: [
-               { test: /^.{1,25}$/,
-                 error: 'Scenename  must be between 1 and 25 characters' }
+               { test: /^.{1,20}$/,
+                 error: 'Scenename  must be between 1 and 20 characters' }
              ]
     },
 	description:{
