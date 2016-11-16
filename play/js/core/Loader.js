@@ -15,7 +15,7 @@ var Loader = function ( editor ) {
 		console.log('loaded sounds set', sounds);
 	};
 
-	this.loadRemotePlayful = function( sceneId, callback ){
+	this.loadRemotePlayful = function( sceneId ){
 
 		editor.config.clear();
 		editor.storage.clear( function () {
@@ -23,6 +23,7 @@ var Loader = function ( editor ) {
 
 		var self = this;
 		editor._isLoadingFile = true;
+			signals.loadFile.dispatch();
 
 		$.ajax({
 			url: "gallery/download"+sceneId,
@@ -38,9 +39,6 @@ var Loader = function ( editor ) {
 
 				loadBase64Playful(a, self);
 
-				if(callback){
-					callback();
-				}
 			},
 			//success: function(a,b,c){ console.log(a);console.log(b);console.log(c);},
 			processData: false,  // tell jQuery not to process the data
@@ -89,6 +87,7 @@ var Loader = function ( editor ) {
 	this.loadFile = function ( file ) {
 
 		editor._isLoadingFile = true; // fix to not decorate imported objects...
+		signals.loadFile.dispatch();
 
 		var filename = file.name || 'playful.playful';
 		var extension = filename.split( '.' ).pop().toLowerCase();

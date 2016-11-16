@@ -21,6 +21,35 @@
     cursor: default !important;
 }
 
+/* Loading Panel */
+.loading-panel {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    background-color: rgba(15, 15, 15, 0.8);
+    z-index: 99;
+
+}
+
+.loading-panel .spinner{
+    width: 100px;
+    height: 100px;
+    margin-top: calc(50vh - 100px);
+    margin-left: calc(50vw - 50px);
+    background-size: cover;
+}
+
+.loading-panel .loading-text{
+    margin-top: 50px;
+    color: #e57245;
+    font-size: 2em;
+    width: 100vw;
+    text-align: center;
+}
+
+
 /* Tools */
 #tools {
     position: fixed;

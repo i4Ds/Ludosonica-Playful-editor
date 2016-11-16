@@ -290,8 +290,6 @@ THREE.PlayfulExporter.prototype = {
                             if (object.skybox.materials[i].map.sourceBlob) textures.push(object.skybox.materials[i].map);
                             if(object.skybox.materials[i].map.sourceFile) data.skybox.textures.push(object.skybox.materials[i].map.sourceFile);
 
-                            console.log('skybox', data.skybox.textures);
-
                         }
 
                     }

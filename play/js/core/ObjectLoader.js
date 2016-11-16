@@ -26,6 +26,7 @@ THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
             // load textures
             if ( data.map ) {
                 var loadedFile = editor.loadedTexturesFolder.file( data.map );
+                console.log(loadedFile);
                 if ( loadedFile ) {
                     material.map = new THREE.Texture(); //shim so that uv buffers get allocated at init
 
@@ -61,17 +62,6 @@ THREE.ObjectLoader.prototype.parseMaterials = function ( json ) {
 
             }
 
-            //if physijs data was stored create a physical material instead
-            //if (data.restitution) {
-            //    material = Physijs.createMaterial(
-            //        material,
-            //        data.friction,
-            //        data.restitution
-            //    );
-            //} else {
-            //
-            //    console.log('no restitution', data);
-            //}
 
             //create a physical material
             var friction = data.friction || 0;
@@ -184,7 +174,7 @@ THREE.ObjectLoader.prototype.parseObject = function () {
                         for (var i = 0; i < 6; i++) {
 
                             var loadedFile = editor.loadedTexturesFolder.file(data.skybox.textures[i]);
-                            console.log('loaded File', loadedFile);
+
                             if (loadedFile) {
 
                                 var loadedTexture = loadedFile.asArrayBuffer();

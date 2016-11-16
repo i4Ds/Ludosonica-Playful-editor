@@ -76,6 +76,7 @@
 <script src="js/Editor.TemplateManager.js"></script>
 <script src="js/Template.js"></script>
 <script src="js/Config.js"></script>
+<script src="js/LoadingPanel.js"></script>
 
 <script src="js/core/ThreeJSExtensions.js"></script>
 <script src="js/core/Loader.js"></script>
@@ -144,6 +145,7 @@
 
 
 
+
 </script>
 
 <!-- fragment shader a.k.a. pixel shader -->
@@ -155,6 +157,7 @@
 			vec3 glow = glowColor * intensity;
 			gl_FragColor = vec4( glow, 1.0 );
 		}
+
 
 
 
@@ -186,7 +189,7 @@
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
     var workMode = 'easy';
-    var IS_DEV_MODE = true;
+    var IS_DEV_MODE = false;
 
     var editor = new Editor();
 
@@ -225,6 +228,9 @@
     var sceneSave = new SavePanel(editor).setId('sceneSave');
     document.body.appendChild(sceneSave.dom);
 
+    var loadingPanel = new LoadingPanel(editor);
+    document.body.appendChild(loadingPanel.dom);
+
 
     function getParameterByName(name, url) {
         if (!url) {
@@ -249,7 +255,7 @@
             // always genrate default scene. otherwise load remote.
             // the saved state is not needed anymore
 
-            if(IS_DEV_MODE){
+            if (IS_DEV_MODE) {
                 // state is the scene file
                 if (state !== undefined) {
 
@@ -281,11 +287,11 @@
                     // there is always a default scene generated on reload
                     generateDefaultScene();
                     // add leap box to scene
-                    editor.signals.leapBoxChanged.dispatch( true );
+                    editor.signals.leapBoxChanged.dispatch(true);
                 }
 
 
-            }else{
+            } else {
 
                 generateDefaultScene();
                 console.log('new scene created');
@@ -305,7 +311,6 @@
         //load remote scene
 //        var sceneId = /^\?load_scene=(\d+)/i.exec(window.location.search);
 //        if (sceneId !== null) {
-//            console.log('haaalllooo', sceneId[0]);
 //            editor.loader.loadRemotePlayful(sceneId[0]);
 //        }
 
@@ -321,33 +326,38 @@
 
         if (sceneId !== null && play) {
 
-            editor.loader.loadRemotePlayful('?load_scene=' + sceneId, function () {
+            var onLoadComplete = function () {
+                console.log('hallo velo');
                 $('#modes-play').click();
                 $('#modes-play').hide();
                 $('#menu-gallery').show();
-                console.log('play?! :(')
-            });
+            };
 
-            window.onbeforeunload = null;
-
-        }else if(sceneId !== null){
+            editor.signals.fileLoadCompleted.add(onLoadComplete);
 
             editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
 
-        }else {
+            window.onbeforeunload = null;
+
+        } else if (sceneId !== null) {
+
+            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
+
+        } else {
             console.log('dont load scene');
         }
 
 
-        if(!IS_DEV_MODE){
-            if( sceneId === null && userId === null){
+        if (!IS_DEV_MODE) {
+            if (sceneId === null && userId === null) {
 
                 window.onbeforeunload = null;
-                var galleryPath = location.origin+'/play/gallery/login';
+                var galleryPath = location.origin + '/play/gallery/login';
                 location.href = galleryPath;
 
             }
         }
+
 
 
         var timeout;
@@ -554,7 +564,7 @@
     })();
 
 
-    if(!IS_DEV_MODE){
+    if (!IS_DEV_MODE) {
         window.onbeforeunload = function () {
 //        alert("Dude, are you sure you want to leave? Think of the kittens!");
             return "Dude, are you sure you want to leave? Think of the kittens!";
