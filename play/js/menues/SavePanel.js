@@ -80,7 +80,14 @@ var SavePanel = function (editor) {
 
     uploadButton.click(function () {
 
-        if (checkFields()) {
+        var sceneId = sessionStorage.getItem('scene');
+        var checked = true;
+
+        if(sceneId == 'null'){
+            checked = checkFields();
+        }
+
+        if (checked) {
 
             lockPanel();
             if ($('.imageContainer > a > canvas').length == 0) {
