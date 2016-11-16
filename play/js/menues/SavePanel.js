@@ -55,8 +55,8 @@ var SavePanel = function (editor) {
 
     var checkFields = function () {
 
-        if (inputSceneName.val().length == 0 || inputSceneName.val().length > 50) {
-            statusLabel.text('Scenename must be between 1 and 50 characters');
+        if (inputSceneName.val().length == 0 || inputSceneName.val().length > 20) {
+            statusLabel.text('Scenename must be between 1 and 20 characters');
             statusLabel.css('color', 'red');
             inputSceneName.css('border', '1px solid red');
             return false;
@@ -80,7 +80,7 @@ var SavePanel = function (editor) {
 
     uploadButton.click(function () {
 
-        if (/*checkFields()*/ true) {
+        if (checkFields()) {
 
             lockPanel();
             if ($('.imageContainer > a > canvas').length == 0) {
