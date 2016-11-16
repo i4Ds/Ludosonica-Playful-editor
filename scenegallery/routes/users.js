@@ -98,9 +98,8 @@ passport.serializeUser(function(user, done) {
  });
 
 passport.deserializeUser(function(id, done) {
-  db.get('SELECT id, email FROM users WHERE id = ?', id, function(err, row) {
+  db.get('SELECT id, name,email FROM users WHERE id = ?', id, function(err, row) {
     if (!row) return done(null, false);
-    console.log('deserializing user:',row);
     return done(null, row);
   });
 });

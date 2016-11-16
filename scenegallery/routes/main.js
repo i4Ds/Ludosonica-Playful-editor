@@ -8,16 +8,14 @@ var sqlite3 = require('sqlite3').verbose();
 router.get('/', ensureAuthenticated,function(req, res) {
 	var db = new sqlite3.Database( GLOBAL.db );
 
-	 // res.render('/', { user: req.user });
-
-
-	console.log('User id =',req.user);
 
 	var scenes = [];
+
+	
 				
 	db.serialize(function() {
 
-		   db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id WHERE user_id != ? ORDER BY timestamp DESC LIMIT 100",req.user.id,function(err,row){
+		   db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id WHERE user_id != ? ORDER BY timestamp DESC LIMIT 200",req.user.id,function(err,row){
 		// db.each("SELECT * FROM scene WHERE user_id != (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", GLOBAL.email, function(err, row) {
 			if(err){
 				console.log(err);
@@ -39,7 +37,7 @@ router.get('/', ensureAuthenticated,function(req, res) {
 		var rows = [];
 		// db.each("SELECT scene.id,scene.description,scene.name,scene.location,scene.timestamp,scene.removehash,scene.images,users.name AS user_name FROM scene INNER JOIN users ON scene.user_id = users.id WHERE user_id = (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC",GLOBAL.email, function(err,row) {
 		// db.each("SELECT * FROM scene WHERE user_id = (SELECT id FROM users WHERE email = ?) ORDER BY timestamp DESC", req.user.id, function(err, row) {
-			db.each("SELECT * FROM scene WHERE user_id = ? ORDER BY timestamp DESC LIMIT 100", req.user.id, function(err, row) {
+			db.each("SELECT * FROM scene WHERE user_id = ? ORDER BY timestamp DESC LIMIT 200", req.user.id, function(err, row) {
 			if(err){
 				console.log('first', err);
 				var error = new Error(err);
@@ -53,7 +51,8 @@ router.get('/', ensureAuthenticated,function(req, res) {
 				var error = new Error(err);
 				next(error);
 			}else{
-				res.render( 'index', { user: req.user.id, scenes: scenes, user_scenes: rows, host: req.headers.host } );
+				res.render( 'index', { user: req.user.id, scenes: scenes, user_scenes: rows, host: req.headers.host, username: req.user.name } );
+
 			}
 		});
 
@@ -149,6 +148,36 @@ router.post('/copy_other', function(req,res) {
 
 	}
 });
+
+	// Delete scene
+	router.post('/delete', function(req,res) {
+
+		if( req.param('scene') !== undefined ){
+
+			db.serialize(function () {
+
+				db.run("SELECT id FROM scene WHERE id=?",req.param('scene'));
+				db.run("DELETE FROM scene WHERE id=?",req.param('scene'),
+					function(error){
+						if(error) {
+							req.flash('error_msg','Opps, something went wrong please try again');
+							console.log(error);
+							var err = new Error(error);
+							next(err);
+						}else{
+							req.flash('success_msg','Your scene has been succesfully deleted');
+							res.redirect('/play/gallery/main');
+							res.end();
+						}}
+				);
+
+				// db.run("ALTER TABLE scene ADD user_name TEXT");
+				// db.run("UPDATE TABLE scene INNER JOIN users ON scene.user_id = users.id SET scene.user_name = users.name");
+
+			});
+
+		}
+	});
 
 
 });
