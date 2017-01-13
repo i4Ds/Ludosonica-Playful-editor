@@ -74,6 +74,7 @@ var Editor = function () {
     this.helpers = {};
 
     this.soundCollection;
+    this.objectSignals = {};
 
     this.theme = new Editor.Theme(this);
     this.play = new Play(this);
@@ -89,7 +90,6 @@ Editor.prototype = {
 
     // set the editor's theme
     setTheme: function (value) {
-        console.log(value);
 
         //document.getElementById( 'theme' ).href = value;
 
@@ -258,7 +258,6 @@ Editor.prototype = {
     setObjectName: function (object, name) {
 
         object.name = name;
-        object.instanceChanged.dispatch();
         this.signals.sceneGraphChanged.dispatch();
 
     },
@@ -326,7 +325,60 @@ Editor.prototype = {
 
     },
 
+    getTriggerProperties: function () {
+
+        var triggers = {
+            "Touch Fist": {},
+            "Touch Point": {},
+            "Touch Stroke": {},
+            Collision: {},
+            Appear: {}
+        };
+
+
+        this.scene.traverse(function (child) {
+
+            if (child.events) {
+                var index = 0;
+
+                while (index > -1) {
+                    index = indexOfAction(child.events, 'Notify Listeners', index);
+
+                    if (index > -1) {
+
+                        var topic = child.name + ':' + child.events[index].action.mode;
+
+                        triggers[topic] = {
+
+                            topicId: child.events[index].action.topicId,
+
+                            getData: function (container, resultObject) {
+                                resultObject['topicId'] = this.topicId;
+                            }
+
+                        };
+
+                        index += 1;
+                    }
+                }
+            }
+        });
+
+
+        function indexOfAction(events, type, startIndex) {
+
+            for (var i = startIndex; i < events.length; i++) {
+                if (events[i].action.type == type) return i;
+            }
+            return -1;
+        }
+
+        return triggers;
+    },
+
     setEdge: function (object) {
+
+        //console.log('edge set', object);
 
         var types = [false, false, false];
         if (object.events) {
@@ -679,7 +731,7 @@ Editor.prototype = {
 
                         editor.play.playAction(this, i, {
                             //other_object: other_object,
-                            relative_velocity: relative_velocity,
+                            relative_velocity: relative_velocity
                             //relative_rotation: relative_rotation,
                             //contact_normal: contact_normal
                         });
@@ -689,25 +741,26 @@ Editor.prototype = {
                 }
 
             }
-            //if ( this.behaviors.resurrection) console.log(this.behaviors, this.behaviors.resurrection.activator);
-            if (this.behaviors && this.behaviors.hasOwnProperty('resurrection') && this._resurrectionBehaviorTimeout === undefined && this.behaviors.resurrection.activator == 'collision') {
-                console.log('put timeout');
-                this._resurrectionBehaviorTimeout = setTimeout(function () {
-
-                    console.log('timeout', this._resurrectionPos.clone());
-                    this.position.copy(this._resurrectionPos);
-                    this.rotation.copy(this._resurrectionRot);
-                    this.mass = this._resurrectionMass;
-                    this.__dirtyPosition = true;
-                    this.__dirtyRotation = true;
-                    this.setAngularVelocity(new THREE.Vector3());
-                    this.setLinearVelocity(new THREE.Vector3());
-                    this._resurrectionBehaviorTimeout = undefined;
-
-                }.bind(this), this.behaviors.resurrection.delay * 1000);
-            }
 
         };
+
+
+        var topicListener = function () {
+
+            if (this.events != undefined) {
+
+                for (var i = 0; i < this.events.length; i++) {
+
+                    if (this.events[i].trigger.type.indexOf(':') !== -1) {
+
+                        editor.play.playAction(this, i);
+
+                    }
+
+                }
+            }
+        };
+
 
         // leap touch callback
         var grab = function () {
@@ -733,7 +786,6 @@ Editor.prototype = {
 
         // leap touch callback
         var point = function () {
-            console.log('point event on object');
 
             //if ( this.name != 'Ground' ) editor.play.effects.glow( this );
 
@@ -780,16 +832,19 @@ Editor.prototype = {
 
             //editor.play.effects.removeGlow( this );
 
-        }
+        };
 
 
-        function hasTrigger(events, type) {
+        function hasTriggerOrAction(events, type) {
 
             for (var i = 0; i < events.length; i++) {
                 if (events[i].trigger.type == type) return true;
+                if (events[i].action.type == type) return true;
             }
 
+
         }
+
 
         //clone array
         //var children = this.scene.children.slice(0);
@@ -801,6 +856,7 @@ Editor.prototype = {
             if (child._physijs) {
 
                 var clone = child.clone();
+                // todo new: add each clone an observable object!
 
                 clone.behaviors = child.behaviors;
 
@@ -818,8 +874,9 @@ Editor.prototype = {
                 //clone.mass = clone.mass;
                 //if ( clone.material._physijs.massmodifier != undefined ) clone.mass *= clone.material._physijs.massmodifier;
 
-                // add collision event callbacks
+                // add collision event callbacks (from physijs sdk)
                 clone.addEventListener('collision', collisionPlay);
+
 
                 // add constant / time based triggers
                 if (clone.material.runtimeMaterials !== undefined) {
@@ -835,22 +892,42 @@ Editor.prototype = {
                     }
                 }
 
-                // add touch callbacks where needed
+
                 if (clone.events) {
-                    if (hasTrigger(clone.events, 'Touch Fist')) clone.grab = grab.bind(clone);
-                    if (hasTrigger(clone.events, 'Touch Point')) clone.point = point.bind(clone);
-                    if (hasTrigger(clone.events, 'Touch Stroke')) clone.stroke = stroke.bind(clone);
+                    // add touch callbacks where needed
+                    if (hasTriggerOrAction(clone.events, 'Touch Fist')) clone.grab = grab.bind(clone);
+                    if (hasTriggerOrAction(clone.events, 'Touch Point')) clone.point = point.bind(clone);
+                    if (hasTriggerOrAction(clone.events, 'Touch Stroke')) clone.stroke = stroke.bind(clone);
+
+                    if (hasTriggerOrAction(clone.events, 'Resurrect')) {
+                        clone._resurrectionPos = clone.position.clone();
+                        clone._resurrectionRot = clone.rotation.clone();
+                        clone._resurrectionMass = clone.mass;
+                    }
+
+
+                    // todo new: get id of notifier -> subscribe with: findObjectById
+                    for (var i = 0; i < clone.events.length; i++) {
+                        // check for observable topic triggers
+                        if (clone.events[i].trigger.type.indexOf(':') !== -1) {
+
+                            var topic = clone.events[i].trigger.type;
+
+                            if (!editor.objectSignals[topic]) {
+                                var Signal = signals.Signal;
+                                editor.objectSignals[topic] = new Signal();
+                            }
+
+                            clone.topicListener = topicListener;
+                            editor.objectSignals[topic].add(clone.topicListener.bind(clone));
+                        }
+                    }
                 }
+
                 clone.release = release.bind(clone);
 
                 //TODO: Does this destroy anything?
                 clone.material = child.material.clone();
-
-                if (clone.behaviors && clone.behaviors.hasOwnProperty('resurrection')) {
-                    clone._resurrectionPos = clone.position.clone();
-                    clone._resurrectionRot = clone.rotation.clone();
-                    clone._resurrectionMass = clone.mass;
-                }
 
                 child.parent._cloneEquivalent.add(clone);
 

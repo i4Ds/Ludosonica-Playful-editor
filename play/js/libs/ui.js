@@ -1,6 +1,3 @@
-/**
- * extended fiona
- */
 
 var UI = {};
 
@@ -50,7 +47,7 @@ UI.Element.prototype = {
 
 	}
 
-}
+};
 
 // properties
 
@@ -1094,39 +1091,20 @@ UI.EventList = function (  ) {
 
 	this.eventList = [];
 
+
 	var dom = document.createElement( 'div' );
 	dom.className = 'EventList';
 
 	this.dom = dom;
 
 	this.dom.eventTemplate = document.createElement( 'div' );
-	this.dom.eventTemplate.innerHTML = '\
-	<select size="1">\
-		<option>...</option>\
-		<option>Touch Fist</option>\
-		<option>Touch Point</option>\
-		<option>Touch Stroke</option>\
-		<option>Collision</option>\
-		<option>Appear</option>\
-	</select>\
-	<select size="1" class="eventActionSelector" style="display: none;">\
-		<option>...</option>\
-		<option>Toss</option>\
-		<option>Play sound</option>\
-		<option>Stop sounds</option>\
-		<option>Change Static</option>\
-	</select>\
-	<button style="display: none;">+</button>\
-	<button class="icon-del-small eventDeleteButton"></button>\
-	<div class="eventProperties" style="display: none;"></div>';
-
+	this.dom.eventTemplate.innerHTML = this.createTemplate();
 
 	this.dom.addButton = document.createElement( 'button' );
 	this.dom.addButton.textContent = '+';
 	this.dom.appendChild( this.dom.addButton );
 
 	this.dom.addButton.addEventListener('click', this.add.bind(this), false);
-
 
 
 	this.dom._changeEvent = document.createEvent('HTMLEvents');
@@ -1139,23 +1117,56 @@ UI.EventList = function (  ) {
 
 UI.EventList.prototype = Object.create( UI.Element.prototype );
 
-// tripperProperties and actionProperties is where you can define your triggers and actions!
-UI.EventList.prototype.triggerProperties = {
-	"Touch Fist": {
+// triggerProperties and actionProperties is where you can define your triggers and actions!
+// triggerProperties are defined in editor!
+//UI.EventList.prototype.triggerProperties = {
+//	"Touch Fist": {
+//
+//	},
+//	"Touch Point": {
+//
+//	},
+//	"Touch Stroke": {
+//
+//	},
+//	Collision: {
+//
+//	},
+//	Appear: {
+//
+//	}
+//};
 
-	},
-	"Touch Point": {
 
-	},
-	"Touch Stroke": {
+UI.EventList.prototype.createTemplate = function () {
 
-	},
-	Collision: {
+	this.triggerProperties = editor.getTriggerProperties();
 
-	},
-	Appear: {
+	var triggerHTML = '\
+	<select size="1" class="eventTriggerSelector">\
+		<option>...</option>';
 
+	for(var trigger in this.triggerProperties){
+		triggerHTML += '<option>'+trigger+'</option>';
 	}
+
+	triggerHTML += '</select>';
+
+	var actionHTML = '\
+	<select size="1" class="eventActionSelector" style="display: none;">\
+		<option>...</option>\
+		<option>Toss</option>\
+		<option>Play sound</option>\
+		<option>Stop sounds</option>\
+		<option>Change Static</option>\
+		<option>Notify Listeners</option>\
+		<option>Resurrect</option>\
+	</select>\
+	<button style="display: none;">+</button>\
+	<button class="icon-del-small eventDeleteButton"></button>\
+	<div class="eventProperties" style="display: none;"></div>';
+
+	return triggerHTML + actionHTML;
 };
 
 UI.EventList.prototype.actionProperties = {
@@ -1260,6 +1271,66 @@ UI.EventList.prototype.actionProperties = {
 		}
 	},
 	"Stop sounds": { },
+	"Notify Listeners":{
+		getUI: function ( ) {
+
+			var container = new UI.Panel();
+
+			container.add( new UI.Text( 'Name' ).setWidth( '90px' ) );
+			container.add( new UI.Input().onChange( this.fireChange ));
+			container.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+
+			return container;
+
+		},
+		getData: function ( container, resultObject ) {
+
+			var name = container.dom.querySelector('input.Input');
+			resultObject.mode = name.value;
+
+			var id = container.dom.querySelector('span.hiddenId').value;
+			if(!id){
+				// generate id per topic // todo generate real id
+				resultObject['topicId'] = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+			}else{
+				resultObject['topicId'] = id;
+			}
+
+		},
+		setData: function ( container, dataObject ) {
+
+			var name = container.dom.querySelector('input.Input');
+			name.value = dataObject.mode;
+
+			var id = container.dom.querySelector('span.hiddenId');
+			id.value = dataObject.topicId;
+
+		}
+	},
+	"Resurrect":{
+		getUI: function ( ) {
+
+			var container = new UI.Panel();
+
+			container.add( new UI.Text( 'Delay' ).setWidth( '90px' ) );
+			container.add( new UI.Number( 0.5 ).setRange(0, 10000).onChange( this.fireChange ));
+
+			return container;
+
+		},
+		getData: function ( container, resultObject, eventNode ) {
+
+			var delay = container.dom.querySelector('input.Number');
+			resultObject.mode = delay.value;
+
+		},
+		setData: function ( container, dataObject ) {
+
+			var delay = container.dom.querySelector('input.Number');
+			delay.value = dataObject.mode;
+
+		}
+	}
 
 };
 
@@ -1283,6 +1354,7 @@ UI.EventList.prototype.getValue = function ( ) {
 	for(var i = 0; i < events.length; ++i) {
 
 		var event = events[ i ];
+
 		if ( event.parentNode != this.dom ) continue;
 
 		var trigger = event.querySelector('select').value;
@@ -1296,8 +1368,8 @@ UI.EventList.prototype.getValue = function ( ) {
 
 			var propertiesElement = new UI.Panel( event.getElementsByClassName('eventProperties')[0] );
 
-			if ( this.triggerProperties[ trigger ].getData ) this.triggerProperties[ trigger ].getData( propertiesElement, data.trigger, event );
-			if ( this.actionProperties[ action ].getData ) this.actionProperties[ action ].getData( propertiesElement, data.action, event );
+				if ( this.triggerProperties[ trigger ].getData ) this.triggerProperties[ trigger ].getData( propertiesElement, data.trigger, event );
+				if ( this.actionProperties[ action ].getData ) this.actionProperties[ action ].getData( propertiesElement, data.action, event );
 
 			eventList.push( data );
 		}
@@ -1309,6 +1381,8 @@ UI.EventList.prototype.getValue = function ( ) {
 };
 
 UI.EventList.prototype.setValue = function ( events ) {
+
+	this.dom.eventTemplate.innerHTML = this.createTemplate();
 
 	// first, clear all entries
 	var oldRows = this.dom.parentNode.querySelectorAll( 'div.EventList > div' );
@@ -1332,22 +1406,35 @@ UI.EventList.prototype.setValue = function ( events ) {
 
 			var event = events[ i ];
 
-			var row = this.add();
+			// take current trigger type of linked observable by id
+			if(event.trigger.topicId) {
+				for(var triggr in this.triggerProperties){
+					if ( this.triggerProperties[triggr].topicId && this.triggerProperties[triggr].topicId == event.trigger.topicId ){
+						event.trigger.type = triggr;
+					}
+				}
+			}
 
-			var propertiesElement = new UI.Panel( row.getElementsByClassName('eventProperties')[0] );
+			// only add the event if the linked observable still exists, otherwise it is not added to the eventlist.
+			if(this.triggerProperties[event.trigger.type]){
+				var row = this.add();
 
-			// set selects
-			var selects = row.querySelectorAll('select');
-			selects[0].value = event.trigger.type;
-			selects[0].dispatchEvent(evt);
-			selects[1].value = event.action.type;
-			selects[1].dispatchEvent(evt);
+				var propertiesElement = new UI.Panel(row.getElementsByClassName('eventProperties')[0]);
 
-			var eventNode = this.eventList[ this.eventList.length - 1 ];
+				// set selects
+				var selects = row.querySelectorAll('select');
 
-			// set properties
-			if ( this.triggerProperties[ event.trigger.type ].setData ) this.triggerProperties[ event.trigger.type ].setData( propertiesElement, event.trigger, eventNode );
-			if ( this.actionProperties[ event.action.type ].setData ) this.actionProperties[ event.action.type ].setData( propertiesElement, event.action, eventNode );
+				selects[0].value = event.trigger.type;
+				selects[0].dispatchEvent(evt);
+				selects[1].value = event.action.type;
+				selects[1].dispatchEvent(evt);
+
+				var eventNode = this.eventList[this.eventList.length - 1];
+
+				// set properties
+				if (this.triggerProperties[event.trigger.type].setData) this.triggerProperties[event.trigger.type].setData(propertiesElement, event.trigger, eventNode);
+				if (this.actionProperties[event.action.type].setData) this.actionProperties[event.action.type].setData(propertiesElement, event.action, eventNode);
+			}
 		}
 
 		// activate firing changes again
@@ -1355,7 +1442,8 @@ UI.EventList.prototype.setValue = function ( events ) {
 
 	}
 
-}
+};
+
 
 UI.EventList.prototype.setLabel = function ( value ) {
 
@@ -1370,7 +1458,7 @@ UI.EventList.prototype.add = function() {
 	//properties will be attached to clone whenever necessary.
 	var clone = this.dom.eventTemplate.cloneNode(true);
 
-	this.dom.insertBefore(clone,this.dom.firstChild);
+	this.dom.insertBefore(clone, this.dom.firstChild);
 
 	var triggerDropdown = clone.querySelector('select');
 
@@ -1476,7 +1564,6 @@ UI.RuntimeMaterial = function (  ) {
 	this.dom.appendChild( this.dom.addButton );
 
 	this.dom.addButton.addEventListener('click', this.add.bind(this), false);
-
 
 
 	this.dom._changeEvent = document.createEvent('HTMLEvents');

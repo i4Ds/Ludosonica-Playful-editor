@@ -24,9 +24,10 @@ Play.prototype.actionTimeouts = {
 		'Touch Stroke': 1000,
 		'Collision': 150
 	}
-}
+};
 
 Play.prototype.playAction = function ( object, eventIndex, args ) {
+
 	var action = object.events[ eventIndex ].action;
 	var triggerType = object.events[ eventIndex ].trigger.type;
 	var timeout = typeof this.actionTimeouts[ action.type ] == 'object' ? this.actionTimeouts[ action.type ][ triggerType ] || 0 : this.actionTimeouts[ action.type ] || 0;
@@ -34,7 +35,8 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 	if ( (object._eventsLastFired[ eventIndex ] || 0) + timeout > new Date().getTime() ) return;
 	
 	args = args || {};
-	
+
+	// todo add swith case for new ui placement of resurrection
 	switch ( action.type ) {
 		case 'Toss':
 		
@@ -75,6 +77,31 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 		case 'Custom':
 			action.func.apply( object );
 		break;
+		case 'Resurrect':
+				object._resurrectionBehaviorTimeout = setTimeout(function () {
+
+					console.log('timeout', object._resurrectionPos.clone());
+					object.position.copy(object._resurrectionPos);
+					object.rotation.copy(object._resurrectionRot);
+					object.mass = object._resurrectionMass;
+					object.__dirtyPosition = true;
+					object.__dirtyRotation = true;
+					object.setAngularVelocity(new THREE.Vector3());
+					object.setLinearVelocity(new THREE.Vector3());
+					object._resurrectionBehaviorTimeout = undefined;
+
+				}.bind(object), parseInt(action.mode) * 1000);
+			break;
+		case 'Notify Listeners':
+
+			// todo new: notify handlers!
+			// notify. -> dispatch signal
+			var topic = object.name+':'+action.mode;
+			if(editor.objectSignals[topic]) editor.objectSignals[topic].dispatch();
+			else console.log('no topic', topic, 'in', editor.objectSignals);
+
+
+			break;
 	}
 	
 	object._eventsLastFired[ eventIndex ] = new Date().getTime();

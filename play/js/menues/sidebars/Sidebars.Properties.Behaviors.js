@@ -26,41 +26,41 @@ Sidebars.Properties.Behaviors = function ( editor ) {
 
 	
 	// resurrection
-
-	var resurrectionRow = new UI.Panel();
-	resurrectionRow.setClass('row');
-	var resurrection = new UI.Behavior( 'Resurrection' ).onChange( update );
-	
-	var resurrectionPropertiesPanel = new UI.Panel();
-	resurrectionPropertiesPanel.add( new UI.Text('Activator').setWidth('90px') );
-	var resurrectionPropertiesActivator = new UI.Select().setOptions({ 'collision':'Collision' }).setWidth('150px').onChange( resurrection.fireChange );
-	resurrectionPropertiesPanel.add( resurrectionPropertiesActivator );
-	resurrectionPropertiesPanel.add( new UI.Text('Delay (sec)').setWidth('90px') );
-	var resurrectionPropertiesDelay = new UI.Number( 0.5 ).setRange(0, 10000).onChange( resurrection.fireChange );
-	resurrectionPropertiesPanel.add( resurrectionPropertiesDelay );
-	resurrection.setPropertiesDOM( resurrectionPropertiesPanel.dom );
-	
-	resurrection.setProperties = function ( properties ) {
-	
-		resurrectionPropertiesActivator.setValue( properties.activator );
-		resurrectionPropertiesDelay.setValue( properties.delay );
-		
-	};
-	resurrection.getProperties = function (  ) {
-		
-		return { activator: resurrectionPropertiesActivator.getValue(), delay: resurrectionPropertiesDelay.getValue() };
-		
-	};
-
-	resurrectionRow.add( resurrection );
-
-	container.add( resurrectionRow );
+	// todo the resurrection is moved to events section. Delete this if tested
+	//var resurrectionRow = new UI.Panel();
+	//resurrectionRow.setClass('row');
+	//var resurrection = new UI.Behavior( 'Resurrection' ).onChange( update );
+	//
+	//var resurrectionPropertiesPanel = new UI.Panel();
+	//resurrectionPropertiesPanel.add( new UI.Text('Activator').setWidth('90px') );
+	//var resurrectionPropertiesActivator = new UI.Select().setOptions({ 'collision':'Collision' }).setWidth('150px').onChange( resurrection.fireChange );
+	//resurrectionPropertiesPanel.add( resurrectionPropertiesActivator );
+	//resurrectionPropertiesPanel.add( new UI.Text('Delay (sec)').setWidth('90px') );
+	//var resurrectionPropertiesDelay = new UI.Number( 0.5 ).setRange(0, 10000).onChange( resurrection.fireChange );
+	//resurrectionPropertiesPanel.add( resurrectionPropertiesDelay );
+	//resurrection.setPropertiesDOM( resurrectionPropertiesPanel.dom );
+	//
+	//resurrection.setProperties = function ( properties ) {
+	//
+	//	resurrectionPropertiesActivator.setValue( properties.activator );
+	//	resurrectionPropertiesDelay.setValue( properties.delay );
+	//
+	//};
+	//resurrection.getProperties = function (  ) {
+	//
+	//	return { activator: resurrectionPropertiesActivator.getValue(), delay: resurrectionPropertiesDelay.getValue() };
+	//
+	//};
+    //
+	//resurrectionRow.add( resurrection );
+    //
+	//container.add( resurrectionRow );
 	
 	//
 	
 	var behaviorList = {
-		'rocket': rocket,
-		'resurrection': resurrection
+		'rocket': rocket
+		//'resurrection': resurrection
 	};
 	
 	function update() {

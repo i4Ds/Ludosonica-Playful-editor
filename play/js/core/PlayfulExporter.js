@@ -271,7 +271,7 @@ THREE.PlayfulExporter.prototype = {
 
                 }
 
-                console.log(object.skybox);
+
                 if (object.skybox) {
 
                     data.skybox = {

@@ -22,7 +22,9 @@ Sidebars.Properties.Events = function ( editor ) {
 
 	function update( ) {
 
-		objectSelected.events = eventList.getValue();
+		var events = eventList.getValue();
+		 //console.log('get events object', events);
+		objectSelected.events = events;
 
 		if ( objectSelected._egh ) editor.setEdge( objectSelected );
 
