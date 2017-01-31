@@ -32,10 +32,10 @@ Sidebars.Properties.Physics = function (editor) {
 
             // update to template value
             var template = editor.templateManager.getTemplateOfInstance(objectSelected.id);
-            var frictionValue = template.material._physijs.friction;
-            physicsFriction.setValue(frictionValue);
+            var value = template.material._physijs.friction;
+            physicsFriction.setValue(value);
 
-            signals.objectChanged.dispatch(objectSelected);
+            update();
         }
     });
     var physicsFriction = new UI.Number(0.5).setRange(0, 1).onChange(function () {
@@ -69,7 +69,7 @@ Sidebars.Properties.Physics = function (editor) {
             var value = template.material._physijs.restitution;
             physicsRestitution.setValue(value);
 
-            signals.objectChanged.dispatch(objectSelected);
+            update();
         }
     });
     var physicsRestitution = new UI.Number(0.5).setRange(0, 1).onChange(function (){
@@ -103,7 +103,7 @@ Sidebars.Properties.Physics = function (editor) {
             var value = template.isStatic;
             physicsMode.setValue(value);
 
-            signals.objectChanged.dispatch(objectSelected);
+            update();
         }
     });
     var physicsMode = new UI.Checkbox(false).onChange(function (){

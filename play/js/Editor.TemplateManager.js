@@ -32,11 +32,8 @@ Editor.TemplateManager = function ( editor ) {
             'scale': true,
             'visible' : true,
             'geometry': true,
-            'color' : true,
             'edges': true,
-            'texture' : true,
             'blending' : true,
-            'opacity' : true,
             'runtimeMaterial' : true,
             'rocket' : true,
             'resurrection' : true

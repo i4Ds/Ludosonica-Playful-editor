@@ -1,8 +1,17 @@
+/**
+ * 31.1.17 template link / unlink functionality is only added to properties: COLOR, MAP, OPACITY
+ * all the others did not work at that time or were of no use.
+ *
+ * @param editor
+ * @returns {UI.Panel}
+ * @constructor
+ */
+
 Sidebars.Properties.Material = function (editor) {
 
     var signals = editor.signals;
 
-    var objService = editor.objectPropertyService;
+    var objectSelected = undefined;
 
     var materialClasses = {
 
@@ -22,6 +31,15 @@ Sidebars.Properties.Material = function (editor) {
 
     };
 
+    // template link / unlink functionality is only added to properties: COLOR, MAP, OPACITY
+    // add instance properties
+    var COLOR_PROP = 'color';
+    var MAP_PROP = 'map';
+    var OPACITY_PROP = 'opacity';
+    editor.templateManager.addLinkProperty(COLOR_PROP);
+    editor.templateManager.addLinkProperty(MAP_PROP);
+    editor.templateManager.addLinkProperty(OPACITY_PROP);
+
     var container = new UI.Panel();
     container.setDisplay('none');
 
@@ -30,7 +48,7 @@ Sidebars.Properties.Material = function (editor) {
     // uuid (disabled)
 
     var materialUUIDRow = new UI.Panel();
-    materialUUIDRow.setClass("row");
+    materialUUIDRow.setClass("row disabled");
     var materialUUID = new UI.Input().setWidth('115px').setColor('#444').setFontSize('12px').setDisabled(true);
     var materialUUIDRenew = new UI.Button('⟳').setMarginLeft('7px').onClick(function () {
 
@@ -41,13 +59,13 @@ Sidebars.Properties.Material = function (editor) {
     materialUUIDRow.add(new UI.Text('UUID').setWidth('90px'));
     materialUUIDRow.add(materialUUID);
     materialUUIDRow.add(materialUUIDRenew);
-    //container.add( materialUUIDRow );
+    container.add( materialUUIDRow );
 
 
     // name (disabled)
 
     var materialNameRow = new UI.Panel();
-    materialNameRow.setClass("row easy");
+    materialNameRow.setClass("row easy disabled");
     var materialName = new UI.Input().setWidth('150px').setColor('#444').setFontSize('12px').onChange(function () {
 
         editor.setMaterialName(editor.selected.material, materialName.getValue());
@@ -55,13 +73,13 @@ Sidebars.Properties.Material = function (editor) {
     });
     materialNameRow.add(new UI.Text('Name').setWidth('90px'));
     materialNameRow.add(materialName);
-    //container.add( materialNameRow );
+    container.add( materialNameRow );
 
 
-    // class (disabled)
+    // class (disabled) -> not all work but some would be funny
 
     var materialClassRow = new UI.Panel();
-    materialClassRow.setClass("row advanced");
+    materialClassRow.setClass("row advanced disabled");
     var materialClass = new UI.Select().setOptions({
 
         'LineBasicMaterial': 'LineBasicMaterial',
@@ -77,15 +95,37 @@ Sidebars.Properties.Material = function (editor) {
     }).setWidth('150px').setColor('#444').setFontSize('12px').onChange(update);
     materialClassRow.add(new UI.Text('Type').setWidth('90px'));
     materialClassRow.add(materialClass);
-    //container.add( materialClassRow );
+    container.add( materialClassRow );
 
 
-    // color
+    // COLOR (not disabled!)
 
     var materialColorRow = new UI.Panel();
     materialColorRow.setClass("row easy");
-    var materialColor = new UI.Color().onChange(update);
+    var colorLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
+        if (this.dom.className.indexOf('linked') === -1) {
+            objectSelected.isLinked[COLOR_PROP] = true;
+            this.setClass('icn icon-link linked');
+
+            // update to template value
+            var template = editor.templateManager.getTemplateOfInstance(objectSelected.id);
+            var value = template.material.color;
+            materialColor.setHexValue(value.getHexString());
+
+            update();
+        }
+    });
+    var materialColor = new UI.Color().onChange(function () {
+
+        if (objectSelected.isInstance) {
+            objectSelected.isLinked[COLOR_PROP] = false;
+            colorLink.setClass('icn icon-link link');
+        }
+        update();
+    });
+
+    materialColorRow.add(colorLink);
     materialColorRow.add(new UI.Text('Color').setWidth('90px'));
     materialColorRow.add(materialColor);
 
@@ -113,7 +153,7 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialAmbientRow);
 
 
-    // emissive (disabled)
+    // emissive (disabled) -> would be funny
 
     var materialEmissiveRow = new UI.Panel();
     materialEmissiveRow.setClass("row disabled");
@@ -125,18 +165,18 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialEmissiveRow);
 
 
-    // specular (disabled)
+    // specular (disabled) -> would work
 
     var materialSpecularRow = new UI.Panel();
-    materialSpecularRow.setClass("row");
+    materialSpecularRow.setClass("row disabled");
     var materialSpecular = new UI.Color().onChange(update);
 
     materialSpecularRow.add(new UI.Text('Specular').setWidth('90px'));
     materialSpecularRow.add(materialSpecular);
-    //container.add( materialSpecularRow );
+    container.add( materialSpecularRow );
 
 
-    // shininess (disabled)
+    // shininess (disabled) -> would work
 
     var materialShininessRow = new UI.Panel();
     materialShininessRow.setClass("row disabled");
@@ -164,13 +204,36 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialVertexColorsRow);
 
 
-    // map
+    // MAP (not disabled!)
 
     var materialMapRow = new UI.Panel();
     materialMapRow.setClass("row advanced");
-    //var materialMapEnabled = new UI.Checkbox(false).onChange(update);
-    var materialMap = new UI.Texture().setColor('#444').onChange(update);
+    var mapLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
+        if (this.dom.className.indexOf('linked') === -1) {
+            objectSelected.isLinked[MAP_PROP] = true;
+            this.setClass('icn icon-link linked');
+
+            // update to template value
+            var template = editor.templateManager.getTemplateOfInstance(objectSelected.id);
+            var value = template.material.map;
+            materialMap.setValue(value);
+
+            update();
+        }
+    });
+
+    //var materialMapEnabled = new UI.Checkbox(false).onChange(update);
+    var materialMap = new UI.Texture().setColor('#444').onChange(function () {
+
+        if (objectSelected.isInstance) {
+            objectSelected.isLinked[MAP_PROP] = false;
+            mapLink.setClass('icn icon-link link');
+        }
+        update();
+    });
+
+    materialMapRow.add(mapLink);
     materialMapRow.add(new UI.Text('Texture').setWidth('90px'));
     //materialMapRow.add(materialMapEnabled);
     materialMapRow.add(materialMap);
@@ -252,7 +315,7 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialEnvMapRow);
 
 
-    // blending (diabled)
+    // blending (diabled) -> would be funny
 
     var materialBlendingRow = new UI.Panel();
     materialBlendingRow.setClass("row advanced disabled");
@@ -291,12 +354,35 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialSideRow);
 
 
-    // opacity
+    // OPACITY (not disabled!)
 
     var materialOpacityRow = new UI.Panel();
     materialOpacityRow.setClass("row");
-    var materialOpacity = new UI.Number().setWidth('24px').setRange(0, 1).onChange(update);
+    var opacityLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
+        if (this.dom.className.indexOf('linked') === -1) {
+            objectSelected.isLinked[OPACITY_PROP] = true;
+            this.setClass('icn icon-link linked');
+
+            // update to template value
+            var template = editor.templateManager.getTemplateOfInstance(objectSelected.id);
+            var value = template.material.opacity;
+            materialOpacity.setValue(value);
+
+            update();
+        }
+    });
+
+    var materialOpacity = new UI.Number().setWidth('24px').setRange(0, 1).onChange(function () {
+
+        if (objectSelected.isInstance) {
+            objectSelected.isLinked[OPACITY_PROP] = false;
+            opacityLink.setClass('icn icon-link link');
+        }
+        update();
+    });
+
+    materialOpacityRow.add(opacityLink);
     materialOpacityRow.add(new UI.Text('Opacity').setWidth('90px'));
     materialOpacityRow.add(materialOpacity);
 
@@ -329,10 +415,10 @@ Sidebars.Properties.Material = function (editor) {
     container.add(materialWireframeRow);
 
 
-    // runtime material
+    // runtime material -> does not work -> (disabled)
 
     var runtimeMaterialRow = new UI.Panel();
-    runtimeMaterialRow.setClass("row advanced");
+    runtimeMaterialRow.setClass("row disabled");
     var runtimeMaterial = new UI.RuntimeMaterial().onChange(update);
 
     runtimeMaterialRow.add(new UI.Text('Runtime material changes').setWidth('300px'));
@@ -387,7 +473,7 @@ Sidebars.Properties.Material = function (editor) {
                         var instMaterial = instObjects[i].material;
 
                         // check if property of the current instance is linked to the template or not.
-                        if (instObjects[i].isLinked.color) {
+                        if (instObjects[i].isLinked[COLOR_PROP]) {
                             instMaterial.color.setHex(materialColor.getHexValue());
                         }
 
@@ -457,7 +543,7 @@ Sidebars.Properties.Material = function (editor) {
                 //var mapEnabled = materialMapEnabled.getValue() === true;
                 var mapEnabled = true;
 
-                // COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
+                // MAP UPDATE OF TEMPLATE AND ITS INSTANCES
                 if (object.isTemplate) {
 
                     var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
@@ -468,7 +554,7 @@ Sidebars.Properties.Material = function (editor) {
                         var instGeometry = instObjects[i].geometry;
 
                         // check if property of the current instance is linked to the template or not.
-                        if (instObjects[i].isLinked.color) {
+                        if (instObjects[i].isLinked[MAP_PROP]) {
 
                             if (objectHasUvs) {
 
@@ -643,7 +729,7 @@ Sidebars.Properties.Material = function (editor) {
                         var instMaterial = instObjects[i].material;
 
                         // check if property of the current instance is linked to the template or not.
-                        if (instObjects[i].isLinked.opacity) {
+                        if (instObjects[i].isLinked[OPACITY_PROP]) {
 
                             instMaterial.opacity = materialOpacity.getValue();
                             // CUSTOM
@@ -695,7 +781,7 @@ Sidebars.Properties.Material = function (editor) {
 
         }
 
-    };
+    }
 
     function updateRows() {
 
@@ -732,7 +818,7 @@ Sidebars.Properties.Material = function (editor) {
 
         }
 
-    };
+    }
 
     // signals
 
@@ -750,6 +836,7 @@ Sidebars.Properties.Material = function (editor) {
 
             container.setDisplay('');
 
+            objectSelected = object;
             var material = object.material;
 
             if (material.uuid !== undefined) {
@@ -898,6 +985,39 @@ Sidebars.Properties.Material = function (editor) {
 
             //updateRows();
 
+            // link icon / button
+            if (objectSelected.isInstance) {
+
+                $(colorLink.dom).show();
+                $(mapLink.dom).show();
+                $(opacityLink.dom).show();
+
+                // set link to linked icon if property is linked or to link button if not for all props:
+                // color
+                if (objectSelected.isLinked[COLOR_PROP]) {
+                    colorLink.setClass('icn icon-link linked');
+                } else {
+                    colorLink.setClass('icn icon-link link');
+                }
+                // map
+                if (objectSelected.isLinked[MAP_PROP]) {
+                    mapLink.setClass('icn icon-link linked');
+                } else {
+                    mapLink.setClass('icn icon-link link');
+                }
+                // opacity
+                if (objectSelected.isLinked[OPACITY_PROP]) {
+                    opacityLink.setClass('icn icon-link linked');
+                } else {
+                    opacityLink.setClass('icn icon-link link');
+                }
+
+            } else {
+                $(colorLink.dom).hide();
+                $(mapLink.dom).hide();
+                $(opacityLink.dom).hide();
+            }
+
         } else {
 
             container.setDisplay('none');
@@ -914,4 +1034,4 @@ Sidebars.Properties.Material = function (editor) {
 
     return container;
 
-}
+};

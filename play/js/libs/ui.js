@@ -1097,15 +1097,14 @@ UI.EventList = function (  ) {
 
 	this.dom = dom;
 
-	this.dom.eventTemplate = document.createElement( 'div' );
-	this.dom.eventTemplate.innerHTML = this.createTemplate();
-
 	this.dom.addButton = document.createElement( 'button' );
 	this.dom.addButton.textContent = '+';
 	this.dom.appendChild( this.dom.addButton );
 
 	this.dom.addButton.addEventListener('click', this.add.bind(this), false);
 
+	this.dom.eventTemplate = document.createElement( 'div' );
+	this.dom.eventTemplate.innerHTML = this.createTemplate();
 
 	this.dom._changeEvent = document.createEvent('HTMLEvents');
 	this.dom._changeEvent.initEvent( 'change', true, true );
@@ -1162,7 +1161,7 @@ UI.EventList.prototype.createTemplate = function () {
 		<option>Notify Listeners</option>\
 		<option>Resurrect</option>\
 	</select>\
-	<button style="display: none;">+</button>\
+	<button style="display: none;">...</button>\
 	<button class="icon-del-small eventDeleteButton"></button>\
 	<div class="eventProperties" style="display: none;"></div>';
 
@@ -1458,7 +1457,8 @@ UI.EventList.prototype.add = function() {
 	//properties will be attached to clone whenever necessary.
 	var clone = this.dom.eventTemplate.cloneNode(true);
 
-	this.dom.insertBefore(clone, this.dom.firstChild);
+	//this.dom.insertBefore(clone, this.dom.firstChild);
+	this.dom.appendChild(clone);
 
 	var triggerDropdown = clone.querySelector('select');
 
@@ -1507,7 +1507,7 @@ UI.EventList.prototype.add = function() {
 			event.target.innerHTML = '-';
 		} else {
 			propertiesElement.dom.style.display = 'none';
-			event.target.innerHTML = '+';
+			event.target.innerHTML = '...';
 		}
 
 	}.bind(this), false);
@@ -1782,7 +1782,8 @@ UI.RuntimeMaterial.prototype.add = function() {
 	//properties will be attached to clone whenever necessary.
 	var clone = this.dom.eventTemplate.cloneNode(true);
 
-	this.dom.insertBefore(clone,this.dom.firstChild);
+	//this.dom.insertBefore(clone,this.dom.firstChild);
+	this.dom.appendChild(clone);
 
 	var triggerDropdown = clone.querySelector('select');
 	var actionDropdown = clone.getElementsByClassName('eventActionSelector')[0];
