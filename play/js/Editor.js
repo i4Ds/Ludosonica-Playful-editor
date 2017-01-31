@@ -1,6 +1,8 @@
-var Editor = function () {
+var Editor = function ( isDevMode ) {
 
     var SIGNALS = signals;
+
+    this.isDevMode = isDevMode;
 
     this.signals = {
 
@@ -290,6 +292,7 @@ Editor.prototype = {
         this.templateManager.removeTemplate(templateId);
 
         this.signals.templateDeleted.dispatch();
+        this.signals.sceneGraphChanged.dispatch();
 
     },
 

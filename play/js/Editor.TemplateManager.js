@@ -4,6 +4,11 @@ Editor.TemplateManager = function ( editor ) {
     this.editor = editor;
 
     this.signals = editor.signals;
+    this.linkProperties = {};
+
+    this.addLinkProperty = function ( property ) {
+        this.linkProperties[property] = true;
+    };
 
     this.addTemplate = function ( template, instance ) {
 
@@ -17,6 +22,9 @@ Editor.TemplateManager = function ( editor ) {
 
         instance.isInstance = true;
 
+        // todo problem: if new object attribute is added or if object attribute is deleted this list has to be updated
+        // not generic enough!
+        // possible solution: method as interface to add a new isLinked property
         this.isLinked = {
             'parent': true,
             'position': true,
@@ -24,9 +32,6 @@ Editor.TemplateManager = function ( editor ) {
             'scale': true,
             'visible' : true,
             'geometry': true,
-            'friction': true,
-            'bounciness' : true,
-            'static' : true,
             'color' : true,
             'edges': true,
             'texture' : true,
@@ -37,7 +42,7 @@ Editor.TemplateManager = function ( editor ) {
             'resurrection' : true
         };
 
-        instance.isLinked = this.isLinked;
+        instance.isLinked = this.linkProperties;
 
         templateInstanceMap.push({
             template: template,
@@ -45,6 +50,7 @@ Editor.TemplateManager = function ( editor ) {
         });
 
         this.signals.templateAdded.dispatch();
+        this.signals.sceneGraphChanged.dispatch();
 
         editor.setTemplates ( templateInstanceMap );
 
@@ -55,6 +61,11 @@ Editor.TemplateManager = function ( editor ) {
     this.removeTemplate = function ( templateId ){
 
         var templateInstanceMap = editor.scene.templates;
+
+        var instancesOfTemplate = this.getInstancesOfTemplate(templateId);
+        for(var i = 0; i < instancesOfTemplate.length; i++){
+            instancesOfTemplate[i].isInstance = false;
+        }
 
         var templIndex = this._getIndexOfTemplate( templateInstanceMap, templateId );
 
@@ -71,7 +82,6 @@ Editor.TemplateManager = function ( editor ) {
         var templateInstanceMap = editor.scene.templates;
 
         for( var i = 0; i < templateInstanceMap.length; i++ ) {
-
 
             var instances = templateInstanceMap[i].instances;
 
@@ -128,6 +138,31 @@ Editor.TemplateManager = function ( editor ) {
 
 
 
+    this.getTemplateOfInstance = function ( instanceId ) {
+
+        var templateInstanceMap = editor.scene.templates;
+
+        for( var i = 0; i < templateInstanceMap.length; i++ ) {
+            var instances = templateInstanceMap[i].instances;
+
+            for ( var j = 0; j < instances.length; j++){
+
+                var index = this._getIndexOfInstance( instances, instanceId );
+
+                if( index > -1 ){
+                    return templateInstanceMap[i].template;
+                }
+
+            }
+        }
+    };
+
+
+    /**
+     * creates a new instance for a template
+     * @param templateId
+     * @returns {*} new instance
+     */
     this.getInstanceForTemplate = function ( templateId ) {
 
         var templateInstanceMap = editor.scene.templates;
@@ -138,7 +173,7 @@ Editor.TemplateManager = function ( editor ) {
         instance.material = instance.material.clone();
         instance.isInstance = true;
 
-        instance.isLinked = this.isLinked;
+        instance.isLinked = this.linkProperties;
 
         this._addInstanceOfTemplate( templateInstanceMap, instance, templateId );
 
@@ -148,7 +183,11 @@ Editor.TemplateManager = function ( editor ) {
     };
 
 
-
+    /**
+     * returns an array of instances mesh objects.
+     * @param templateId
+     * @returns {Array|*}
+     */
     this.getInstancesOfTemplate = function ( templateId ) {
 
         var templateInstanceMap = editor.scene.templates;

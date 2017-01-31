@@ -41,6 +41,7 @@ Tools.Modes = function ( editor ) {
 			$('#menu-file').show();
 			$('#menu-save').show();
 			$('#menu-object').show();
+			$('#menu-template').show();
 			$('#menu-scene').show();
 			$('#modes-translate').show();
 			$('#modes-scale').show();
@@ -57,6 +58,7 @@ Tools.Modes = function ( editor ) {
 			$('#menu-file').hide();
 			$('#menu-save').hide();
 			$('#menu-object').hide();
+			$('#menu-template').hide();
 			$('#menu-scene').hide();
 			$('#modes-translate').hide();
 			$('#modes-scale').hide();

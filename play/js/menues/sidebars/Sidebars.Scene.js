@@ -63,13 +63,11 @@ Sidebars.Scene = function ( editor ) {
 						if( !object.isInstance ){
 
 							html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
-							// todo AFTER MAEKSHOP
-							//html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
+							html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
 
 						}
 
 					}
-
 
 
 					/*if ( object instanceof THREE.Mesh ) {
@@ -149,8 +147,6 @@ Sidebars.Scene = function ( editor ) {
 
 				var clone = object.clone();
 				clone.material = clone.material.clone();
-
-				console.log('clone', clone);
 
 				editor.templateManager.addTemplate( clone, object );
 

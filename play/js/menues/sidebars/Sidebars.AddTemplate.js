@@ -63,7 +63,6 @@ Sidebars.AddTemplate = function (editor) {
 
             if (deleteBtn.length > 0) $(deleteBtn[0]).click(function (el) {
 
-                // todo remove all instances? maybe better: detach all inst.
                 editor.removeTemplate(this.value);
                 editor.select( null );
 

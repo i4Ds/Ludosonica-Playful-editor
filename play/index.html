@@ -191,7 +191,7 @@
     var workMode = 'easy';
     var IS_DEV_MODE = false;
 
-    var editor = new Editor();
+    var editor = new Editor( IS_DEV_MODE );
 
     var viewportParent = new Viewport(editor);
     var viewport = viewportParent.getContainer();
@@ -327,7 +327,6 @@
         if (sceneId !== null && play) {
 
             var onLoadComplete = function () {
-                console.log('hallo velo');
                 $('#modes-play').click();
                 $('#modes-play').hide();
                 $('#menu-gallery').show();
