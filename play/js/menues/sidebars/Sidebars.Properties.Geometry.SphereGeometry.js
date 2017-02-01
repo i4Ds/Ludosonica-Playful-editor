@@ -1,12 +1,10 @@
-Sidebars.Properties.Geometry.SphereGeometry = function ( signals, object ) {
+Sidebars.Properties.Geometry.SphereGeometry = function ( signals, object, linkProperties ) {
 
 	var container = new UI.Panel();
 
 	var geometry = object.geometry;
 
-	var RADIUS_PROP = 'sphere_radius';
-	// add instance properties
-	editor.templateManager.addLinkProperty(RADIUS_PROP);
+	var RADIUS_PROP = linkProperties.RADIUS_PROP;
 
 
 	// radius

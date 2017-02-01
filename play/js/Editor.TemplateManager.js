@@ -26,20 +26,8 @@ Editor.TemplateManager = function ( editor ) {
 
         instance.isInstance = true;
 
-        this.isLinked = {
-            'parent': true,
-            'position': true,
-            'rotation': true,
-            'scale': true,
-            'visible' : true,
-            'edges': true,
-            'blending' : true,
-            'runtimeMaterial' : true,
-            'rocket' : true,
-            'resurrection' : true
-        };
-
-        instance.isLinked = this.linkProperties;
+        //instance.isLinked = this.linkProperties;
+        instance.isLinked = jQuery.extend({}, this.linkProperties);
 
         templateInstanceMap.push({
             template: template,
@@ -170,7 +158,7 @@ Editor.TemplateManager = function ( editor ) {
         instance.material = instance.material.clone();
         instance.isInstance = true;
 
-        instance.isLinked = this.linkProperties;
+        instance.isLinked = jQuery.extend({}, this.linkProperties);
 
         this._addInstanceOfTemplate( templateInstanceMap, instance, templateId );
 

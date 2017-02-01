@@ -1,16 +1,12 @@
-Sidebars.Properties.Geometry.BoxGeometry = function (signals, object) {
+Sidebars.Properties.Geometry.BoxGeometry = function (signals, object, linkProperties) {
 
     var container = new UI.Panel();
 
     var geometry = object.geometry;
 
-    var WIDTH_PROP = 'width';
-    var HEIGHT_PROP = 'height';
-    var DEPTH_PROP = 'depth';
-    // add instance properties
-    editor.templateManager.addLinkProperty(WIDTH_PROP);
-    editor.templateManager.addLinkProperty(HEIGHT_PROP);
-    editor.templateManager.addLinkProperty(DEPTH_PROP);
+    var WIDTH_PROP = linkProperties.WIDTH_PROP;
+    var HEIGHT_PROP = linkProperties.HEIGHT_PROP;
+    var DEPTH_PROP = linkProperties.DEPTH_PROP;
 
     // width
 
@@ -18,7 +14,7 @@ Sidebars.Properties.Geometry.BoxGeometry = function (signals, object) {
     widthRow.setClass("row");
     // check if object property is linked or not, because ui is rebuilt on each object selected event.
     if (object.isInstance) {
-
+        //console.log('new ui', object, object.isLinked[WIDTH_PROP]);
         var linkClassW = object.isLinked[WIDTH_PROP] ? 'linked' : 'link';
         var widthLink = new UI.Text('').setClass('icn icon-link ' + linkClassW).onClick(function () {
 
@@ -43,6 +39,7 @@ Sidebars.Properties.Geometry.BoxGeometry = function (signals, object) {
         if (object.isInstance) {
             object.isLinked[WIDTH_PROP] = false;
             widthLink.setClass('icn icon-link link');
+            //console.log('on change', object, object.isLinked[WIDTH_PROP]);
         }
         update();
     });
