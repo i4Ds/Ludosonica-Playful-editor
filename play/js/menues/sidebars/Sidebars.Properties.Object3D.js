@@ -1,700 +1,917 @@
-Sidebars.Properties.Object3D = function ( editor ) {
+Sidebars.Properties.Object3D = function (editor) {
+
+    var signals = editor.signals;
+
 
-	var signals = editor.signals;
+    // template link / unlink functionality is only added to properties: POSITION, ROTATION, SCALE
+    // add instance properties
+    //var NAME_PROP = 'color';
+    var PARENT_PROP = 'map';
+    var POSITION_PROP = 'opacity';
+    var ROTATION_PROP = 'obj_rotation';
+    var SCALE_PROP = 'obj_scale';
+    //editor.templateManager.addLinkProperty(NAME_PROP);
+    editor.templateManager.addLinkProperty(PARENT_PROP);
+    editor.templateManager.addLinkProperty(POSITION_PROP);
+    editor.templateManager.addLinkProperty(ROTATION_PROP);
+    editor.templateManager.addLinkProperty(SCALE_PROP);
+
+
+    var container = new UI.Panel();
+    container.setDisplay('none');
+
+    $("<h3/>", {html: "Object"}).appendTo(container.dom);
+    var objectType = new UI.Text().setClass("objectType");
+    container.add(objectType);
 
-	var container = new UI.Panel();
-	container.setDisplay( 'none' );
+    // uuid
 
-	$("<h3/>",{ html: "Object" }).appendTo( container.dom );
-	var objectType = new UI.Text().setClass("objectType");
-	container.add( objectType );
+    var objectUUIDRow = new UI.Panel();
+    objectUUIDRow.setClass("row");
+    var objectUUID = new UI.Input().setWidth('115px').setColor('#444').setFontSize('12px').setDisabled(true);
+    var objectUUIDRenew = new UI.Button('⟳').setMarginLeft('7px').onClick(function () {
 
-	// uuid
+        objectUUID.setValue(THREE.Math.generateUUID());
 
-	var objectUUIDRow = new UI.Panel();
-	objectUUIDRow.setClass("row");
-	var objectUUID = new UI.Input().setWidth( '115px' ).setColor( '#444' ).setFontSize( '12px' ).setDisabled( true );
-	var objectUUIDRenew = new UI.Button( '⟳' ).setMarginLeft( '7px' ).onClick( function () {
+        editor.selected.uuid = objectUUID.getValue();
 
-		objectUUID.setValue( THREE.Math.generateUUID() );
+    });
 
-		editor.selected.uuid = objectUUID.getValue();
+    objectUUIDRow.add(new UI.Text('UUID').setWidth('90px'));
+    objectUUIDRow.add(objectUUID);
+    objectUUIDRow.add(objectUUIDRenew);
 
-	} );
+    objectUUIDRow.setDisplay('none');
 
-	objectUUIDRow.add( new UI.Text( 'UUID' ).setWidth( '90px' ) );
-	objectUUIDRow.add( objectUUID );
-	objectUUIDRow.add( objectUUIDRenew );
-	
-	objectUUIDRow.setDisplay('none');
+    container.add(objectUUIDRow);
 
-	container.add( objectUUIDRow );
 
-	// name
+    // name
 
-	var objectNameRow = new UI.Panel();
-	objectNameRow.setClass("row");
-	var objectName = new UI.Input().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( function () {
+    var objectNameRow = new UI.Panel();
+    objectNameRow.setClass("row");
+    //var nameLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
+    //
+    //	if (this.dom.className.indexOf('linked') === -1) {
+    //		editor.selected.isLinked[NAME_PROP] = true;
+    //		this.setClass('icn icon-link linked');
+    //
+    //		// update to template value
+    //		var template = editor.templateManager.getTemplateOfInstance(object.id);
+    //		var value = template.name;
+    //		objectName.setValue(value);
+    //
+    //		update();
+    //	}
+    //});
+    var objectName = new UI.Input().setWidth('150px').setColor('#444').setFontSize('12px').onChange(function () {
 
-			editor.setObjectName( editor.selected, objectName.getValue() );
+        //if (editor.selected.isInstance) {
+        //	editor.selected.isLinked[NAME_PROP] = false;
+        //	nameLink.setClass('icn icon-link link');
+        //}
+        editor.setObjectName(editor.selected, objectName.getValue());
 
-	} );
+    });
 
-	objectNameRow.add( new UI.Text( 'Name' ).setWidth( '90px' ) );
-	objectNameRow.add( objectName );
-	
+    //objectNameRow.add( nameLink );
+    objectNameRow.add(new UI.Text('Name').setWidth('90px'));
+    objectNameRow.add(objectName);
 
-	container.add( objectNameRow );
 
-	// parent
+    container.add(objectNameRow);
 
-	var objectParentRow = new UI.Panel();
-	objectParentRow.setClass("row advanced");
-	var objectParent = new UI.Select().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
 
-	objectParentRow.add( new UI.Text( 'Parent' ).setWidth( '90px' ) );
-	objectParentRow.add( objectParent );
-	
-	container.add( objectParentRow );
+    // PARENT
 
-	// position
+    var objectParentRow = new UI.Panel();
+    objectParentRow.setClass("row advanced");
+    //var parentLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
+    //
+    //    if (this.dom.className.indexOf('linked') === -1) {
+    //        editor.selected.isLinked[PARENT_PROP] = true;
+    //        this.setClass('icn icon-link linked');
+    //
+    //        // update to template value
+    //        var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
+    //        var value = template.parent.id;
+    //        objectParent.setValue(value);
+    //
+    //        update();
+    //    }
+    //});
+    var objectParent = new UI.Select().setWidth('150px').setColor('#444').setFontSize('12px').onChange(function () {
 
-	var objectPositionRow = new UI.Panel();
-	objectPositionRow.setClass("row advanced");
-	var objectPositionX = new UI.Number().setWidth( '50px' ).setColor( 'red' ).onChange( update );
-	var objectPositionY = new UI.Number().setWidth( '50px' ).setColor( 'green' ).onChange( update );
-	var objectPositionZ = new UI.Number().setWidth( '50px' ).setColor( 'blue' ).onChange( update );
-	var objectPositionXLabel = new UI.Text( 'X' ).setWidth( '10px' ).setColor( 'red' );
-	var objectPositionYLabel = new UI.Text( 'Y' ).setWidth( '10px' ).setColor( 'green' );
-	var objectPositionZLabel = new UI.Text( 'Z' ).setWidth( '10px' ).setColor( 'blue' );
+        //if (editor.selected.isInstance) {
+        //    editor.selected.isLinked[PARENT_PROP] = false;
+        //    parentLink.setClass('icn icon-link link');
+        //}
+        update();
+    });
 
-	objectPositionRow.add( new UI.Text( 'Position' ).setWidth( '90px' ) );
-	objectPositionRow.add( objectPositionXLabel, objectPositionX,
-						   objectPositionYLabel, objectPositionY,
-						   objectPositionZLabel, objectPositionZ );
+    //objectParentRow.add(parentLink);
+    objectParentRow.add(new UI.Text('Parent').setWidth('90px'));
+    objectParentRow.add(objectParent);
 
-	container.add( objectPositionRow );
+    container.add(objectParentRow);
+    container.add(objectParentRow);
 
-	signals.objectSelected.add( function ( object ){
+    signals.objectSelected.add(function (object) {
 
-		if( object && object.isTemplate ){
+        if (object && (object.isInstance || object.isTemplate) ) {
 
-			$(objectPositionX.dom).prop('disabled', true);
-			$(objectPositionY.dom).prop('disabled', true);
-			$(objectPositionZ.dom).prop('disabled', true);
+            objectParentRow.setClass('disabled');
 
-			$(objectPositionRow.dom).addClass( 'inactive' );
+        } else {
 
-		} else {
+            objectParentRow.setClass("row advanced");
+        }
 
-			$(objectPositionX.dom).prop('disabled', false);
-			$(objectPositionY.dom).prop('disabled', false);
-			$(objectPositionZ.dom).prop('disabled', false);
+    });
 
-			$(objectPositionRow.dom).removeClass( 'inactive' );
-		}
+    // POSITION
 
-	});
+    var objectPositionRow = new UI.Panel();
+    objectPositionRow.setClass("row advanced");
+    var positionLink = new UI.Text('').setClass('icn icon-link').onClick(updatePositionLink);
+    var objectPositionX = new UI.Number().setWidth('50px').setColor('red').onChange(updatePosition);
+    var objectPositionY = new UI.Number().setWidth('50px').setColor('green').onChange(updatePosition);
+    var objectPositionZ = new UI.Number().setWidth('50px').setColor('blue').onChange(updatePosition);
+    var objectPositionXLabel = new UI.Text('X').setWidth('10px').setColor('red');
+    var objectPositionYLabel = new UI.Text('Y').setWidth('10px').setColor('green');
+    var objectPositionZLabel = new UI.Text('Z').setWidth('10px').setColor('blue');
 
-	// rotation
+    objectPositionRow.add(positionLink);
+    objectPositionRow.add(new UI.Text('Position').setWidth('90px'));
+    objectPositionRow.add(objectPositionXLabel, objectPositionX,
+        objectPositionYLabel, objectPositionY,
+        objectPositionZLabel, objectPositionZ);
 
-	var objectRotationRow = new UI.Panel();
-	objectRotationRow.setClass("row advanced");
-	var objectRotationX = new UI.Number().setWidth( '50px' ).setColor( 'red' ).onChange( update );
-	var objectRotationY = new UI.Number().setWidth( '50px' ).setColor( 'green' ).onChange( update );
-	var objectRotationZ = new UI.Number().setWidth( '50px' ).setColor( 'blue' ).onChange( update );
-	var objectRotationXLabel = new UI.Text( 'X' ).setWidth( '10px' ).setColor( 'red' );
-	var objectRotationYLabel = new UI.Text( 'Y' ).setWidth( '10px' ).setColor( 'green' );
-	var objectRotationZLabel = new UI.Text( 'Z' ).setWidth( '10px' ).setColor( 'blue' );
+    container.add(objectPositionRow);
 
-	objectRotationRow.add( new UI.Text( 'Rotation' ).setWidth( '90px' ) );
-	objectRotationRow.add( objectRotationXLabel, objectRotationX,
-						   objectRotationYLabel, objectRotationY,
-						   objectRotationZLabel, objectRotationZ );
 
-	container.add( objectRotationRow );
+    function updatePosition() {
 
-	// scale all
+        if (editor.selected.isInstance) {
+            editor.selected.isLinked[POSITION_PROP] = false;
+            positionLink.setClass('icn icon-link link');
+        }
+        update();
+    }
 
-	var objectScaleAllRow = new UI.Panel();
-	objectScaleAllRow.setClass("row advanced");
-	var objectScaleLock = new UI.Checkbox();
+    function updatePositionLink() {
 
-	objectScaleAllRow.add( new UI.Text( 'Scale all' ).setWidth( '90px' ) );
-	objectScaleAllRow.add( objectScaleLock );
+        if (this.dom.className.indexOf('linked') === -1) {
+            editor.selected.isLinked[POSITION_PROP] = true;
+            this.setClass('icn icon-link linked');
 
-	objectScaleAllRow.setDisplay( 'none' );
+            // update ui inputs to template value
+            var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
 
-	container.add( objectScaleAllRow );
+            objectPositionX.setValue(template.position.x);
+            objectPositionY.setValue(template.position.y);
+            objectPositionZ.setValue(template.position.z);
 
-	// scale separate
+            update();
+        }
+    }
 
-	var objectScaleRow = new UI.Panel();
-	objectScaleRow.setClass("row advanced");
-	var objectScaleX = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'red' ).onChange( updateScaleX );
-	var objectScaleY = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'green' ).onChange( updateScaleY );
-	var objectScaleZ = new UI.Number( 1 ).setWidth( '50px' ).setColor( 'blue' ).onChange( updateScaleZ );
-	var objectScaleXLabel = new UI.Text( 'X' ).setWidth( '10px' ).setColor( 'red' );
-	var objectScaleYLabel = new UI.Text( 'Y' ).setWidth( '10px' ).setColor( 'green' );
-	var objectScaleZLabel = new UI.Text( 'Z' ).setWidth( '10px' ).setColor( 'blue' );
+    signals.objectSelected.add(function (object) {
 
-	objectScaleRow.add( new UI.Text( 'Scale' ).setWidth( '90px' ) );
+        if (object && object.isTemplate) {
 
-	objectScaleRow.add( objectScaleXLabel, objectScaleX,
-						objectScaleYLabel, objectScaleY,
-						objectScaleZLabel, objectScaleZ );
-	
-	objectScaleRow.setDisplay('none');
+            $(objectPositionX.dom).prop('disabled', true);
+            $(objectPositionY.dom).prop('disabled', true);
+            $(objectPositionZ.dom).prop('disabled', true);
 
-	container.add( objectScaleRow );
+            $(objectPositionRow.dom).addClass('inactive');
 
-	// fov
+        } else {
 
-	var objectFovRow = new UI.Panel();
-	objectFovRow.setClass("row advanced");
-	var objectFov = new UI.Number().onChange( update );
+            $(objectPositionX.dom).prop('disabled', false);
+            $(objectPositionY.dom).prop('disabled', false);
+            $(objectPositionZ.dom).prop('disabled', false);
 
-	objectFovRow.add( new UI.Text( 'Fov' ).setWidth( '90px' ) );
-	objectFovRow.add( objectFov );
+            $(objectPositionRow.dom).removeClass('inactive');
+        }
 
-	container.add( objectFovRow );
+    });
 
-	// near
 
-	var objectNearRow = new UI.Panel();
-	objectNearRow.setClass("row advanced");
-	var objectNear = new UI.Number().onChange( update );
+    // ROTATION
 
-	objectNearRow.add( new UI.Text( 'Near' ).setWidth( '90px' ) );
-	objectNearRow.add( objectNear );
+    var objectRotationRow = new UI.Panel();
+    objectRotationRow.setClass("row advanced");
+    var rotationLink = new UI.Text('').setClass('icn icon-link').onClick(updateRotationLink);
+    var objectRotationX = new UI.Number().setWidth('50px').setColor('red').onChange(updateRotation);
+    var objectRotationY = new UI.Number().setWidth('50px').setColor('green').onChange(updateRotation);
+    var objectRotationZ = new UI.Number().setWidth('50px').setColor('blue').onChange(updateRotation);
+    var objectRotationXLabel = new UI.Text('X').setWidth('10px').setColor('red');
+    var objectRotationYLabel = new UI.Text('Y').setWidth('10px').setColor('green');
+    var objectRotationZLabel = new UI.Text('Z').setWidth('10px').setColor('blue');
 
-	container.add( objectNearRow );
+    objectRotationRow.add(rotationLink);
+    objectRotationRow.add(new UI.Text('Rotation').setWidth('90px'));
+    objectRotationRow.add(objectRotationXLabel, objectRotationX,
+        objectRotationYLabel, objectRotationY,
+        objectRotationZLabel, objectRotationZ);
 
-	// far
+    container.add(objectRotationRow);
 
-	var objectFarRow = new UI.Panel();
-	objectFarRow.setClass("row advanced");
-	var objectFar = new UI.Number().onChange( update );
+    function updateRotation() {
 
-	objectFarRow.add( new UI.Text( 'Far' ).setWidth( '90px' ) );
-	objectFarRow.add( objectFar );
+        if (editor.selected.isInstance) {
+            editor.selected.isLinked[ROTATION_PROP] = false;
+            rotationLink.setClass('icn icon-link link');
+        }
+        update();
+    }
 
-	container.add( objectFarRow );
+    function updateRotationLink() {
 
-	// intensity
+        if (this.dom.className.indexOf('linked') === -1) {
+            editor.selected.isLinked[ROTATION_PROP] = true;
+            this.setClass('icn icon-link linked');
 
-	var objectIntensityRow = new UI.Panel();
-	objectIntensityRow.setClass("row advanced");
-	var objectIntensity = new UI.Number().setRange( 0, Infinity ).onChange( update );
+            // update ui inputs to template value
+            var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
 
-	objectIntensityRow.add( new UI.Text( 'Intensity' ).setWidth( '90px' ) );
-	objectIntensityRow.add( objectIntensity );
+            objectRotationX.setValue(template.rotation.x);
+            objectRotationY.setValue(template.rotation.y);
+            objectRotationZ.setValue(template.rotation.z);
 
-	container.add( objectIntensityRow );
+            update();
+        }
+    }
 
-	// color
 
-	var objectColorRow = new UI.Panel();
-	objectColorRow.setClass("row");
-	var objectColor = new UI.Color().onChange( update );
+    // scale all
 
-	objectColorRow.add( new UI.Text( 'Color' ).setWidth( '90px' ) );
-	objectColorRow.add( objectColor );
+    var objectScaleAllRow = new UI.Panel();
+    objectScaleAllRow.setClass("row advanced");
+    var objectScaleLock = new UI.Checkbox();
 
-	container.add( objectColorRow );
+    objectScaleAllRow.add(new UI.Text('Scale all').setWidth('90px'));
+    objectScaleAllRow.add(objectScaleLock);
 
-	// ground color
+    objectScaleAllRow.setDisplay('none');
 
-	var objectGroundColorRow = new UI.Panel();
-	objectGroundColorRow.setClass("row advanced");
-	var objectGroundColor = new UI.Color().onChange( update );
+    container.add(objectScaleAllRow);
 
-	objectGroundColorRow.add( new UI.Text( 'Ground color' ).setWidth( '90px' ) );
-	objectGroundColorRow.add( objectGroundColor );
 
-	container.add( objectGroundColorRow );
+    // SCALE separate
 
-	// distance
+    var objectScaleRow = new UI.Panel();
+    objectScaleRow.setClass("row advanced");
+    var scaleLink = new UI.Text('').setClass('icn icon-link').onClick(updateScaleLink);
+    var objectScaleX = new UI.Number(1).setWidth('50px').setColor('red').onChange(updateScaleX);
+    var objectScaleY = new UI.Number(1).setWidth('50px').setColor('green').onChange(updateScaleY);
+    var objectScaleZ = new UI.Number(1).setWidth('50px').setColor('blue').onChange(updateScaleZ);
+    var objectScaleXLabel = new UI.Text('X').setWidth('10px').setColor('red');
+    var objectScaleYLabel = new UI.Text('Y').setWidth('10px').setColor('green');
+    var objectScaleZLabel = new UI.Text('Z').setWidth('10px').setColor('blue');
 
-	var objectDistanceRow = new UI.Panel();
-	objectDistanceRow.setClass("row advanced");
-	var objectDistance = new UI.Number().setRange( 0, Infinity ).onChange( update );
+    objectScaleRow.add(scaleLink);
+    objectScaleRow.add(new UI.Text('Scale').setWidth('90px'));
+    objectScaleRow.add(objectScaleXLabel, objectScaleX,
+        objectScaleYLabel, objectScaleY,
+        objectScaleZLabel, objectScaleZ);
 
-	objectDistanceRow.add( new UI.Text( 'Distance' ).setWidth( '90px' ) );
-	objectDistanceRow.add( objectDistance );
+    objectScaleRow.setDisplay('none');
 
-	container.add( objectDistanceRow );
+    container.add(objectScaleRow);
 
-	// angle
+    function updateScaleLink() {
 
-	var objectAngleRow = new UI.Panel();
-	objectAngleRow.setClass("row advanced");
-	var objectAngle = new UI.Number().setPrecision( 3 ).setRange( 0, Math.PI / 2 ).onChange( update );
+        if (this.dom.className.indexOf('linked') === -1) {
+            editor.selected.isLinked[SCALE_PROP] = true;
+            this.setClass('icn icon-link linked');
 
-	objectAngleRow.add( new UI.Text( 'Angle' ).setWidth( '90px' ) );
-	objectAngleRow.add( objectAngle );
+            // update ui inputs to template value
+            var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
 
-	container.add( objectAngleRow );
+            objectScaleX.setValue(template.scale.x);
+            objectScaleY.setValue(template.scale.y);
+            objectScaleZ.setValue(template.scale.z);
 
-	// exponent
+            update();
+        }
+    }
 
-	var objectExponentRow = new UI.Panel();
-	objectExponentRow.setClass("row advanced");
-	var objectExponent = new UI.Number().setRange( 0, Infinity ).onChange( update );
 
-	objectExponentRow.add( new UI.Text( 'Exponent' ).setWidth( '90px' ) );
-	objectExponentRow.add( objectExponent );
+    // fov
 
-	container.add( objectExponentRow );
+    var objectFovRow = new UI.Panel();
+    objectFovRow.setClass("row advanced");
+    var objectFov = new UI.Number().onChange(update);
 
-	// visible
+    objectFovRow.add(new UI.Text('Fov').setWidth('90px'));
+    objectFovRow.add(objectFov);
 
-	var objectVisibleRow = new UI.Panel();
-	objectVisibleRow.setClass("row advanced");
-	var objectVisible = new UI.Checkbox().onChange( update );
+    container.add(objectFovRow);
 
-	objectVisibleRow.add( new UI.Text( 'Visible' ).setWidth( '90px' ) );
-	objectVisibleRow.add( objectVisible );
+    // near
 
-	objectVisibleRow.setDisplay( 'none' );
+    var objectNearRow = new UI.Panel();
+    objectNearRow.setClass("row advanced");
+    var objectNear = new UI.Number().onChange(update);
 
-	container.add( objectVisibleRow );
+    objectNearRow.add(new UI.Text('Near').setWidth('90px'));
+    objectNearRow.add(objectNear);
 
-	// user data
+    container.add(objectNearRow);
 
-	var objectUserDataRow = new UI.Panel();
-	objectUserDataRow.setClass("row advanced");
-	var objectUserData = new UI.TextArea().setWidth( '150px' ).setHeight( '40px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( update );
-	objectUserData.onKeyUp( function () {
+    // far
 
-		try {
+    var objectFarRow = new UI.Panel();
+    objectFarRow.setClass("row advanced");
+    var objectFar = new UI.Number().onChange(update);
 
-			JSON.parse( objectUserData.getValue() );
-			objectUserData.setBorderColor( '#ccc' );
-			objectUserData.setBackgroundColor( '' );
+    objectFarRow.add(new UI.Text('Far').setWidth('90px'));
+    objectFarRow.add(objectFar);
 
-		} catch ( error ) {
+    container.add(objectFarRow);
 
-			objectUserData.setBorderColor( '#f00' );
-			objectUserData.setBackgroundColor( 'rgba(255,0,0,0.25)' );
+    // intensity
 
-		}
+    var objectIntensityRow = new UI.Panel();
+    objectIntensityRow.setClass("row advanced");
+    var objectIntensity = new UI.Number().setRange(0, Infinity).onChange(update);
 
-	} );
+    objectIntensityRow.add(new UI.Text('Intensity').setWidth('90px'));
+    objectIntensityRow.add(objectIntensity);
 
-	objectUserDataRow.add( new UI.Text( 'User data' ).setWidth( '90px' ) );
-	objectUserDataRow.add( objectUserData );
-	
-	objectUserDataRow.setDisplay('none');
+    container.add(objectIntensityRow);
 
-	container.add( objectUserDataRow );
+    // color
 
+    var objectColorRow = new UI.Panel();
+    objectColorRow.setClass("row");
+    var objectColor = new UI.Color().onChange(update);
 
-	//
+    objectColorRow.add(new UI.Text('Color').setWidth('90px'));
+    objectColorRow.add(objectColor);
 
-	function updateScaleX() {
+    container.add(objectColorRow);
 
-		var object = editor.selected;
+    // ground color
 
-		if ( objectScaleLock.getValue() === true ) {
+    var objectGroundColorRow = new UI.Panel();
+    objectGroundColorRow.setClass("row advanced");
+    var objectGroundColor = new UI.Color().onChange(update);
 
-			var scale = objectScaleX.getValue() / object.scale.x;
+    objectGroundColorRow.add(new UI.Text('Ground color').setWidth('90px'));
+    objectGroundColorRow.add(objectGroundColor);
 
-			objectScaleY.setValue( objectScaleY.getValue() * scale );
-			objectScaleZ.setValue( objectScaleZ.getValue() * scale );
+    container.add(objectGroundColorRow);
 
-		}
+    // distance
 
-		update();
+    var objectDistanceRow = new UI.Panel();
+    objectDistanceRow.setClass("row advanced");
+    var objectDistance = new UI.Number().setRange(0, Infinity).onChange(update);
 
-	}
+    objectDistanceRow.add(new UI.Text('Distance').setWidth('90px'));
+    objectDistanceRow.add(objectDistance);
 
-	function updateScaleY() {
+    container.add(objectDistanceRow);
 
-		var object = editor.selected;
+    // angle
 
-		if ( objectScaleLock.getValue() === true ) {
+    var objectAngleRow = new UI.Panel();
+    objectAngleRow.setClass("row advanced");
+    var objectAngle = new UI.Number().setPrecision(3).setRange(0, Math.PI / 2).onChange(update);
 
-			var scale = objectScaleY.getValue() / object.scale.y;
+    objectAngleRow.add(new UI.Text('Angle').setWidth('90px'));
+    objectAngleRow.add(objectAngle);
 
-			objectScaleX.setValue( objectScaleX.getValue() * scale );
-			objectScaleZ.setValue( objectScaleZ.getValue() * scale );
+    container.add(objectAngleRow);
 
-		}
+    // exponent
 
-		update();
+    var objectExponentRow = new UI.Panel();
+    objectExponentRow.setClass("row advanced");
+    var objectExponent = new UI.Number().setRange(0, Infinity).onChange(update);
 
-	}
+    objectExponentRow.add(new UI.Text('Exponent').setWidth('90px'));
+    objectExponentRow.add(objectExponent);
 
-	function updateScaleZ() {
+    container.add(objectExponentRow);
 
-		var object = editor.selected;
+    // visible
 
-		if ( objectScaleLock.getValue() === true ) {
+    var objectVisibleRow = new UI.Panel();
+    objectVisibleRow.setClass("row advanced");
+    var objectVisible = new UI.Checkbox().onChange(update);
 
-			var scale = objectScaleZ.getValue() / object.scale.z;
+    objectVisibleRow.add(new UI.Text('Visible').setWidth('90px'));
+    objectVisibleRow.add(objectVisible);
 
-			objectScaleX.setValue( objectScaleX.getValue() * scale );
-			objectScaleY.setValue( objectScaleY.getValue() * scale );
+    objectVisibleRow.setDisplay('none');
 
-		}
+    container.add(objectVisibleRow);
 
-		update();
+    // user data
 
-	}
+    var objectUserDataRow = new UI.Panel();
+    objectUserDataRow.setClass("row advanced");
+    var objectUserData = new UI.TextArea().setWidth('150px').setHeight('40px').setColor('#444').setFontSize('12px').onChange(update);
+    objectUserData.onKeyUp(function () {
 
+        try {
 
-	function update(){
+            JSON.parse(objectUserData.getValue());
+            objectUserData.setBorderColor('#ccc');
+            objectUserData.setBackgroundColor('');
 
-		console.log(' update ');
+        } catch (error) {
 
-		var object = editor.selected;
+            objectUserData.setBorderColor('#f00');
+            objectUserData.setBackgroundColor('rgba(255,0,0,0.25)');
 
-		if( object.isTemplate ){
+        }
 
-			var instObjects = editor.templateManager.getInstancesOfTemplate( object.id );
+    });
 
-			for( var i = 0; i < instObjects.length; i++){
+    objectUserDataRow.add(new UI.Text('User data').setWidth('90px'));
+    objectUserDataRow.add(objectUserData);
 
-				// todo check if property of the current instance is linked to the template or not.
-				updateObject(instObjects[i], true);
+    objectUserDataRow.setDisplay('none');
 
-			}
-		}
+    container.add(objectUserDataRow);
 
-		updateObject( object, false );
-	}
 
+    //
 
-	function updateObject( object, isInstance ) {
+    function updateScaleX() {
 
-		if ( object !== null ) {
+        var object = editor.selected;
 
-			if ( object.parent !== undefined ) {
+        if (object.isInstance) {
+            object.isLinked[SCALE_PROP] = false;
+            scaleLink.setClass('icn icon-link link');
+        }
 
-				var newParentId = parseInt( objectParent.getValue() );
+        if (objectScaleLock.getValue() === true) {
 
-				if ( object.parent.id !== newParentId && object.id !== newParentId ) {
+            var scale = objectScaleX.getValue() / object.scale.x;
 
-					editor.parent( object, editor.scene.getObjectById( newParentId, true ) );
+            objectScaleY.setValue(objectScaleY.getValue() * scale);
+            objectScaleZ.setValue(objectScaleZ.getValue() * scale);
 
-				}
+        }
 
-			}
+        update();
 
-			// POSITION
-			if( !isInstance ){
-				object.position.x = objectPositionX.getValue();
-				object.position.y = objectPositionY.getValue();
-				object.position.z = objectPositionZ.getValue();
-			}
+    }
 
-			// ROTATION
-			if( !isInstance || object.rotation ){
-				object.rotation.x = objectRotationX.getValue();
-				object.rotation.y = objectRotationY.getValue();
-				object.rotation.z = objectRotationZ.getValue();
-			}
+    function updateScaleY() {
 
-			// SCALE
-			if( !isInstance || object.scale ){
-				object.scale.x = objectScaleX.getValue();
-				object.scale.y = objectScaleY.getValue();
-				object.scale.z = objectScaleZ.getValue();
-			}
+        var object = editor.selected;
 
-			if( !isInstance || object.visible ){
-				object.visible = objectVisible.getValue();
-			}
+        if (object.isInstance) {
+            object.isLinked[SCALE_PROP] = false;
+            scaleLink.setClass('icn icon-link link');
+        }
 
+        if (objectScaleLock.getValue() === true) {
 
-			// ***** all the stuff below is disabled in the user interface anyway *****
+            var scale = objectScaleY.getValue() / object.scale.y;
 
-			if ( object.fov !== undefined ) {
+            objectScaleX.setValue(objectScaleX.getValue() * scale);
+            objectScaleZ.setValue(objectScaleZ.getValue() * scale);
 
-				object.fov = objectFov.getValue();
-				object.updateProjectionMatrix();
+        }
 
-			}
+        update();
 
-			if ( object.near !== undefined ) {
+    }
 
-				object.near = objectNear.getValue();
+    function updateScaleZ() {
 
-			}
+        var object = editor.selected;
 
-			if ( object.far !== undefined ) {
+        if (object.isInstance) {
+            object.isLinked[SCALE_PROP] = false;
+            scaleLink.setClass('icn icon-link link');
+        }
 
-				object.far = objectFar.getValue();
+        if (objectScaleLock.getValue() === true) {
 
-			}
+            var scale = objectScaleZ.getValue() / object.scale.z;
 
-			if ( object.intensity !== undefined ) {
+            objectScaleX.setValue(objectScaleX.getValue() * scale);
+            objectScaleY.setValue(objectScaleY.getValue() * scale);
 
-				object.intensity = objectIntensity.getValue();
+        }
 
-			}
+        update();
 
-			if ( object.color !== undefined ) {
+    }
 
-				object.color.setHex( objectColor.getHexValue() );
 
-			}
+    function update() {
 
-			if ( object.groundColor !== undefined ) {
+        var object = editor.selected;
 
-				object.groundColor.setHex( objectGroundColor.getHexValue() );
+        if (object.isTemplate) {
 
-			}
+            var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
 
-			if ( object.distance !== undefined ) {
+            for (var i = 0; i < instObjects.length; i++) {
 
-				object.distance = objectDistance.getValue();
+                // todo check if property of the current instance is linked to the template or not.
+                updateObject(instObjects[i], true);
 
-			}
+            }
+        }
 
-			if ( object.angle !== undefined ) {
+        updateObject(object, false);
+    }
 
-				object.angle = objectAngle.getValue();
 
-			}
+    function updateObject(object, isInstance) {
 
-			if ( object.exponent !== undefined ) {
+        if (object !== null) {
 
-				object.exponent = objectExponent.getValue();
+            if ((object.parent !== undefined) && (!isInstance || ( isInstance && object.isLinked[PARENT_PROP] ))) {
 
-			}
+                var newParentId = parseInt(objectParent.getValue());
 
+                if (object.parent.id !== newParentId && object.id !== newParentId) {
 
-			try {
+                    editor.parent(object, editor.scene.getObjectById(newParentId, true));
 
-				object.userData = JSON.parse( objectUserData.getValue() );
+                }
 
-			} catch ( exception ) {
+            }
 
-				console.warn( exception );
+            // POSITION
+            if (!isInstance || ( isInstance && object.isLinked[POSITION_PROP] )) {
+                object.position.x = objectPositionX.getValue();
+                object.position.y = objectPositionY.getValue();
+                object.position.z = objectPositionZ.getValue();
+            }
 
-			}
+            // ROTATION
+            if ((!isInstance || ( isInstance && object.isLinked[ROTATION_PROP] )) && object.rotation) {
+                object.rotation.x = objectRotationX.getValue();
+                object.rotation.y = objectRotationY.getValue();
+                object.rotation.z = objectRotationZ.getValue();
+            }
 
-			signals.objectChanged.dispatch( object );
+            // SCALE
+            if ((!isInstance || ( isInstance && object.isLinked[SCALE_PROP] )) && object.scale) {
+                object.scale.x = objectScaleX.getValue();
+                object.scale.y = objectScaleY.getValue();
+                object.scale.z = objectScaleZ.getValue();
+            }
 
-		}
+            if (!isInstance || object.visible) {
+                object.visible = objectVisible.getValue();
+            }
 
-	}
 
-	function updateRows() {
+            // ***** all the stuff below is disabled in the user interface anyway *****
 
-		var object = editor.selected;
+            if (object.fov !== undefined) {
 
-		var properties = {
-			'parent': objectParentRow,
-			'position': objectPositionRow,
-			'rotation': objectRotationRow,
-			'scale': objectScaleAllRow,
-			'scale': objectScaleRow,
-			'fov': objectFovRow,
-			'near': objectNearRow,
-			'far': objectFarRow,
-			'intensity': objectIntensityRow,
-			'color': objectColorRow,
-			'groundColor': objectGroundColorRow,
-			'distance' : objectDistanceRow,
-			'angle' : objectAngleRow,
-			'exponent' : objectExponentRow
-			//'visible' : objectVisibleRow
-		};
+                object.fov = objectFov.getValue();
+                object.updateProjectionMatrix();
 
-		for ( var property in properties ) {
-			
-			var visible = object[ property ] !== undefined ? true: false;
-			properties[ property ].setDisplay( visible ? '' : 'none' );
+            }
 
-		}
+            if (object.near !== undefined) {
 
-	}
+                object.near = objectNear.getValue();
 
-	function updateTransformRows() {
+            }
 
-		var object = editor.selected;
+            if (object.far !== undefined) {
 
-		if ( object instanceof THREE.Light ||
-		   ( object instanceof THREE.Object3D && object.userData.targetInverse ) ||
-			 object instanceof THREE.Scene ) {
+                object.far = objectFar.getValue();
 
-			objectRotationRow.setDisplay( 'none' );
-			//objectScaleRow.setDisplay( 'none' );
+            }
 
-		} else {
+            if (object.intensity !== undefined) {
 
-			objectRotationRow.setDisplay( '' );
-			//objectScaleRow.setDisplay( '' );
+                object.intensity = objectIntensity.getValue();
 
-		}
-		
-		objectPositionRow.setDisplay( object instanceof THREE.Scene ? 'none' : '' );
+            }
 
-	}
+            if (object.color !== undefined) {
 
-	// events
+                object.color.setHex(objectColor.getHexValue());
 
-	signals.objectSelected.add( function ( object ) {
+            }
 
-		updateUI();
+            if (object.groundColor !== undefined) {
 
-	} );
+                object.groundColor.setHex(objectGroundColor.getHexValue());
 
-	signals.sceneGraphChanged.add( function () {
+            }
 
-		var scene = editor.scene;
+            if (object.distance !== undefined) {
 
-		var options = {};
+                object.distance = objectDistance.getValue();
 
-		options[ scene.id ] = 'Scene';
+            }
 
-		( function addObjects( objects ) {
+            if (object.angle !== undefined) {
 
-			for ( var i = 0, l = objects.length; i < l; i ++ ) {
+                object.angle = objectAngle.getValue();
 
-				var object = objects[ i ];
+            }
 
-				options[ object.id ] = object.name;
+            if (object.exponent !== undefined) {
 
-				addObjects( object.children );
+                object.exponent = objectExponent.getValue();
 
-			}
+            }
 
-		} )( scene.children );
 
-		objectParent.setOptions( options );
+            try {
 
-	} );
+                object.userData = JSON.parse(objectUserData.getValue());
 
-	signals.objectChanged.add( function ( object ) {
+            } catch (exception) {
 
-		if ( object !== editor.selected ) return;
+                console.warn(exception);
 
-		updateUI();
+            }
 
-	} );
-	
-	function updateUI() {
+            signals.objectChanged.dispatch(object);
 
-		container.setDisplay( 'none' );
+        }
 
-		var object = editor.selected;
+    }
 
-		if ( object !== null ) {
+    function updateRows() {
 
-			container.setDisplay( 'block' );
+        var object = editor.selected;
 
-			objectType.setValue( editor.getObjectType( object ) );
+        var properties = {
+            'parent': objectParentRow,
+            'position': objectPositionRow,
+            'rotation': objectRotationRow,
+            'scaleAll': objectScaleAllRow,
+            'scale': objectScaleRow,
+            'fov': objectFovRow,
+            'near': objectNearRow,
+            'far': objectFarRow,
+            'intensity': objectIntensityRow,
+            'color': objectColorRow,
+            'groundColor': objectGroundColorRow,
+            'distance': objectDistanceRow,
+            'angle': objectAngleRow,
+            'exponent': objectExponentRow
+            //'visible' : objectVisibleRow
+        };
 
-			objectUUID.setValue( object.uuid );
+        for (var property in properties) {
 
-			objectName.setValue( object.name );
+            var visible = object[property] !== undefined ? true : false;
+            properties[property].setDisplay(visible ? '' : 'none');
 
-			if( editor.notDeletableObjects.indexOf( object.name ) !== -1){
-				$(objectName.dom).prop('disabled', true);
-				$(objectName.dom).addClass('inactive');
-			}else {
-				$(objectName.dom).prop('disabled', false);
-				$(objectName.dom).removeClass('inactive');
-			}
+        }
 
-			if ( object.parent !== undefined ) {
+    }
 
-				objectParent.setValue( object.parent.id );
+    function updateTransformRows() {
 
-			}
+        var object = editor.selected;
 
-			objectPositionX.setValue( object.position.x );
-			objectPositionY.setValue( object.position.y );
-			objectPositionZ.setValue( object.position.z );
+        if (object instanceof THREE.Light ||
+            ( object instanceof THREE.Object3D && object.userData.targetInverse ) ||
+            object instanceof THREE.Scene) {
 
-			objectRotationX.setValue( object.rotation.x );
-			objectRotationY.setValue( object.rotation.y );
-			objectRotationZ.setValue( object.rotation.z );
+            objectRotationRow.setDisplay('none');
+            //objectScaleRow.setDisplay( 'none' );
 
-			objectScaleX.setValue( object.scale.x );
-			objectScaleY.setValue( object.scale.y );
-			objectScaleZ.setValue( object.scale.z );
+        } else {
 
-			if ( object.fov !== undefined ) {
+            objectRotationRow.setDisplay('');
+            //objectScaleRow.setDisplay( '' );
 
-				objectFov.setValue( object.fov );
+        }
 
-			}
+        objectPositionRow.setDisplay(object instanceof THREE.Scene ? 'none' : '');
 
-			if ( object.near !== undefined ) {
+    }
 
-				objectNear.setValue( object.near );
+    // events
 
-			}
+    signals.objectSelected.add(function (object) {
 
-			if ( object.far !== undefined ) {
+        updateUI();
 
-				objectFar.setValue( object.far );
+    });
 
-			}
+    signals.sceneGraphChanged.add(function () {
 
-			if ( object.intensity !== undefined ) {
+        var scene = editor.scene;
 
-				objectIntensity.setValue( object.intensity );
+        var options = {};
 
-			}
+        options[scene.id] = 'Scene';
 
-			if ( object.color !== undefined ) {
+        (function addObjects(objects) {
 
-				objectColor.setHexValue( object.color.getHexString() );
+            for (var i = 0, l = objects.length; i < l; i++) {
 
-			}
+                var object = objects[i];
 
-			if ( object.groundColor !== undefined ) {
+                options[object.id] = object.name;
 
-				objectGroundColor.setHexValue( object.groundColor.getHexString() );
+                addObjects(object.children);
 
-			}
+            }
 
-			if ( object.distance !== undefined ) {
+        })(scene.children);
 
-				objectDistance.setValue( object.distance );
+        objectParent.setOptions(options);
 
-			}
+    });
 
-			if ( object.angle !== undefined ) {
+    signals.objectChanged.add(function (object) {
 
-				objectAngle.setValue( object.angle );
+        if (object !== editor.selected) return;
 
-			}
+        updateUI();
 
-			if ( object.exponent !== undefined ) {
+    });
 
-				objectExponent.setValue( object.exponent );
+    function updateUI() {
 
-			}
+        container.setDisplay('none');
 
-			objectVisible.setValue( object.visible );
+        var object = editor.selected;
 
-			try {
+        if (object !== null) {
 
-				objectUserData.setValue( JSON.stringify( object.userData, null, '  ' ) );
+            container.setDisplay('block');
 
-			} catch ( error ) {
+            objectType.setValue(editor.getObjectType(object));
 
-				console.log( error );
+            objectUUID.setValue(object.uuid);
 
-			}
+            objectName.setValue(object.name);
 
-			objectUserData.setBorderColor( '#ccc' );
-			objectUserData.setBackgroundColor( '' );
+            if (editor.notDeletableObjects.indexOf(object.name) !== -1) {
+                $(objectName.dom).prop('disabled', true);
+                $(objectName.dom).addClass('inactive');
+            } else {
+                $(objectName.dom).prop('disabled', false);
+                $(objectName.dom).removeClass('inactive');
+            }
 
-			updateRows();
-			updateTransformRows();
+            if (object.parent !== undefined) {
 
-		}
+                objectParent.setValue(object.parent.id);
 
-	}
+            }
 
-	return container;
+            objectPositionX.setValue(object.position.x);
+            objectPositionY.setValue(object.position.y);
+            objectPositionZ.setValue(object.position.z);
+
+            objectRotationX.setValue(object.rotation.x);
+            objectRotationY.setValue(object.rotation.y);
+            objectRotationZ.setValue(object.rotation.z);
+
+            objectScaleX.setValue(object.scale.x);
+            objectScaleY.setValue(object.scale.y);
+            objectScaleZ.setValue(object.scale.z);
+
+
+            // link icon / button
+            if (object.isInstance) {
+
+                //$(nameLink.dom).show();
+                //$(parentLink.dom).show();
+                $(positionLink.dom).show();
+                $(rotationLink.dom).show();
+                $(scaleLink.dom).show();
+
+                // set link to linked icon if property is linked or to link button if not for all props:
+                // name
+                //if (object.isLinked[NAME_PROP]) {
+                //	nameLink.setClass('icn icon-link linked');
+                //} else {
+                //	nameLink.setClass('icn icon-link link');
+                //}
+                // parent
+                //if (object.isLinked[PARENT_PROP]) {
+                //    parentLink.setClass('icn icon-link linked');
+                //} else {
+                //    parentLink.setClass('icn icon-link link');
+                //}
+                // position
+                if (object.isLinked[POSITION_PROP]) {
+                    positionLink.setClass('icn icon-link linked');
+                } else {
+                    positionLink.setClass('icn icon-link link');
+                }
+                // rotation
+                if (object.isLinked[ROTATION_PROP]) {
+                    rotationLink.setClass('icn icon-link linked');
+                } else {
+                    rotationLink.setClass('icn icon-link link');
+                }
+                // scale
+                if (object.isLinked[SCALE_PROP]) {
+                    scaleLink.setClass('icn icon-link linked');
+                } else {
+                    scaleLink.setClass('icn icon-link link');
+                }
+
+            } else {
+                //$(nameLink.dom).hide();
+                //$(parentLink.dom).hide();
+                $(positionLink.dom).hide();
+                $(rotationLink.dom).hide();
+                $(scaleLink.dom).hide();
+            }
+
+
+            // *** 1.feb.17 all the stuff below is currently disabled in ui and therefore the link to template functionality is not implemented ****
+
+            if (object.fov !== undefined) {
+
+                objectFov.setValue(object.fov);
+
+            }
+
+            if (object.near !== undefined) {
+
+                objectNear.setValue(object.near);
+
+            }
+
+            if (object.far !== undefined) {
+
+                objectFar.setValue(object.far);
+
+            }
+
+            if (object.intensity !== undefined) {
+
+                objectIntensity.setValue(object.intensity);
+
+            }
+
+            if (object.color !== undefined) {
+
+                objectColor.setHexValue(object.color.getHexString());
+
+            }
+
+            if (object.groundColor !== undefined) {
+
+                objectGroundColor.setHexValue(object.groundColor.getHexString());
+
+            }
+
+            if (object.distance !== undefined) {
+
+                objectDistance.setValue(object.distance);
+
+            }
+
+            if (object.angle !== undefined) {
+
+                objectAngle.setValue(object.angle);
+
+            }
+
+            if (object.exponent !== undefined) {
+
+                objectExponent.setValue(object.exponent);
+
+            }
+
+            objectVisible.setValue(object.visible);
+
+            try {
+
+                objectUserData.setValue(JSON.stringify(object.userData, null, '  '));
+
+            } catch (error) {
+
+                console.log(error);
+
+            }
+
+            objectUserData.setBorderColor('#ccc');
+            objectUserData.setBackgroundColor('');
+
+            updateRows();
+            updateTransformRows();
+
+        }
+
+    }
+
+    return container;
 
 };

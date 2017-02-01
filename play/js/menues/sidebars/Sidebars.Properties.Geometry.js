@@ -2,7 +2,7 @@ Sidebars.Properties.Geometry = function (editor) {
 
     var signals = editor.signals;
 
-    // 1.feb.16 todo template link functionality is only implemented for box, cylinder and sphere geometry because these are currently working
+    // 1.feb.17 todo template link functionality is only implemented for box, cylinder and sphere geometry because they are currently working
     // add instance properties for box geometry
     var BOX_PROPS = {
         WIDTH_PROP: 'rect_width',

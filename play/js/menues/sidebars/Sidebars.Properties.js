@@ -15,7 +15,7 @@ Sidebars.Properties = function ( editor ) {
 	properties.add( new Sidebars.Properties.Physics( editor ) );
 	properties.add( new Sidebars.Properties.Material( editor ) );
 	properties.add( new Sidebars.Properties.Animation( editor ) );
-	properties.add( new Sidebars.Properties.Behaviors( editor ) );
+	//properties.add( new Sidebars.Properties.Behaviors( editor ) );
 
 	properties.add( new Sidebars.Properties.AdvancedSwitch( editor, container ) );
 
