@@ -22,9 +22,6 @@ Editor.TemplateManager = function ( editor ) {
 
         instance.isInstance = true;
 
-        // todo problem: if new object attribute is added or if object attribute is deleted this list has to be updated
-        // not generic enough!
-        // possible solution: method as interface to add a new isLinked property
         this.isLinked = {
             'parent': true,
             'position': true,

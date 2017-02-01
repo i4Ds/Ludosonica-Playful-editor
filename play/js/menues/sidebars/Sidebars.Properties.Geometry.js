@@ -8,7 +8,7 @@ Sidebars.Properties.Geometry = function ( editor ) {
 	
 	$("<h3/>",{ html: "Geometry" }).appendTo( container.dom );
 
-	// uuid
+	// uuid (disabled)
 
 	var geometryUUIDRow = new UI.Panel();
 	var geometryUUID = new UI.Input().setWidth( '115px' ).setColor( '#444' ).setFontSize( '12px' ).setDisabled( true );
@@ -28,7 +28,7 @@ Sidebars.Properties.Geometry = function ( editor ) {
 
 	container.add( geometryUUIDRow );
 
-	// name
+	// name (disabled)
 
 	var geometryNameRow = new UI.Panel();
 	var geometryName = new UI.Input().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' ).onChange( function () {
@@ -44,7 +44,7 @@ Sidebars.Properties.Geometry = function ( editor ) {
 
 	container.add( geometryNameRow );
 
-	// class
+	// class (disabled)
 
 	var geometryTypeRow = new UI.Panel();
 	var geometryType = new UI.Text().setWidth( '150px' ).setColor( '#444' ).setFontSize( '12px' );
@@ -56,7 +56,7 @@ Sidebars.Properties.Geometry = function ( editor ) {
 
 	container.add( geometryTypeRow );
 
-	// vertices
+	// vertices (disabled)
 
 	var geometryVerticesRow = new UI.Panel();
 	var geometryVertices = new UI.Text().setColor( '#444' ).setFontSize( '12px' );
@@ -68,7 +68,7 @@ Sidebars.Properties.Geometry = function ( editor ) {
 
 	container.add( geometryVerticesRow );
 
-	// faces
+	// faces (disabled)
 
 	var geometryFacesRow = new UI.Panel();
 	var geometryFaces = new UI.Text().setColor( '#444' ).setFontSize( '12px' );
