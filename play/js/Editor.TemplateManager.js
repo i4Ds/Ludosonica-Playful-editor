@@ -6,6 +6,10 @@ Editor.TemplateManager = function ( editor ) {
     this.signals = editor.signals;
     this.linkProperties = {};
 
+    /**
+     * method to add link property to instances. Link property with equal names are only added once.
+     * @param property
+     */
     this.addLinkProperty = function ( property ) {
         this.linkProperties[property] = true;
     };
@@ -28,7 +32,6 @@ Editor.TemplateManager = function ( editor ) {
             'rotation': true,
             'scale': true,
             'visible' : true,
-            'geometry': true,
             'edges': true,
             'blending' : true,
             'runtimeMaterial' : true,

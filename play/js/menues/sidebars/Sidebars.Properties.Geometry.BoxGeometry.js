@@ -8,9 +8,9 @@ Sidebars.Properties.Geometry.BoxGeometry = function (signals, object) {
     var HEIGHT_PROP = 'height';
     var DEPTH_PROP = 'depth';
     // add instance properties
-    editor.templateManager.addLinkProperty(WIDTH_PROP);		// todo what happens if same key is added twice?!
-    editor.templateManager.addLinkProperty('bounciness');
-    editor.templateManager.addLinkProperty('static');
+    editor.templateManager.addLinkProperty(WIDTH_PROP);
+    editor.templateManager.addLinkProperty(HEIGHT_PROP);
+    editor.templateManager.addLinkProperty(DEPTH_PROP);
 
     // width
 
@@ -220,16 +220,11 @@ Sidebars.Properties.Geometry.BoxGeometry = function (signals, object) {
         object.geometry = new THREE.BoxGeometry(
             width,
             height,
-            depth
+            depth,
+            widthSegments.getValue(),
+            heightSegments.getValue(),
+            depthSegments.getValue()
         );
-        //object.geometry = new THREE.BoxGeometry(
-        //    width.getValue(),
-        //    height.getValue(),
-        //    depth.getValue(),
-        //    widthSegments.getValue(),
-        //    heightSegments.getValue(),
-        //    depthSegments.getValue()
-        //);
 
         object.geometry.buffersNeedUpdate = true;
         object.geometry.computeBoundingSphere();
