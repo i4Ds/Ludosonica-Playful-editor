@@ -425,6 +425,19 @@
     cursor: pointer;
 }
 
+.sidebar .title-with-link{
+    float: left;
+}
+
+.sidebar .title-link{
+   float: right;
+}
+
+.clear-float{
+    clear: both;
+}
+
+
 
 #galleryCamera {
     position: absolute;
