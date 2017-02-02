@@ -6,10 +6,13 @@ Sidebars.Properties.Physics = function (editor) {
     var physijsSelected = undefined;
 
 
+    var FRICTION_PROP = 'friction';
+    var RESTITUTION_PROP = 'bounciness';
+    var PHYSICS_PROP = 'static';
     // add instance properties
-    editor.templateManager.addLinkProperty('friction');
-    editor.templateManager.addLinkProperty('bounciness');
-    editor.templateManager.addLinkProperty('static');
+    editor.templateManager.addLinkProperty( FRICTION_PROP );
+    editor.templateManager.addLinkProperty( RESTITUTION_PROP );
+    editor.templateManager.addLinkProperty(PHYSICS_PROP);
 
     // panel
 
@@ -27,7 +30,7 @@ Sidebars.Properties.Physics = function (editor) {
     var frictionLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
         if (this.dom.className.indexOf('linked') === -1) {
-            objectSelected.isLinked['friction'] = true;
+            objectSelected.isLinked[FRICTION_PROP] = true;
             this.setClass('icn icon-link linked');
 
             // update to template value
@@ -41,7 +44,7 @@ Sidebars.Properties.Physics = function (editor) {
     var physicsFriction = new UI.Number(0.5).setRange(0, 1).onChange(function () {
 
         if (objectSelected.isInstance) {
-            objectSelected.isLinked['friction'] = false;
+            objectSelected.isLinked[FRICTION_PROP] = false;
             frictionLink.setClass('icn icon-link link');
         }
         update();
@@ -61,7 +64,7 @@ Sidebars.Properties.Physics = function (editor) {
     var restitutionLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
         if (this.dom.className.indexOf('linked') === -1) {
-            objectSelected.isLinked['bounciness'] = true;
+            objectSelected.isLinked[RESTITUTION_PROP] = true;
             this.setClass('icn icon-link linked');
 
             // update to template value
@@ -74,7 +77,7 @@ Sidebars.Properties.Physics = function (editor) {
     });
     var physicsRestitution = new UI.Number(0.5).setRange(0, 1).onChange(function (){
         if (objectSelected.isInstance) {
-            objectSelected.isLinked['bounciness'] = false;
+            objectSelected.isLinked[RESTITUTION_PROP] = false;
             restitutionLink.setClass('icn icon-link link');
         }
         update()
@@ -94,7 +97,7 @@ Sidebars.Properties.Physics = function (editor) {
     var physicsModeLink = new UI.Text('').setClass('icn icon-link').onClick(function () {
 
         if (this.dom.className.indexOf('linked') === -1) {
-            objectSelected.isLinked['static'] = true;
+            objectSelected.isLinked[PHYSICS_PROP] = true;
 
             this.setClass('icn icon-link linked');
 
@@ -108,7 +111,7 @@ Sidebars.Properties.Physics = function (editor) {
     });
     var physicsMode = new UI.Checkbox(false).onChange(function (){
         if (objectSelected.isInstance) {
-            objectSelected.isLinked['static'] = false;
+            objectSelected.isLinked[PHYSICS_PROP] = false;
             physicsModeLink.setClass('icn icon-link link');
         }
         update()
@@ -137,14 +140,14 @@ Sidebars.Properties.Physics = function (editor) {
 
                 if (physics) {
 
-                    if (instObjects[i].isLinked.friction) {
+                    if (instObjects[i].isLinked[FRICTION_PROP]) {
                         physics.friction = physicsFriction.getValue();
                     }
-                    if (instObjects[i].isLinked.bounciness) {
+                    if (instObjects[i].isLinked[RESTITUTION_PROP]) {
                         physics.restitution = physicsRestitution.getValue();
                     }
-                    if (instObjects[i].isLinked.static) {
-                        objectSelected.isStatic = physicsMode.getValue();
+                    if (instObjects[i].isLinked[PHYSICS_PROP]) {
+                        instObjects[i].isStatic = physicsMode.getValue();
                     }
 
                 }
@@ -200,19 +203,19 @@ Sidebars.Properties.Physics = function (editor) {
 
                 // set link to linked icon if property is linked or to link button if not for all props:
                 //friction
-                if (objectSelected.isLinked['friction']) {
+                if (objectSelected.isLinked[FRICTION_PROP]) {
                     frictionLink.setClass('icn icon-link linked');
                 } else {
                     frictionLink.setClass('icn icon-link link');
                 }
                 // restitution
-                if (objectSelected.isLinked['bounciness']) {
+                if (objectSelected.isLinked[RESTITUTION_PROP]) {
                     restitutionLink.setClass('icn icon-link linked');
                 } else {
                     restitutionLink.setClass('icn icon-link link');
                 }
                 // static
-                if (objectSelected.isLinked['static']) {
+                if (objectSelected.isLinked[PHYSICS_PROP]) {
                     physicsModeLink.setClass('icn icon-link linked');
                 } else {
                     physicsModeLink.setClass('icn icon-link link');
