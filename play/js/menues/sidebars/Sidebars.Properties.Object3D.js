@@ -129,6 +129,7 @@ Sidebars.Properties.Object3D = function (editor) {
 
     });
 
+
     // POSITION
 
     var objectPositionRow = new UI.Panel();
