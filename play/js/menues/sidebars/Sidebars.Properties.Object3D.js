@@ -6,13 +6,13 @@ Sidebars.Properties.Object3D = function (editor) {
     // template link / unlink functionality is only added to properties: POSITION, ROTATION, SCALE
     // add instance properties
     //var NAME_PROP = 'color';
-    var PARENT_PROP = 'map';
-    var POSITION_PROP = 'opacity';
+    var PARENT_PROP = 'obj_parent';
+    //var POSITION_PROP = 'obj_position';
     var ROTATION_PROP = 'obj_rotation';
     var SCALE_PROP = 'obj_scale';
     //editor.templateManager.addLinkProperty(NAME_PROP);
     editor.templateManager.addLinkProperty(PARENT_PROP);
-    editor.templateManager.addLinkProperty(POSITION_PROP);
+    //editor.templateManager.addLinkProperty(POSITION_PROP);
     editor.templateManager.addLinkProperty(ROTATION_PROP);
     editor.templateManager.addLinkProperty(SCALE_PROP);
 
@@ -133,7 +133,7 @@ Sidebars.Properties.Object3D = function (editor) {
 
     var objectPositionRow = new UI.Panel();
     objectPositionRow.setClass("row advanced");
-    var positionLink = new UI.Text('').setClass('icn icon-link').onClick(updatePositionLink);
+    //var positionLink = new UI.Text('').setClass('icn icon-link').onClick(updatePositionLink);
     var objectPositionX = new UI.Number().setWidth('50px').setColor('red').onChange(updatePosition);
     var objectPositionY = new UI.Number().setWidth('50px').setColor('green').onChange(updatePosition);
     var objectPositionZ = new UI.Number().setWidth('50px').setColor('blue').onChange(updatePosition);
@@ -141,7 +141,7 @@ Sidebars.Properties.Object3D = function (editor) {
     var objectPositionYLabel = new UI.Text('Y').setWidth('10px').setColor('green');
     var objectPositionZLabel = new UI.Text('Z').setWidth('10px').setColor('blue');
 
-    objectPositionRow.add(positionLink);
+    //objectPositionRow.add(positionLink);
     objectPositionRow.add(new UI.Text('Position').setWidth('90px'));
     objectPositionRow.add(objectPositionXLabel, objectPositionX,
         objectPositionYLabel, objectPositionY,
@@ -152,29 +152,29 @@ Sidebars.Properties.Object3D = function (editor) {
 
     function updatePosition() {
 
-        if (editor.selected.isInstance) {
-            editor.selected.isLinked[POSITION_PROP] = false;
-            positionLink.setClass('icn icon-link link');
-        }
+        //if (editor.selected.isInstance) {
+        //    editor.selected.isLinked[POSITION_PROP] = false;
+        //    positionLink.setClass('icn icon-link link');
+        //}
         update();
     }
 
-    function updatePositionLink() {
-
-        if (this.dom.className.indexOf('linked') === -1) {
-            editor.selected.isLinked[POSITION_PROP] = true;
-            this.setClass('icn icon-link linked');
-
-            // update ui inputs to template value
-            var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
-
-            objectPositionX.setValue(template.position.x);
-            objectPositionY.setValue(template.position.y);
-            objectPositionZ.setValue(template.position.z);
-
-            update();
-        }
-    }
+    //function updatePositionLink() {
+    //
+    //    if (this.dom.className.indexOf('linked') === -1) {
+    //        editor.selected.isLinked[POSITION_PROP] = true;
+    //        this.setClass('icn icon-link linked');
+    //
+    //        // update ui inputs to template value
+    //        var template = editor.templateManager.getTemplateOfInstance(editor.selected.id);
+    //
+    //        objectPositionX.setValue(template.position.x);
+    //        objectPositionY.setValue(template.position.y);
+    //        objectPositionZ.setValue(template.position.z);
+    //
+    //        update();
+    //    }
+    //}
 
     signals.objectSelected.add(function (object) {
 
@@ -514,13 +514,13 @@ Sidebars.Properties.Object3D = function (editor) {
 
         var object = editor.selected;
 
+        // UPDATE INSTANCE OF TEMPLATE
         if (object.isTemplate) {
 
             var instObjects = editor.templateManager.getInstancesOfTemplate(object.id);
 
             for (var i = 0; i < instObjects.length; i++) {
 
-                // todo check if property of the current instance is linked to the template or not.
                 updateObject(instObjects[i], true);
 
             }
@@ -547,7 +547,7 @@ Sidebars.Properties.Object3D = function (editor) {
             }
 
             // POSITION
-            if (!isInstance || ( isInstance && object.isLinked[POSITION_PROP] )) {
+            if (!isInstance) {
                 object.position.x = objectPositionX.getValue();
                 object.position.y = objectPositionY.getValue();
                 object.position.z = objectPositionZ.getValue();
@@ -789,7 +789,7 @@ Sidebars.Properties.Object3D = function (editor) {
 
                 //$(nameLink.dom).show();
                 //$(parentLink.dom).show();
-                $(positionLink.dom).show();
+                //$(positionLink.dom).show();
                 $(rotationLink.dom).show();
                 $(scaleLink.dom).show();
 
@@ -807,11 +807,11 @@ Sidebars.Properties.Object3D = function (editor) {
                 //    parentLink.setClass('icn icon-link link');
                 //}
                 // position
-                if (object.isLinked[POSITION_PROP]) {
-                    positionLink.setClass('icn icon-link linked');
-                } else {
-                    positionLink.setClass('icn icon-link link');
-                }
+                //if (object.isLinked[POSITION_PROP]) {
+                //    positionLink.setClass('icn icon-link linked');
+                //} else {
+                //    positionLink.setClass('icn icon-link link');
+                //}
                 // rotation
                 if (object.isLinked[ROTATION_PROP]) {
                     rotationLink.setClass('icn icon-link linked');
@@ -828,7 +828,7 @@ Sidebars.Properties.Object3D = function (editor) {
             } else {
                 //$(nameLink.dom).hide();
                 //$(parentLink.dom).hide();
-                $(positionLink.dom).hide();
+                //$(positionLink.dom).hide();
                 $(rotationLink.dom).hide();
                 $(scaleLink.dom).hide();
             }
