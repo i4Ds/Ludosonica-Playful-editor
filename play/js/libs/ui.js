@@ -1029,7 +1029,7 @@ UI.Sound.prototype.getValue = function() {
 	return this.sound;
 };
 
-UI.Sound.prototype.setValue = function(sound) {
+UI.Sound.prototype.setValue = function(sound, notSetInUI) {
 
 	if (sound instanceof Blob) {
 
@@ -1040,7 +1040,10 @@ UI.Sound.prototype.setValue = function(sound) {
 			var changeEvent = document.createEvent('HTMLEvents');
 			changeEvent.initEvent( 'change', true, true );
 			changeEvent.buffer = buffer;
-			this.dom.dispatchEvent( changeEvent );
+			if(!notSetInUI){
+				this.dom.dispatchEvent( changeEvent );
+			}
+
 
 		}.bind(this) );
 		this.dom.dropArea.textContent = sound.name;
@@ -1061,7 +1064,9 @@ UI.Sound.prototype.setValue = function(sound) {
 
 		var changeEvent = document.createEvent('HTMLEvents');
 		changeEvent.initEvent( 'change', true, true );
-		this.dom.dispatchEvent( changeEvent );
+		if(!notSetInUI){
+			this.dom.dispatchEvent( changeEvent );
+		}
 	}
 
 };
@@ -1222,6 +1227,7 @@ UI.EventList.prototype.actionProperties = {
 
 				}
 
+				// does it need this?
 				self.fireChange();
 
 			} );
@@ -1238,10 +1244,11 @@ UI.EventList.prototype.actionProperties = {
 			//save the sound itself in the event list
 			resultObject.sound = eventNode._soundProperty.getValue();
 
+
 		},
 		setData: function ( container, dataObject, eventNode ) {
 
-			eventNode._soundProperty.setValue( dataObject.sound );
+			eventNode._soundProperty.setValue( dataObject.sound, true);
 
 		}
 	},

@@ -14,7 +14,6 @@ Sidebars.Properties.Events = function ( editor ) {
 
 	var title = $("<h3/>",{ html: "Events" });
 	title.addClass('title-with-link');
-	title.appendTo( container.dom );
 
 	var eventsLink = new UI.Text('').setClass('icn icon-link link title-link').onClick(function () {
 
@@ -30,7 +29,9 @@ Sidebars.Properties.Events = function ( editor ) {
 			update();
 		}
 	});
+
 	container.add( eventsLink );
+	title.appendTo( container.dom );
 
 	// event list
 
@@ -38,6 +39,7 @@ Sidebars.Properties.Events = function ( editor ) {
 	eventListRow.setClass('clear-float');
 	var eventList = new UI.EventList(  ).onChange( function () {
 
+		console.log('ON CHANGE');
 		// link button logic
 		if (objectSelected.isInstance) {
 			objectSelected.isLinked[EVENTS_PROP] = false;

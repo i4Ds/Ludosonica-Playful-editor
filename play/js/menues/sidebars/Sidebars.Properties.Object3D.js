@@ -246,7 +246,7 @@ Sidebars.Properties.Object3D = function (editor) {
     }
 
 
-    // scale all
+    // scale all (disabled)
 
     var objectScaleAllRow = new UI.Panel();
     objectScaleAllRow.setClass("row advanced");
@@ -260,10 +260,10 @@ Sidebars.Properties.Object3D = function (editor) {
     container.add(objectScaleAllRow);
 
 
-    // SCALE separate
+    // scale separate (disabled)
 
     var objectScaleRow = new UI.Panel();
-    objectScaleRow.setClass("row advanced");
+    objectScaleRow.setClass("row advanced disabled");
     var scaleLink = new UI.Text('').setClass('icn icon-link').onClick(updateScaleLink);
     var objectScaleX = new UI.Number(1).setWidth('50px').setColor('red').onChange(updateScaleX);
     var objectScaleY = new UI.Number(1).setWidth('50px').setColor('green').onChange(updateScaleY);

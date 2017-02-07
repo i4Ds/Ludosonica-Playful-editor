@@ -427,10 +427,11 @@
 
 .sidebar .title-with-link{
     float: left;
+    padding-top: 5px;
 }
 
 .sidebar .title-link{
-   float: right;
+   float: left;
 }
 
 .clear-float{
