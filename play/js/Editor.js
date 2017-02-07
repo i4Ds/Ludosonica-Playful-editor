@@ -906,6 +906,7 @@ Editor.prototype = {
                     }
 
 
+
                     // todo new: get id of notifier -> subscribe with: findObjectById
                     for (var i = 0; i < clone.events.length; i++) {
                         // check for observable topic triggers

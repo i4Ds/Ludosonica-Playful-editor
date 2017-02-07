@@ -49,7 +49,7 @@ var formconfig = {
 	scenename:{
 		rules: [
                { test: /^.{1,20}$/,
-                 error: 'Scenename  must be between 1 and 20 characters' }
+                 error: 'Scenename must be between 1 and 20 characters' }
              ]
     },
 	description:{
@@ -115,7 +115,9 @@ var process = function(req, res, next) {
 
 		//make directory
 		//var timestamp = new Date().toUTCString();
-		var timestamp = new Date().toString().replace(' GMT+0100 (CET)', '');
+		var date = new Date();
+				date.setHours(date.getHours()+1);
+				var timestamp = date.toISOString().replace(/T/, ' ').replace(/\..+/, ''); 
 		var shasum = crypto.createHash('sha256');
 		//shasum.update( req.form.data.email + req.form.data.name + timestamp );
 		shasum.update( req.form.data.scenename + timestamp );

@@ -1177,32 +1177,167 @@ UI.EventList.prototype.actionProperties = {
 			var xPanel = new UI.Panel();
 			var yPanel = new UI.Panel();
 			var zPanel = new UI.Panel();
+			var randomPanel = new UI.Panel();
+			randomPanel.add(new UI.Text('').setWidth('140px'));
+			randomPanel.add(new UI.Text('random'));
 			xPanel.add( new UI.Text( 'X' ).setWidth( '90px' ) );
-			xPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ) );
+			xPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
+			xPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+			xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+			xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+			xPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+			xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+			xPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+			xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+
+			// y property
 			yPanel.add( new UI.Text( 'Y' ).setWidth( '90px' ) );
-			yPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ) );
+			yPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
+
+			yPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+			yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+			yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+			yPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+			yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+
+			yPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+			yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+
+			// z Property
+
 			zPanel.add( new UI.Text( 'Z' ).setWidth( '90px' ) );
-			zPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ) );
+			zPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
+
+			zPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+			zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+			zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+			zPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+			zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+
+			zPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+			zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+
+			container.add(randomPanel);
 			container.add( xPanel );
 			container.add( yPanel );
 			container.add( zPanel );
 			return container;
 
+			function update() {
+				var text = container.dom.querySelectorAll('span.Text');
+				var input = container.dom.querySelectorAll('input.Input');
+				var checkBox = container.dom.querySelectorAll('input.Checkbox');
+				var numbers = container.dom.querySelectorAll('input.Number');
+				if ( checkBox[0].checked) {
+					$(input[0]).show();
+					$(input[1]).show();
+					$(text[3]).show();
+					$(text[4]).show();
+					$(numbers[0]).hide();
+				} else if (!checkBox[0].checked) {
+					$(input[0]).hide();
+					$(numbers[0]).val('0.00');
+					$(input[0]).val('');
+					$(input[1]).val('');
+					$(input[1]).hide();
+					$(text[3]).hide();
+					$(text[4]).hide();
+					$(numbers[0]).show();
+				}
+				if ( checkBox[1].checked) {
+					$(input[2]).show();
+					$(input[3]).show();
+					$(text[7]).show();
+					$(text[6]).show();
+					$(numbers[1]).hide();
+				} else if (!checkBox[1].checked) {
+					$(input[2]).val('');
+					$(input[3]).val('');
+					// $(numbers[1]).val('0.00');
+					$(input[2]).hide();
+					$(input[3]).hide();
+					$(text[7]).hide();
+					$(text[6]).hide();
+					$(numbers[1]).show();
+				}
+				if ( checkBox[2].checked) {
+					$(input[4]).show();
+					$(input[5]).show();
+					$(text[9]).show();
+					$(text[10]).show();
+					$(numbers[2]).hide();
+				} else if (!checkBox[2].checked) {
+					$(input[4]).val('');
+					$(input[5]).val('');
+					$(numbers[2]).val('0.00');
+					$(input[4]).hide();
+					$(input[5]).hide();
+					$(text[9]).hide();
+					$(text[10]).hide();
+					$(numbers[2]).show();
+				}
+				}
+
 		},
 		getData: function ( container, resultObject ) {
-
+			var text = container.dom.querySelectorAll('span.Text');
+			var input = container.dom.querySelectorAll('input.Input');
 			var numbers = container.dom.querySelectorAll('input.Number');
+			var checkBox = container.dom.querySelectorAll('input.Checkbox');
+			if (isNaN(input[0].value) && isNaN(input[1].value) && isNaN(input[2].value) && isNaN(input[3].value)
+				&& isNaN(input[4].value) && isNaN(input[5].value)) {
+				input[0].value = '';
+				input[1].value = '';
+				input[2].value = '';
+				input[3].value = '';
+				input[4].value = '';
+				input[5].value = '';
+
+			}
 			resultObject.x = parseFloat(numbers[0].value);
 			resultObject.y = parseFloat(numbers[1].value);
 			resultObject.z = parseFloat(numbers[2].value);
+			// random TOSS
+			resultObject.xIsRandomFrom = parseFloat(input[0].value);
+			resultObject.yIsRandomFrom = parseFloat(input[2].value);
+			resultObject.zIsRandomFrom = parseFloat(input[4].value);
+			resultObject.xIsRandomTo = parseFloat(input[1].value);
+			resultObject.yIsRandomTo = parseFloat(input[3].value);
+			resultObject.zIsRandomTo = parseFloat(input[5].value);
+
+
+			resultObject.xIsRandom = checkBox[0].checked;
+			resultObject.xIsRandom = checkBox[1].checked;
+			resultObject.xIsRandom = checkBox[2].checked;
+
+
+
 
 		},
 		setData: function ( container, dataObject ) {
-
+			var text = container.dom.querySelectorAll('span.Text');
+			var input = container.dom.querySelectorAll('input.Input');
 			var numbers = container.dom.querySelectorAll('input.Number');
+			var checkBox = container.dom.querySelectorAll('input.Checkbox');
+
+
 			numbers[0].value = dataObject.x;
 			numbers[1].value = dataObject.y;
 			numbers[2].value = dataObject.z;
+			// random TOSS
+			input[0].value = dataObject.xIsRandomFrom;
+			input[2].value = dataObject.xIsRandomFrom;
+			input[4].value = dataObject.xIsRandomFrom;
+			input[1].value = dataObject.xIsRandomTo;
+			input[3].value = dataObject.xIsRandomTo;
+			input[5].value = dataObject.xIsRandomTo;
+
+			checkBox[0].checked = dataObject.xIsRandom;
+			checkBox[1].checked = dataObject.xIsRandom;
+			checkBox[2].checked = dataObject.xIsRandom;
+
+
+
 
 		}
 	},
@@ -1261,13 +1396,15 @@ UI.EventList.prototype.actionProperties = {
 
 			var staticSelect = container.dom.querySelector('select');
 			resultObject.mode = staticSelect.value;
+			console.log("static:",staticSelect.value);
 
 		},
 		setData: function ( container, dataObject ) {
 
 			var staticSelect = container.dom.querySelector('select');
 			staticSelect.value = dataObject.mode;
-
+			console.log("static.select.value", staticSelect.value);
+			 console.log("data object.mode", dataObject.mode);
 		}
 	},
 	"Stop sounds": { },
@@ -1292,6 +1429,7 @@ UI.EventList.prototype.actionProperties = {
 			if(!id){
 				// generate id per topic // todo generate real id
 				resultObject['topicId'] = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
+				console.log("result object:",resultObject);
 			}else{
 				resultObject['topicId'] = id;
 			}

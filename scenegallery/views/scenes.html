@@ -1,129 +1,1151 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
-  <head>
-   <link rel="stylesheet" href="/stylesheets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"></link>
-		<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"></link>
-		<link rel="stylesheet" href="/stylesheets/content.css"></link>
-		<link rel="stylesheet" href="/stylesheets/style.css"/>
+<head>
+	<link rel="stylesheet" href="/stylesheets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"></link>
+	<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"></link>
+	<link rel="stylesheet" href="/stylesheets/content.css"></link>
+	<link rel="stylesheet" href="/stylesheets/style.css"/>
 
-      
-  </head>
-    <body>
-    <div class="container">
-			<div class="row">
-			<div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-          
-       <li role="presentation"><a href="/play/gallery/login">Login</a></li>
-        <li role="presentation"><a href="/play/gallery/register">Register</a></li>
-          </ul>
-          
-      <!--    <h3 class="text-muted">All the scenes in one place </h3> -->
-        </nav>
-        
-     	</div>
+	
+</head>
+<body>
+	<div class="container">
+		<div class="row">
+			<div class="header clearfix col-md-12 col-sm-12">
+				<nav>
+					<ul class="nav nav-pills pull-right">
+						
+						 <li role="presentation"><a href="/play/gallery/mozart">Mozart</a></li>
+						<li role="presentation"><a href="/play/gallery/login">Login</a></li>
+						<li role="presentation"><a href="/play/gallery/register">Register</a></li>
+					</ul>
+					
+					
+				</nav>
+				
+			</div>
 
-					<h3>Scenes overview</h3>
+			<div class="col-md-12 col-sm-12">
+				<h3>Scenes overview</h3>
+			</div>
 
+			<div class="col-md-12 col-sm-12 col-xs-12 toggle_buttons">
 
-						<!-- <hr class="col-md-12 main-row" /> -->
+			    <ul class="nav navbar-nav">
+	       <li class="dropdown">
+	            <a href="#" class="dropdown-toggle" data-toggle="dropdown">Filter by username <b class="caret"></b></a>
+	            <ul class="dropdown-menu multi-column columns-4" style="right: 0; left: auto;">
+		            <div class="row">
+			            <div class="col-sm-3">
+				            <ul class="multi-column-dropdown">
+					            <li><a class="button" data-rel="#a_scenes" href="#">A</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#b_scenes" href="#">B</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#c_scenes" href="#">C</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#d_scenes" href="#">D</a></li>
+					             <li class="divider"></li>
+					            <li><a class="button" data-rel="#e_scenes" href="#">E</a></li>
+					                <li class="divider"></li>
+					            <li><a class="button" data-rel="#f_scenes" href="#">F</a></li>
+					             <li class="divider"></li>
+					             <li><a class="button" data-rel="#g_scenes" href="#">G</a></li>
 
-					<% scenes.forEach(function(scene){ %>
+				            </ul>
+			            </div>
+			            <div class="col-sm-3">
+				            <ul class="multi-column-dropdown">
+					            <li><a class="button" data-rel="#h_scenes" href="#">H</a></li>
+					             <li class="divider"></li>
+					            <li><a class="button" data-rel="#i_scenes" href="#">I</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#j_scenes" href="#">J</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#k_scenes" href="#">K</a></li>
+					             <li class="divider"></li>
+					            <li><a class="button" data-rel="#l_scenes" href="#">L</a></li>
+					             <li class="divider"></li>
+					             <li><a class="button" data-rel="#m_scenes" href="#">M</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#n_scenes" href="#">N</a></li>
+					             
+				            </ul>
+			            </div>
+			            <div class="col-sm-3">
+				            <ul class="multi-column-dropdown">
+					            <li><a class="button" data-rel="#o_scenes" href="#">O</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#p_scenes" href="#">P</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#q_scenes" href="#">Q</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#r_scenes" href="#">R</a></li>
+					            <li class="divider"></li>
+					              <li><a class="button" data-rel="#s_scenes" href="#">S</a></li>
+					             <li class="divider"></li>
+					            <li><a class="button" data-rel="#t_scenes" href="#">T</a></li>
+					               <li class="divider"></li>
+					             <li><a class="button" data-rel="#u_scenes" href="#">U</a></li>
+					            
+				            </ul>
+			            </div>
+			             <div class="col-sm-3">
+				            <ul class="multi-column-dropdown">
+					            <li><a class="button" data-rel="#v_scenes" href="#">V</a></li>
+					             <li class="divider"></li>
+					            <li><a class="button" data-rel="#w_scenes" href="#">W</a></li>
+					            <li class="divider"></li>
+					            <li><a class="button" data-rel="#z_scenes" href="#">Z</a></li>
+					             <li class="divider"></li>
+					             <li><a class="button active" data-rel="#all" href="#">All scenes</a></li>
+				            </ul>
+			            </div>
+		            </div>
+		          
+	            </ul>
+	        </li>
+	        
+        </ul>
 
-						<div class="col-md-3 scene-entry_all">
+			
+			</div>
 
-							<h4><%= scene.name %></h4>
-							<h5>By: <b><%= scene.user_name  %></b></h5>
+			<div class=' toggle' id="all" style='display:block;'>
 
-							<div class="row">
+				<% scenes.forEach(function(scene){ %>
+				<div class="col-md-4 col-sm-6">
+					
+					<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
 
-								<div class="col-md-12">
-									<p class="text-left">Modified: <%= scene.timestamp  %></p>
-								</div>
-							</div>
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
 
-							<div class="row">
-										<div class="col-md-12">
-											<% if( scene.images >= 1 ) { %>
-												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"></img>
-												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"></noscript>
-											<% } %>
-										</div>
-
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
 									</div>
-
-							<div class="row">
-
-								<div class="col-md-12">
-									<div class="panel panel-default">
-										<div class="panel-body">
-											Scene description: </br>
-											<%= scene.description  %>
-										</div>
-									</div>
-
-										
-
-									<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-primary">Play</a>
-								
-
 								</div>
 
-							</div>
+								<img class="img-responsive lazy" data-original="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
 
 
 
 						</div>
 
-						<div class="col-md-1"></div>
 
-						<% }) %>
-
-				
-
-					<hr class="col-md-12 main-row" />
-
-					
-
-					
-
+					</div>
+					<% }) %>
 				</div>
-				<div class="col-md-1"></div>				
-				
-			</div>
-		</div>
 
-		<script type="text/javascript" src='/javascripts/jquery-2.1.1.min.js'></script>
-		<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
-		<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
-		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
-		<script type="text/javascript">
+			<div class=' toggle' id="a_scenes" style='display:block;'>
+
+					
+					<% a_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>	
+							</div>			
 		
-		$(function() {
-			$("img.lazy").lazyload({
-				event : "click",
-					effect : "fadeIn",
-					threshold : 200
-		});
-		});
 
-			function loadImages(){
+			<div class=' toggle' id="b_scenes" style='display:block;'>
+
+					
+					<% b_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
 				
-				$("img.lazy").show().lazyload({
-					effect : "fadeIn",
-					threshold : 200
-				});
-			}
+
+			<div class=' toggle' id="c_scenes" style='display:block;'>
+
+					
+					<% c_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+
+			<div class=' toggle' id="d_scenes" style='display:block;'>
+
+					
+					<% d_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+							</div>
+
+			<div class=' toggle' id="e_scenes" style='display:block;'>
+
+					
+					<% e_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
 			
+
+			<div class=' toggle' id="f_scenes" style='display:block;'>
+
+					
+					<% f_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="g_scenes" style='display:block;'>
+
+					
+					<% g_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+		
+
+			<div class=' toggle' id="h_scenes" style='display:block;'>
+
+					
+					<% h_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+
+			<div class=' toggle' id="i_scenes" style='display:block;'>
+
+					
+					<% i_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="j_scenes" style='display:block;'>
+
+					
+					<% j_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+						<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="k_scenes" style='display:block;'>
+
+					
+					<% k_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="l_scenes" style='display:block;'>
+
+					
+				<% l_scenes.forEach(function(scene){ %>
+				<div class="col-md-4 col-sm-6">
+
+
+
+					<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+					</div>
+					<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="m_scenes" style='display:block;'>
+
+					
+					<% m_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+						<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="n_scenes" style='display:block;'>
+
+					
+					<% n_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+						<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="o_scenes" style='display:block;'>
+
+					
+					<% o_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="p_scenes" style='display:block;'>
+
+					
+					<% p_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="q_scenes" style='display:block;'>
+
+					
+					<% q_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="r_scenes" style='display:block;'>
+
+					
+					<% r_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+	
+
+			<div class=' toggle' id="s_scenes" style='display:block;'>
+
+					
+					<% s_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="t_scenes" style='display:block;'>
+
+					
+					<% t_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+			
+
+			<div class=' toggle' id="u_scenes" style='display:block;'>
+
+					
+					<% u_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="v_scenes" style='display:block;'>
+
+					
+					<% v_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="w_scenes" style='display:block;'>
+
+					
+					<% w_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+				
+
+			<div class=' toggle' id="z_scenes" style='display:block;'>
+
+					
+					<% z_scenes.forEach(function(scene){ %>
+					<div class="col-md-4 col-sm-6">
+
+
+
+							<div class="ct-gallery-item">
+						<% if( scene.images >= 1 ) { %>
+						<div class="bar">
+							<h5 class="scenename">By: <%= scene.user_name  %></h5>
+							<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								<div class="imgDescription">
+									<h4 class="scenename_center"> <%= scene.name %></h4>
+
+									<div class="description_other"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+										
+										<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+										<a type="button" href="/<%= scene.location %>playful.playful"  class="icon-save"></a>
+									</div>
+								</div>
+								
+								<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+							</a>
+							<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+							<% } %>
+
+
+
+						</div>
+							</div>
+							<% }) %>
+
+							
+
+						</div>
+					</div>
+			</div>
+
+
+				<script type="text/javascript" src='/javascripts/jquery-2.1.1.min.js'></script>
+				<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
+				<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
+				<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
+				<script type="text/javascript">
+
+					$(function() {
+						$("img.lazy").lazyload({
+							event : "click",
+							effect : "fadeIn",
+							threshold : 200
+						});
+					});
+
+					function loadImages(){
+
+						$("img.lazy").show().lazyload({
+							effect : "fadeIn",
+							threshold : 200
+						});
+					}
+
 			//add function for iframe parent
 			parent.iFrameLoadImages = loadImages;  
-		
+			
 			$(function() {
 				loadImages();
 				$(".fancybox").fancybox({
@@ -138,10 +1160,29 @@
 					},
 				});
 			});
-						
+			
 			
 		</script>
-	
+		<script>
+			$('.button').click(function(e) {
+				e.preventDefault();
+				setContent($(this));
+			});
+
+// set content on load
+$('.button.active').length && setContent($('.button.active'));
+
+function setContent($el) {
+	$('.button').removeClass('active');
+	$('.toggle').hide();
+
+	$el.addClass('active');
+	$($el.data('rel')).show();
+
+}
+
+</script>
+
 </body>
 
 </html>

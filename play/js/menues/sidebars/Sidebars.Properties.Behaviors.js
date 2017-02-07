@@ -14,10 +14,10 @@ Sidebars.Properties.Behaviors = function ( editor ) {
 
 	
 	// rocket
-
 	var rocketRow = new UI.Panel();
 	rocketRow.setClass('row');
 	var rocket = new UI.Behavior( 'Rocket' ).onChange( update );
+
 	//rocket.setProperties( '' );
 
 	rocketRow.add( rocket );
@@ -66,22 +66,22 @@ Sidebars.Properties.Behaviors = function ( editor ) {
 	function update() {
 		
 		if ( objectSelected ) {
-		
+
 			var object = objectSelected;
-		
+
 			var behaviors = {};
-			
+
 			for ( var behavior in behaviorList ) {
-				
+
 				if ( behaviorList[ behavior ].getValue() ) behaviors[ behavior ] = behaviorList[ behavior ].getProperties() || 1; // need the 1 in order to have the JSON export it...
-				
+
 			}
-			
+
 			// assign behaviors to the object
 			object.behaviors = behaviors;
-			
+
 			signals.objectChanged.dispatch( object );
-			
+
 		}
 
 	}
