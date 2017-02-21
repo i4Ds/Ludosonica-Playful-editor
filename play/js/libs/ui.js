@@ -1029,6 +1029,9 @@ UI.Sound.prototype.getValue = function() {
 	return this.sound;
 };
 
+// notSetInUI: is a hack for the template instance link functionality.
+// it is needed in order that there is no change event triggered, when the value is set in code
+// and not by user interaction.
 UI.Sound.prototype.setValue = function(sound, notSetInUI) {
 
 	if (sound instanceof Blob) {
@@ -1363,13 +1366,13 @@ UI.EventList.prototype.actionProperties = {
                 $(text[10]).hide();
                 $(numbers[2]).show();
             }
-
-            console.log("x from:",resultObject.xIsRandomFrom);
-            console.log("x to:",resultObject.xIsRandomTo);
-            console.log("y from:",resultObject.yIsRandomFrom);
-            console.log("y to:",resultObject.yIsRandomTo);
-            console.log("z from:",resultObject.zIsRandomFrom);
-            console.log("z to:",resultObject.zIsRandomTo);
+            //
+            //console.log("x from:",resultObject.xIsRandomFrom);
+            //console.log("x to:",resultObject.xIsRandomTo);
+            //console.log("y from:",resultObject.yIsRandomFrom);
+            //console.log("y to:",resultObject.yIsRandomTo);
+            //console.log("z from:",resultObject.zIsRandomFrom);
+            //console.log("z to:",resultObject.zIsRandomTo);
 
         },
         setData: function ( container, dataObject ) {
@@ -1509,15 +1512,12 @@ UI.EventList.prototype.actionProperties = {
 
 			var staticSelect = container.dom.querySelector('select');
 			resultObject.mode = staticSelect.value;
-			console.log("static:",staticSelect.value);
 
 		},
 		setData: function ( container, dataObject ) {
 
 			var staticSelect = container.dom.querySelector('select');
 			staticSelect.value = dataObject.mode;
-			console.log("static.select.value", staticSelect.value);
-			 console.log("data object.mode", dataObject.mode);
 		}
 	},
 	"Stop sounds": { },
@@ -1542,7 +1542,7 @@ UI.EventList.prototype.actionProperties = {
 			if(!id){
 				// generate id per topic // todo generate real id
 				resultObject['topicId'] = Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1) + Math.floor((1 + Math.random()) * 0x10000).toString(16).substring(1);
-				console.log("result object:",resultObject);
+
 			}else{
 				resultObject['topicId'] = id;
 			}

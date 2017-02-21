@@ -748,23 +748,6 @@ Editor.prototype = {
         };
 
 
-        var topicListener = function () {
-
-            if (this.events != undefined) {
-
-                for (var i = 0; i < this.events.length; i++) {
-
-                    if (this.events[i].trigger.type.indexOf(':') !== -1) {
-
-                        editor.play.playAction(this, i);
-
-                    }
-
-                }
-            }
-        };
-
-
         // leap touch callback
         var grab = function () {
 
@@ -897,6 +880,8 @@ Editor.prototype = {
 
 
                 if (clone.events) {
+                    console.log('clone events');
+
                     // add touch callbacks where needed
                     if (hasTriggerOrAction(clone.events, 'Touch Fist')) clone.grab = grab.bind(clone);
                     if (hasTriggerOrAction(clone.events, 'Touch Point')) clone.point = point.bind(clone);
@@ -911,10 +896,13 @@ Editor.prototype = {
 
 
                     // todo new: get id of notifier -> subscribe with: findObjectById
+                    // for notifying listeners
                     for (var i = 0; i < clone.events.length; i++) {
+
                         // check for observable topic triggers
                         if (clone.events[i].trigger.type.indexOf(':') !== -1) {
 
+                            // todo why not topic id?
                             var topic = clone.events[i].trigger.type;
 
                             if (!editor.objectSignals[topic]) {
@@ -922,8 +910,25 @@ Editor.prototype = {
                                 editor.objectSignals[topic] = new Signal();
                             }
 
-                            clone.topicListener = topicListener;
+
+                            clone.topicListener = function () {
+
+                                if (this.events != undefined) {
+
+                                    for (var i = 0; i < this.events.length; i++) {
+
+                                        if (this.events[i].trigger.type == topic) {
+
+                                            editor.play.playAction(this, i);
+
+                                        }
+                                    }
+                                }
+                            };
+
+
                             editor.objectSignals[topic].add(clone.topicListener.bind(clone));
+                            console.log('added', clone, 'as live listener to topic', topic);
                         }
                     }
                 }

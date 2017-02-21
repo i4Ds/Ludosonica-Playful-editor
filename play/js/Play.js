@@ -112,12 +112,12 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 			break;
 		case 'Notify Listeners':
 
-			// todo new: notify handlers!
 			// notify. -> dispatch signal
 			var topic = object.name+':'+action.mode;
-			if(editor.objectSignals[topic]) editor.objectSignals[topic].dispatch();
-			else console.log('no topic', topic, 'in', editor.objectSignals);
 
+			if(editor.objectSignals[topic]) editor.objectSignals[topic].dispatch();
+
+			else console.log('no topic', topic, 'in', editor.objectSignals);
 
 			break;
 	}
