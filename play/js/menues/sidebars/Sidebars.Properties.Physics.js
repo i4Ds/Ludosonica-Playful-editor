@@ -39,13 +39,13 @@ Sidebars.Properties.Physics = function ( editor ) {
 
 	var physicsModeRow = new UI.Panel();
 	physicsModeRow.setClass("row");
-	var physicsMode = new UI.Checkbox(false) .onChange( update );
+	var physicsMode = new UI.Checkbox( false ).onChange( update );
 
 	physicsModeRow.add( new UI.Text( 'Static' ).setWidth( '90px' ) );
 	physicsModeRow.add( physicsMode );
 
 	container.add( physicsModeRow );
-	
+
 	//
 
 	function update() {
@@ -53,7 +53,6 @@ Sidebars.Properties.Physics = function ( editor ) {
 
 		// COLOR UPDATE OF TEMPLATE AND ITS INSTANCES
 		if (objectSelected.isTemplate) {
-
 
 			var instObjects = editor.templateManager.getInstancesOfTemplate(objectSelected.id);
 
@@ -66,13 +65,13 @@ Sidebars.Properties.Physics = function ( editor ) {
 
 					var physics = instMaterial._physijs;
 
-					// if ( physics ) {
-                    //
-					// 	physics.friction = physicsFriction.getValue();
-					// 	physics.restitution = physicsRestitution.getValue();
-					// 	objectSelected.isStatic = physicsMode.getValue();
-                    //
-					// }
+					if ( physics ) {
+
+						physics.friction = physicsFriction.getValue();
+						physics.restitution = physicsRestitution.getValue();
+						objectSelected.isStatic = physicsMode.getValue();
+
+					}
 				}
 
 			}
@@ -80,17 +79,18 @@ Sidebars.Properties.Physics = function ( editor ) {
 
 			var physics = objectSelected.material._physijs;
 
-
 			if ( physics ) {
+
 				physics.friction = physicsFriction.getValue();
 				physics.restitution = physicsRestitution.getValue();
 				objectSelected.isStatic = physicsMode.getValue();
+
 			}
 
 
 			signals.objectChanged.dispatch( objectSelected );
 	}
-	
+
 	// events
 
 	signals.objectSelected.add( function ( object ) {
