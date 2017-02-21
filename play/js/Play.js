@@ -46,7 +46,6 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 			
 			var multFactor = Math.max( -editor.scene._gravity.y, 1 ) * object.mass;
 
-		console.log(action);
 			if(action.xIsRandomFrom && action.xIsRandomTo) {
 				action.x = ((Math.random() * (action.xIsRandomTo - action.xIsRandomFrom)) + action.xIsRandomFrom).toFixed(2);
 			}

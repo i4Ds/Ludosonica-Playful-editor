@@ -814,6 +814,23 @@ Editor.prototype = {
 
         };
 
+
+        // topic listener callback
+        var topicListener = function () {
+
+            if (this.events != undefined) {
+
+                for (var i = 0; i < this.events.length; i++) {
+
+                    if (this.events[i].trigger.type.indexOf(':') !== -1) {
+
+                        editor.play.playAction(this, i);
+
+                    }
+                }
+            }
+        };
+
         var release = function () {
 
             //editor.play.effects.removeGlow( this );
@@ -824,7 +841,7 @@ Editor.prototype = {
         function hasTriggerOrAction(events, type) {
 
             for (var i = 0; i < events.length; i++) {
-                if (events[i].trigger.type == type) return true;
+                if (events[i].trigger.type == type || events[i].trigger.type.indexOf(type) !== -1) return true;
                 if (events[i].action.type == type) return true;
             }
 
@@ -886,6 +903,7 @@ Editor.prototype = {
                     if (hasTriggerOrAction(clone.events, 'Touch Fist')) clone.grab = grab.bind(clone);
                     if (hasTriggerOrAction(clone.events, 'Touch Point')) clone.point = point.bind(clone);
                     if (hasTriggerOrAction(clone.events, 'Touch Stroke')) clone.stroke = stroke.bind(clone);
+                    if (hasTriggerOrAction(clone.events, ':')) clone.topicListener = topicListener.bind(clone);
 
                     if (hasTriggerOrAction(clone.events, 'Resurrect')) {
                         clone._resurrectionPos = clone.position.clone();
@@ -894,16 +912,13 @@ Editor.prototype = {
                     }
 
 
+                    // for live event listening
+                    clone.events.forEach(function(event, index){
 
-                    // todo new: get id of notifier -> subscribe with: findObjectById
-                    // for notifying listeners
-                    for (var i = 0; i < clone.events.length; i++) {
+                        console.log('im for each', event, index);
+                        if (event.trigger.type.indexOf(':') !== -1) {
 
-                        // check for observable topic triggers
-                        if (clone.events[i].trigger.type.indexOf(':') !== -1) {
-
-                            // todo why not topic id?
-                            var topic = clone.events[i].trigger.type;
+                            var topic = event.trigger.type;
 
                             if (!editor.objectSignals[topic]) {
                                 var Signal = signals.Signal;
@@ -911,26 +926,14 @@ Editor.prototype = {
                             }
 
 
-                            clone.topicListener = function () {
+                            editor.objectSignals[topic].add(function () {
+                                console.log('hallo vleo', clone, index, topic);
+                                editor.play.playAction(clone, index);
+                            });
 
-                                if (this.events != undefined) {
-
-                                    for (var i = 0; i < this.events.length; i++) {
-
-                                        if (this.events[i].trigger.type == topic) {
-
-                                            editor.play.playAction(this, i);
-
-                                        }
-                                    }
-                                }
-                            };
-
-
-                            editor.objectSignals[topic].add(clone.topicListener.bind(clone));
-                            console.log('added', clone, 'as live listener to topic', topic);
                         }
-                    }
+                    });
+
                 }
 
                 clone.release = release.bind(clone);
@@ -1020,6 +1023,8 @@ Editor.prototype = {
 
             this.sceneChildrenSaves = undefined;
         }
+
+        editor.objectSignals = {};
     }
 
 };
