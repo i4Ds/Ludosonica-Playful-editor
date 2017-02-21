@@ -48,7 +48,7 @@ Sidebars.Properties.Physics = function ( editor ) {
 			var physics = physijsSelected;
 
 			if ( physics ) {
-			
+
 				physics.friction = physicsFriction.getValue();
 				physics.restitution = physicsRestitution.getValue();
 				objectSelected.isStatic = physicsMode.getValue();

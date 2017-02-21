@@ -47,7 +47,7 @@ Sidebars.File.exportSceneHelper = function ( editor, exporterClass, callback, no
 			loader.sound = sounds[sI];
 			loader.onload = function() {
 				soundFolder.file(this.sound.name, this.result, {base64: true});
-				console.log('loaded ', this.sound.name);
+				//console.log('loaded ', this.sound.name);
 				attachmentsLoaded();
 			};
 			loader.onerror = function() {

@@ -1,232 +1,178 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
 <html>
 
-	<head>
-		<link rel="stylesheet" href="/stylesheets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
-		<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
-		<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/>
-		<link rel="stylesheet" href="/stylesheets/content.css"/>
-		<link rel="stylesheet" href="/stylesheets/style.css"/>
+<head>
+	<link rel="stylesheet" href="/stylesheets/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<link rel="stylesheet" href="/stylesheets/bootstrap.min.css"/>
+	<link rel="stylesheet" href="/stylesheets/bootstrap-theme.min.css"/>
+	<link rel="stylesheet" href="/stylesheets/content.css"/>
+	<link rel="stylesheet" href="/stylesheets/style.css"/>
 	
 
-	</head>
+</head>
 
-	<body>
+<body>
+
+
 	
-		<div class="container">
-			<div class="row">
-			<div class="header clearfix">
-        <nav>
-          <ul class="nav nav-pills pull-right">
-          
-       				<li role="presentation">
-       					<a href="/play/gallery/logout">Logout</a>
+	<div class="container">
+		<div class="row">
+			<div class="header clearfix col-md-12 col-sm-12">
+				<nav>
+					<ul class="nav nav-pills pull-right">
+						 <li role="presentation"><a href="/play/gallery/mozart">Mozart</a></li>
+						<li role="presentation">
+							<a href="/play/gallery/logout">Logout</a>
 
-					</li>
-          </ul>
-
-                 
-        </nav>
-
-
-      </div>
-      		<div class="username">
-       					<h5><% if (username) { %>
-						Username: <%= username %>
-						<% } %></h5>
+						</li>
+					</ul>
+				</nav>
 			</div>
+
+			<div class="col-md-12 col-sm-12 username">
+				<h5><% if (username) { %>
+					Username: <%= username %>
+					<% } %></h5>
+				</div>
 				
 
-					<% if (success_msg.length > 0){ %>
-					   <div class="alert alert-success"><%= success_msg %></div>
-					 <% } %>
-
-						
-
-				<% { %>
-
-			<!-- <input type='button' class="btn btn-primary" id='Own' value='My own scenes' />
-			<input type='button' class="btn btn-primary" id='Others' value='Scenes by others' />
-			 -->
-	<div class="toggle_buttons">
-						
+				<% if (success_msg.length > 0){ %>
+				<div class="col-md-12 col-sm-12 alert alert-success"><%= success_msg %></div>
+				<% } %>
 
 
-			
-        <a class="button active" data-rel="#own" href="#">My own scenes</a>
-        <a class="button" data-rel="#others" href="#">Scenes by others</a>
-   		<a class="info_toggle" data-rel="#collapse1" href="#"><button class="btn btn-default">info</button></a>
-   		<div class="info_toggle_div" id="collapse1" style="display:none">
-               Below you can see scenes created by you, which you can <b>Clone</b>, <b>Download </b>and store to your computer or <b>Edit </b>in Playful editor </br></br>Then you can see all the scenes made by someone else. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. 
-    	
-    	
-   			</div>
 
-   	
-   			</div>
-   		</div>	
-		
-
-			<div class='toggle' id="own" style='display:block;'>
-
-					<div class="row">
-					<div class="col-md-3 scene">
-					<p>
-						
-						
 				
-					<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn1 btn-primary_block"> CREATE NEW SCENE</a>
-					<% } %>
-					<br/><br/>
+
+				<div class="col-md-12 col-sm-12 col-xs-12 toggle_buttons">
+
+					<a class="button_index active" data-rel="#own" href="#">My own scenes</a>
+					<a class="button_index" data-rel="#others" href="#">Scenes by others</a>
+					<a class="info_toggle" data-rel="#collapse1" href="#"><button class="btn btn-default">info</button></a>
+					<div class="col-md-12 info_toggle_div" id="collapse1" style="display:none">
+						Below you can see scenes created by you, which you can <b>Clone</b> or <b>Edit </b>in Playful editor. </br></br>Then you can see all the scenes made by other users. You can <b>Play</b> them in editor or you can <b>Copy</b> them to your scenes and then you are able to edit them as well. 
 					</div>
-					<div class="col-md-1"></div>
-					<% user_scenes.forEach(function(scene){ %>
-
-						<div class="col-md-3 scene-entry_own">
-							
-							<div class="scenename">
-							 <form method="post" action="main/delete?scene=<%= scene.id %>">
-        						<button type="submit" class="icon-icn-trash" onclick="return confirm('Are you sure you want to delete this item?');"></a></button>
-        					 </form>
-							<h4><%= scene.name %></h4>
-							</div>
-							
-							<div class="row">
-
-								<div class="col-md-12">
-									<p class="text-left">Modified: <%= scene.timestamp  %></p>
-								</div>
-							</div>
-
-							<div class="row">
-										<div class="col-md-12">
-											<% if( scene.images >= 1 ) { %>
-												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
-													<img class="img-responsive lazy" data-original="/<%= scene.location %>image0.png"/>
-												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"/></noscript>
-											<% } %>
-										</div>
-
-									</div>
-
-							<div class="row">
-
-								<div class="col-md-12">
-									<div class="panel panel-default">
-										<div class="panel-body">
-											
-											<%= scene.description  %>
-										</div>
-									</div>
-
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  class="btn btn-default_edit">Edit</a>
-										<form method="post" action="main/copy_own?scene=<%= scene.id %>">
-            						 <button type="submit" class="btn btn-primary">Clone</button>
-            						<a type="button" href="/<%= scene.location %>playful.playful" class="btn btn-primary" >Download</a>
-        							 </form>
-        							
-
-								</div>
-
-							</div>
-
-						</div>
-
-						<div class="col-md-1"></div>
-
-						<% }) %>
-
-					</div>
-			</div>
-					
-
-			
-			<div class='toggle' id="others" style='display:block;'>		
-
-						<div class="row">
-
-					<% scenes.forEach(function(scene){ %>
-
-								<div class="col-md-3 scene-entry_other">
-									<h4><%= scene.name %></h4>
-									<h5>By: <b><%= scene.user_name  %></b></h5>
-									
-
-									<div class="row">
-
-										<div class="col-md-12">
-											<p class="text-left">Modified: <%= scene.timestamp  %></p>
-										</div>
-									</div>
-
-									<div class="row">
-										<div class="col-md-12">
-											<% if( scene.images >= 1 ) { %>
-												<a class="fancybox" title="image0.png" rel="group_<%= scene.id %>" href="/<%= scene.location %>image0.png">
-													<img src="/<%= scene.location %>image0.png"/>
-												</a>
-												<noscript><img class="img-responsive" src="/<%= scene.location %>image0.png"/></noscript>
-											<% } %>
-										</div>
-
-									</div>
-
-									<div class="row">
-
-										<div class="col-md-12">
-											<div class="panel panel-default">
-												<div class="panel-body">
-												
-													<%= scene.description  %>
-												</div>
-											</div>
-
-									<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="btn btn-default_edit">Play</a>
-
-
-									<form method="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">
-            						 <button type="submit" class="btn btn-primary_copy">Copy to my scenes</button>
-        							 </form>
-
-
-										
-										</div>
-
-								</div>
-
-							
-								</div>
-
-							<div class="col-md-1"></div>
-					<% }) %>
 
 				</div>
-			</div>
-				<!-- <div class="col-md-1"></div>	 -->			
 				
-			</div>
-		</div>
-	
-	
-		<script type="text/javascript" src='/javascripts/jquery-2.1.1.min.js'></script>
-		<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
-		<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
-		<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
-		<script type="text/javascript">
+				<div class=' toggle' id="own" style='display:block;'>
 
 
-			function loadImages(){
-				
-				$("img.lazy").show().lazyload({
-					effect : "fadeIn",
-					threshold : 500
-				});
-			}
-			
+					<div class="col-md-4 col-sm-6">
+						<div class="ct-gallery-item_index_create">
+							<% { %>
+							<a type="button" href="http://<%= host %>/play?user=<%= users.id %>" class="btn1 btn-primary_block"> CREATE NEW SCENE</a>
+							<% } %>
+						</div>
+					</div>
+					<% user_scenes.forEach(function(scene){ %>
+
+					<div class="col-md-4 col-sm-6">
+
+						<div class="ct-gallery-item_index">
+						<% if( scene.images >= 1 ) { %>
+							<div class="bar">
+								<h5 class="scenename"> <%= scene.name %></h5>
+								<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+								
+								
+								<div class="imgDescription">
+									<div class="description"><%= scene.description  %><br/>
+										<small>Modified: <%= scene.timestamp  %></small></div>
+									
+									</a>
+									<form method="post" class="post" action="main/copy_own?scene=<%= scene.id %>">
+										<button type="submit" class="icon-dupli-small" onclick="return confirm('Are you sure you want to duplicate this item?');"></button> </form>
+										<form method="post" class="post" action="main/delete?scene=<%= scene.id %>">
+											<button type="submit" class="icon-del-small" onclick="return confirm('Are you sure you want to delete this item?');"></button> </form>
+											<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&user=<%= users.id %>"  class="icon-edit-small icon-icn-edit_index"></a>
+										</div>
+									</div>
+										
+										<img class="img-responsive" src="/<%= scene.location %>image1.png"/>
+										
+										<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+										<% } %>
+
+									</div>
+								</div>
+								<% }) %>
+
+							</div>
+
+
+
+
+							<div class='toggle' id="others" style='display:block;'>		
+
+								<% scenes.forEach(function(scene){ %>
+								<div class="col-md-4 col-sm-6">
+
+									<div class="ct-gallery-item">
+
+										<% if( scene.images >= 1 ) { %>
+										<div class="bar">
+											<h5 class="scenename">By: <%= scene.user_name  %></h5>
+											<a class="fancybox" rel="group_<%= scene.id %>" href="/<%= scene.location %>image1.png">
+												<div class="imgDescription">
+
+
+													<h4 class="scenename_center"> <%= scene.name %></h4>
+
+													<div class="description_other"><%= scene.description  %><br/>
+														<small>Modified: <%= scene.timestamp  %></small></div>
+
+														</a>
+														<form method="post" class="post" action="/play/gallery/main/copy_other?scene=<%= scene.id %>">
+														
+														<button type="submit" class="icon-dupli-small icon-dupli-small_other" onclick="return confirm('Are you sure you want copy this item?');"></button></form>
+
+														<a type="button" href="http://<%= host %>/play?load_scene=<%= scene.id %>&mode=play" class="icon-play"></a>
+
+													</div>
+												</div>
+
+												<!--  IMAGE LOADING CONTINUITY -->
+													<img src="/<%= scene.location %>image1.png" class="img-responsive"/>
+													<noscript><img class="img-responsive" src="/<%= scene.location %>image1.png"/></noscript>
+
+
+												<% } %>
+
+
+											</div>
+										</div>
+										<% }) %>
+
+
+									</div>
+
+
+								</div>
+							</div>
+
+
+
+
+
+							<script type="text/javascript" src='/javascripts/jquery-2.1.1.min.js'></script>
+							<script type="text/javascript" src='/javascripts/bootstrap.min.js'></script>
+							<script type="text/javascript" src='/javascripts/jquery.lazyload.min.js'></script>
+							<script type="text/javascript" src="/javascripts/jquery.fancybox.pack.js?v=2.1.5"></script>
+							<script type="text/javascript">
+
+
+								function loadImages(){
+
+									$("img.lazy").show().lazyload({
+										effect : "fadeIn",
+										threshold : 500
+									});
+								}
+
 			//add function for iframe parent
 			parent.iFrameLoadImages = loadImages;  
-		
+
 			$(function() {
 				loadImages();
 				$(".fancybox").fancybox({
@@ -241,38 +187,39 @@
 					}
 				});
 			});
-						
+
 			
 		</script>
 		<script>
-$('.button').click(function(e) {
-    e.preventDefault();
-    setContent($(this));
-});
+			$('.button_index').click(function(e) {
+				e.preventDefault();
+				setContent($(this));
+			});
 
 // set content on load
-	$('.button.active').length && setContent($('.button.active'));
+$('.button_index.active').length && setContent($('.button_index.active'));
 
 function setContent($el) {
-    $('.button').removeClass('active');
-    $('.toggle').hide();
-    
-    $el.addClass('active');
-    $($el.data('rel')).show();
+	$('.button_index').removeClass('active');
+	$('.toggle').hide();
+
+	$el.addClass('active');
+	$($el.data('rel')).show();
 
 }
 
-		</script>
-		<script>
-			$(function () {
-    $('.info_toggle').click(function () {
-        $(this).next('div').slideToggle();
-        return false;
-    });
-});
-		</script>
-		
+</script>
+<script>
+	$(function () {
+		$('.info_toggle').click(function () {
+			$(this).next('div').slideToggle();
+			return false;
+		});
+	});
+</script>
 
-	</body>
+
+
+</body>
 
 </html>

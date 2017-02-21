@@ -23,6 +23,12 @@ router.get('/login', function(req,res) {
 
 });
 
+ //test
+router.get('/mozart', function(req,res) {
+	res.render('mozart');
+
+});
+
 
 //Register User
 router.post('/register', function(req,res,call) {

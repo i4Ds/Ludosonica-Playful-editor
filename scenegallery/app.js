@@ -120,8 +120,8 @@ app.use(function (req, res, next) {
 
 
 
-// var routes = require('./routes/index');
-// app.use('/play/gallery', routes);
+// var routes = require('./routes/content');
+// app.use('/play/gallery/content', content);
 
 var users = require('./routes/users');
 app.use('/play/gallery', users);

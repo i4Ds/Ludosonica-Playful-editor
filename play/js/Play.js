@@ -44,18 +44,35 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 			object.mass = object._originalMass;
 			
 			var multFactor = Math.max( -editor.scene._gravity.y, 1 ) * object.mass;
+
+		console.log(action);
+			if(action.xIsRandomFrom && action.xIsRandomTo) {
+				action.x = ((Math.random() * (action.xIsRandomTo - action.xIsRandomFrom)) + action.xIsRandomFrom).toFixed(2);
+			}
+			if(action.yIsRandomFrom && action.yIsRandomTo) {
+				action.y = ((Math.random() * (action.yIsRandomTo - action.yIsRandomFrom)) + action.yIsRandomFrom).toFixed(2);
+			}
+			if(action.zIsRandomFrom && action.zIsRandomTo) {
+				action.z = ((Math.random() * (action.zIsRandomTo - action.zIsRandomFrom)) + action.zIsRandomFrom).toFixed(2);
+
+			}
+			console.log("x:",action.x);
+			console.log("y:",action.y);
+			console.log("z:",action.z);
 			var impulse = new THREE.Vector3(
 				action.x * multFactor, 
 				action.y * multFactor,
 				action.z * multFactor 
 			);
+
 			
 			// if the object has the "rocket" behavior the object's world rotation will be take into account when applying the impulse
 			if ( object.behaviors && object.behaviors.hasOwnProperty('rocket') ) impulse.applyMatrix4( new THREE.Matrix4().extractRotation( object.matrixWorld ) );
 			
 			object.applyCentralImpulse( impulse, object.behaviors );
 			break;
-			
+
+
 		case 'Play sound':
 			console.log('play');
 			var speed = args.relative_velocity != undefined ? args.relative_velocity.length() : 1;
