@@ -1170,177 +1170,284 @@ UI.EventList.prototype.createTemplate = function () {
 };
 
 UI.EventList.prototype.actionProperties = {
-	Toss: {
-		getUI: function (  ) {
+    Toss: {
+        getUI: function (  ) {
 
-			var container = new UI.Panel();
-			var xPanel = new UI.Panel();
-			var yPanel = new UI.Panel();
-			var zPanel = new UI.Panel();
-			var randomPanel = new UI.Panel();
-			randomPanel.add(new UI.Text('').setWidth('140px'));
-			randomPanel.add(new UI.Text('random'));
-			xPanel.add( new UI.Text( 'X' ).setWidth( '90px' ) );
-			xPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
-			xPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
-			xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
-			xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
-			xPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
-			xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
-			xPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
-			xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            var container = new UI.Panel();
+            var xPanel = new UI.Panel();
+            var yPanel = new UI.Panel();
+            var zPanel = new UI.Panel();
+            var randomPanel = new UI.Panel();
 
-			// y property
-			yPanel.add( new UI.Text( 'Y' ).setWidth( '90px' ) );
-			yPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
+            // random text
+            randomPanel.add(new UI.Text('').setWidth('140px'));
+            randomPanel.add(new UI.Text('random'));
 
-			yPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
-			yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
-			yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
-			yPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
-			yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+            // x property
+            xPanel.add( new UI.Text( 'X' ).setWidth( '90px' ) );
+            xPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
 
-			yPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
-			yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            xPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+            xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+            xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            xPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+            xPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
 
-			// z Property
+            xPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+            xPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
 
-			zPanel.add( new UI.Text( 'Z' ).setWidth( '90px' ) );
-			zPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
+            // y property
+            yPanel.add( new UI.Text( 'Y' ).setWidth( '90px' ) );
+            yPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
 
-			zPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
-			zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
-			zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
-			zPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
-			zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+            yPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+            yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+            yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            yPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+            yPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
 
-			zPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
-			zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            yPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+            yPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
 
-			container.add(randomPanel);
-			container.add( xPanel );
-			container.add( yPanel );
-			container.add( zPanel );
-			return container;
+            // z Property
+            zPanel.add( new UI.Text( 'Z' ).setWidth( '90px' ) );
+            zPanel.add( new UI.Number( 0 ).setRange( -1, 1 ).onChange( this.fireChange ).setWidth('40px') );
 
-			function update() {
-				var text = container.dom.querySelectorAll('span.Text');
-				var input = container.dom.querySelectorAll('input.Input');
-				var checkBox = container.dom.querySelectorAll('input.Checkbox');
-				var numbers = container.dom.querySelectorAll('input.Number');
-				if ( checkBox[0].checked) {
-					$(input[0]).show();
-					$(input[1]).show();
-					$(text[3]).show();
-					$(text[4]).show();
-					$(numbers[0]).hide();
-				} else if (!checkBox[0].checked) {
-					$(input[0]).hide();
-					$(numbers[0]).val('0.00');
-					$(input[0]).val('');
-					$(input[1]).val('');
-					$(input[1]).hide();
-					$(text[3]).hide();
-					$(text[4]).hide();
-					$(numbers[0]).show();
-				}
-				if ( checkBox[1].checked) {
-					$(input[2]).show();
-					$(input[3]).show();
-					$(text[7]).show();
-					$(text[6]).show();
-					$(numbers[1]).hide();
-				} else if (!checkBox[1].checked) {
-					$(input[2]).val('');
-					$(input[3]).val('');
-					// $(numbers[1]).val('0.00');
-					$(input[2]).hide();
-					$(input[3]).hide();
-					$(text[7]).hide();
-					$(text[6]).hide();
-					$(numbers[1]).show();
-				}
-				if ( checkBox[2].checked) {
-					$(input[4]).show();
-					$(input[5]).show();
-					$(text[9]).show();
-					$(text[10]).show();
-					$(numbers[2]).hide();
-				} else if (!checkBox[2].checked) {
-					$(input[4]).val('');
-					$(input[5]).val('');
-					$(numbers[2]).val('0.00');
-					$(input[4]).hide();
-					$(input[5]).hide();
-					$(text[9]).hide();
-					$(text[10]).hide();
-					$(numbers[2]).show();
-				}
-				}
+            zPanel.add( new UI.Text( 'from' ).setMargin('2px').setDisplay('none') );
+            zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
+            zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
+            zPanel.add( new UI.Text( 'to' ).setMargin('2px').setDisplay('none') );
+            zPanel.add( new UI.Input().onChange( this.fireChange ).setWidth('20px').setDisplay('none'));
 
-		},
-		getData: function ( container, resultObject ) {
-			var text = container.dom.querySelectorAll('span.Text');
-			var input = container.dom.querySelectorAll('input.Input');
-			var numbers = container.dom.querySelectorAll('input.Number');
-			var checkBox = container.dom.querySelectorAll('input.Checkbox');
-			if (isNaN(input[0].value) && isNaN(input[1].value) && isNaN(input[2].value) && isNaN(input[3].value)
-				&& isNaN(input[4].value) && isNaN(input[5].value)) {
-				input[0].value = '';
-				input[1].value = '';
-				input[2].value = '';
-				input[3].value = '';
-				input[4].value = '';
-				input[5].value = '';
+            zPanel.add( new UI.Checkbox(false).setWidth('40px').onChange(update));
+            zPanel.add( new UI.Text( '').setClass('hiddenId').setWidth( '0px' ) );
 
-			}
-			resultObject.x = parseFloat(numbers[0].value);
-			resultObject.y = parseFloat(numbers[1].value);
-			resultObject.z = parseFloat(numbers[2].value);
-			// random TOSS
-			resultObject.xIsRandomFrom = parseFloat(input[0].value);
-			resultObject.yIsRandomFrom = parseFloat(input[2].value);
-			resultObject.zIsRandomFrom = parseFloat(input[4].value);
-			resultObject.xIsRandomTo = parseFloat(input[1].value);
-			resultObject.yIsRandomTo = parseFloat(input[3].value);
-			resultObject.zIsRandomTo = parseFloat(input[5].value);
+            container.add(randomPanel);
+            container.add( xPanel );
+            container.add( yPanel );
+            container.add( zPanel );
+            return container;
 
+            function update() {
+                var text = container.dom.querySelectorAll('span.Text');
+                var input = container.dom.querySelectorAll('input.Input');
+                var checkBox = container.dom.querySelectorAll('input.Checkbox');
+                var numbers = container.dom.querySelectorAll('input.Number');
 
-			resultObject.xIsRandom = checkBox[0].checked;
-			resultObject.xIsRandom = checkBox[1].checked;
-			resultObject.xIsRandom = checkBox[2].checked;
+                if (checkBox[0].checked) {
+                    $(input[0]).show();
+                    $(input[1]).show();
+                    $(text[3]).show();
+                    $(text[4]).show();
+                    $(numbers[0]).hide();
+                } else if (!checkBox[0].checked) {
+                    $(input[0]).hide();
+                    $(input[0]).val('');
+                    $(input[1]).val('');
+                    $(input[1]).hide();
+                    $(text[3]).hide();
+                    $(text[4]).hide();
+                    $(numbers[0]).show();
+                }
+                if (checkBox[1].checked) {
+                    $(input[2]).show();
+                    $(input[3]).show();
+                    $(text[7]).show();
+                    $(text[6]).show();
+                    $(numbers[1]).hide();
+                } else if (!checkBox[1].checked) {
+                    $(input[2]).hide();
+                    $(input[2]).val('');
+                    $(input[3]).val('');
+                    $(input[3]).hide();
+                    $(text[7]).hide();
+                    $(text[6]).hide();
+                    $(numbers[1]).show();
+                }
+                if (checkBox[2].checked) {
+                    $(input[4]).show();
+                    $(input[5]).show();
+                    $(text[9]).show();
+                    $(text[10]).show();
+                    $(numbers[2]).hide();
+                } else if (!checkBox[2].checked) {
+                    $(input[4]).hide();
+                    $(input[4]).val('');
+                    $(input[5]).val('');
+                    $(input[5]).hide();
+                    $(text[9]).hide();
+                    $(text[10]).hide();
+                    $(numbers[2]).show();
+                }
+            }
 
+        },
+        getData: function ( container, resultObject ) {
+            var text = container.dom.querySelectorAll('span.Text');
+            var input = container.dom.querySelectorAll('input.Input');
+            var numbers = container.dom.querySelectorAll('input.Number');
+            var checkBox = container.dom.querySelectorAll('input.Checkbox');
 
+            // make Fields empty if no value entered
+            if (isNaN(input[0].value) || isNaN(input[1].value)) {
+                input[0].value = '';
+                input[1].value = '';
+            }
+            if (isNaN(input[2].value) || isNaN(input[3].value)) {
+                input[2].value = '';
+                input[3].value = '';
+            }
+            if (isNaN(input[4].value) || isNaN(input[5].value)) {
+                input[4].value = '';
+                input[5].value = '';
+            }
 
+            resultObject.x = parseFloat(numbers[0].value);
+            resultObject.y = parseFloat(numbers[1].value);
+            resultObject.z = parseFloat(numbers[2].value);
 
-		},
-		setData: function ( container, dataObject ) {
-			var text = container.dom.querySelectorAll('span.Text');
-			var input = container.dom.querySelectorAll('input.Input');
-			var numbers = container.dom.querySelectorAll('input.Number');
-			var checkBox = container.dom.querySelectorAll('input.Checkbox');
+            // random TOSS
+            resultObject.xIsRandomFrom = parseFloat(input[0].value);
+            resultObject.yIsRandomFrom = parseFloat(input[2].value);
+            resultObject.zIsRandomFrom = parseFloat(input[4].value);
+            resultObject.xIsRandomTo = parseFloat(input[1].value);
+            resultObject.yIsRandomTo = parseFloat(input[3].value);
+            resultObject.zIsRandomTo = parseFloat(input[5].value);
 
+            // random CHECKBOXES
+            resultObject.xIsRandom = checkBox[0].checked;
+            resultObject.yIsRandom = checkBox[1].checked;
+            resultObject.zIsRandom = checkBox[2].checked;
 
-			numbers[0].value = dataObject.x;
-			numbers[1].value = dataObject.y;
-			numbers[2].value = dataObject.z;
-			// random TOSS
-			input[0].value = dataObject.xIsRandomFrom;
-			input[2].value = dataObject.xIsRandomFrom;
-			input[4].value = dataObject.xIsRandomFrom;
-			input[1].value = dataObject.xIsRandomTo;
-			input[3].value = dataObject.xIsRandomTo;
-			input[5].value = dataObject.xIsRandomTo;
+            // hiding, showing fields and texts
+            if (checkBox[0].checked) {
+                $(input[0]).show();
+                $(input[1]).show();
+                $(text[3]).show();
+                $(text[4]).show();
+                $(numbers[0]).hide();
+            } else if (!checkBox[0].checked) {
+                $(input[0]).hide();
+                $(input[1]).hide();
+                $(text[3]).hide();
+                $(text[4]).hide();
+                $(numbers[0]).show();
+            }
+            if (checkBox[1].checked) {
+                $(input[2]).show();
+                $(input[3]).show();
+                $(text[7]).show();
+                $(text[6]).show();
+                $(numbers[1]).hide();
+            } else if (!checkBox[1].checked) {
+                $(input[2]).hide();
+                $(input[3]).hide();
+                $(text[7]).hide();
+                $(text[6]).hide();
+                $(numbers[1]).show();
+            }
+            if (checkBox[2].checked) {
+                $(input[4]).show();
+                $(input[5]).show();
+                $(text[9]).show();
+                $(text[10]).show();
+                $(numbers[2]).hide();
+            } else if (!checkBox[2].checked) {
+                $(input[4]).hide();
+                $(input[5]).hide();
+                $(text[9]).hide();
+                $(text[10]).hide();
+                $(numbers[2]).show();
+            }
 
-			checkBox[0].checked = dataObject.xIsRandom;
-			checkBox[1].checked = dataObject.xIsRandom;
-			checkBox[2].checked = dataObject.xIsRandom;
+            console.log("x from:",resultObject.xIsRandomFrom);
+            console.log("x to:",resultObject.xIsRandomTo);
+            console.log("y from:",resultObject.yIsRandomFrom);
+            console.log("y to:",resultObject.yIsRandomTo);
+            console.log("z from:",resultObject.zIsRandomFrom);
+            console.log("z to:",resultObject.zIsRandomTo);
 
+        },
+        setData: function ( container, dataObject ) {
+            var text = container.dom.querySelectorAll('span.Text');
+            var input = container.dom.querySelectorAll('input.Input');
+            var numbers = container.dom.querySelectorAll('input.Number');
+            var checkBox = container.dom.querySelectorAll('input.Checkbox');
 
+            // make Fields empty if no value entered
+            if (isNaN(input[0].value) || isNaN(input[1].value)) {
+                input[0].value = '';
+                input[1].value = '';
+            }
+            if (isNaN(input[2].value) || isNaN(input[3].value)) {
+                input[2].value = '';
+                input[3].value = '';
+            }
+            if (isNaN(input[4].value) || isNaN(input[5].value)) {
+                input[4].value = '';
+                input[5].value = '';
+            }
 
+            numbers[0].value = dataObject.x;
+            numbers[1].value = dataObject.y;
+            numbers[2].value = dataObject.z;
 
-		}
-	},
+            // random TOSS
+            input[0].value = dataObject.xIsRandomFrom;
+            input[2].value = dataObject.yIsRandomFrom;
+            input[4].value = dataObject.zIsRandomFrom;
+            input[1].value = dataObject.xIsRandomTo;
+            input[3].value = dataObject.yIsRandomTo;
+            input[5].value = dataObject.zIsRandomTo;
+
+            // random CHECKBOXES
+            checkBox[0].checked = dataObject.xIsRandom;
+            checkBox[1].checked = dataObject.yIsRandom;
+            checkBox[2].checked = dataObject.zIsRandom;
+
+            // hiding, showing fields and texts
+            if (checkBox[0].checked) {
+                $(input[0]).show();
+                $(input[1]).show();
+                $(text[3]).show();
+                $(text[4]).show();
+                $(numbers[0]).hide();
+            } else if (!checkBox[0].checked) {
+                $(input[0]).hide();
+                $(input[1]).hide();
+                $(text[3]).hide();
+                $(text[4]).hide();
+                $(numbers[0]).show();
+            }
+            if (checkBox[1].checked) {
+                $(input[2]).show();
+                $(input[3]).show();
+                $(text[7]).show();
+                $(text[6]).show();
+                $(numbers[1]).hide();
+            } else if (!checkBox[1].checked) {
+                $(input[2]).hide();
+                $(input[3]).hide();
+                $(text[7]).hide();
+                $(text[6]).hide();
+                $(numbers[1]).show();
+            }
+            if (checkBox[2].checked) {
+                $(input[4]).show();
+                $(input[5]).show();
+                $(text[9]).show();
+                $(text[10]).show();
+                $(numbers[2]).hide();
+            } else if (!checkBox[2].checked) {
+                $(input[4]).hide();
+                $(input[5]).hide();
+                $(text[9]).hide();
+                $(text[10]).hide();
+                $(numbers[2]).show();
+            }
+
+        }
+    },
 	"Play sound": {
 		getUI: function ( eventNode ) {
 
