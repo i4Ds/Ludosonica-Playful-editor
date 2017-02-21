@@ -42,6 +42,7 @@ Play.prototype.playAction = function ( object, eventIndex, args ) {
 		
 			//make it dynamic
 			object.mass = object._originalMass;
+			// merge
 			
 			var multFactor = Math.max( -editor.scene._gravity.y, 1 ) * object.mass;
 
