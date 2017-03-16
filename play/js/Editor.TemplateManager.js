@@ -14,6 +14,7 @@ Editor.TemplateManager = function ( editor ) {
         this.linkProperties[property] = true;
     };
 
+
     this.addTemplate = function ( template, instance ) {
 
         var templateInstanceMap = editor.scene.templates || [];
@@ -38,6 +39,47 @@ Editor.TemplateManager = function ( editor ) {
         this.signals.sceneGraphChanged.dispatch();
 
         editor.setTemplates ( templateInstanceMap );
+
+    };
+
+
+    /**
+     * creates a new instance for a template
+     * @param templateId
+     * @returns {*} new instance
+     */
+    this.getInstanceForTemplate = function ( templateId ) {
+
+        var templateInstanceMap = editor.scene.templates;
+
+        var index = this._getIndexOfTemplate( templateInstanceMap, templateId );
+
+        var instance = templateInstanceMap[index].template.clone();
+        instance.material = instance.material.clone();
+        instance.isInstance = true;
+
+        instance.isLinked = jQuery.extend({}, this.linkProperties);
+
+        this._addInstanceOfTemplate( templateInstanceMap, instance, templateId );
+
+        editor.setTemplates ( templateInstanceMap );
+
+        return instance;
+    };
+
+
+    this.duplicateInstance = function ( instance ) {
+
+        var template = this.getTemplateOfInstance( instance.id );
+        var instanceCopy = this.getInstanceForTemplate( template.id );
+
+        instanceCopy.name = instance.name + ' copy';
+
+        instanceCopy.position.x = instance.position.x;
+        instanceCopy.position.y = instance.position.y;
+        instanceCopy.position.z = instance.position.z;
+
+        return instanceCopy;
 
     };
 
@@ -142,30 +184,6 @@ Editor.TemplateManager = function ( editor ) {
         }
     };
 
-
-    /**
-     * creates a new instance for a template
-     * @param templateId
-     * @returns {*} new instance
-     */
-    this.getInstanceForTemplate = function ( templateId ) {
-
-        var templateInstanceMap = editor.scene.templates;
-
-        var index = this._getIndexOfTemplate( templateInstanceMap, templateId );
-
-        var instance = templateInstanceMap[index].template.clone();
-        instance.material = instance.material.clone();
-        instance.isInstance = true;
-
-        instance.isLinked = jQuery.extend({}, this.linkProperties);
-
-        this._addInstanceOfTemplate( templateInstanceMap, instance, templateId );
-
-        editor.setTemplates ( templateInstanceMap );
-
-        return instance;
-    };
 
 
     /**

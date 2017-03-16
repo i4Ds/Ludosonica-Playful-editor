@@ -45,7 +45,7 @@ Sidebars.Scene = function ( editor ) {
 					// add icons for object instances if instance
 					if( object.isInstance ){
 
-						html = ' <span class="icn left icon-template-small" title="Duplicate object"></span>';
+						html = ' <span class="icn left icon-template-small"></span>';
 						html += '<span class="type ' + objectType + '"></span> ' + '<span class="objNameDisplay">' + object.name + '</span>';
 
 					} else {
@@ -65,6 +65,8 @@ Sidebars.Scene = function ( editor ) {
 							html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
 							html += ' <span style="height: 100%"><span><span class="icn icon-add-template" title="Duplicate object as template"></span></span>';
 
+						}else {
+							html += ' <span class="icn icon-dupli-small" title="Duplicate object"></span>';
 						}
 
 					}
@@ -113,11 +115,23 @@ Sidebars.Scene = function ( editor ) {
 
 				if ( object.parent === undefined ) return; // avoid cloning the camera or scene
 
-				var clone = object.clone();
-				clone.material = clone.material.clone();
+				if(!object.isInstance){
 
-				editor.addObject( clone );
-				editor.select( clone );
+					var clone = object.clone();
+					clone.material = clone.material.clone();
+
+					editor.addObject( clone );
+					editor.select( clone );
+
+				}else {
+
+					var copy = editor.templateManager.duplicateInstance( object );
+
+					editor.addObject( copy );
+					editor.select( copy );
+
+				}
+
 
 			}.bind(options[ x ].value));
 
