@@ -123,7 +123,7 @@ var process = function(req, res, next) {
 		shasum.update( req.form.data.scenename + timestamp );
 		var locationHash = shasum.digest('hex');
 		var location = 'content/'+locationHash+'/';
-		var path = './public/'+location;
+		var path = '/play/gallery/'+location;
 
 		//hash remove link
 		shasum = crypto.createHash('sha256');

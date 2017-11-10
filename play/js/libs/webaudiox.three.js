@@ -44,7 +44,9 @@ WebAudiox.ListenerObject3DUpdater	= function(context, object3d){
 			var position	= new THREE.Vector3().setFromMatrixPosition(matrixWorld);
 			var velocity	= position.clone().sub(prevPosition).divideScalar(delta);
 			prevPosition.copy(position);
-			context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
+			if(context.listener.setVelocity){
+				context.listener.setVelocity(velocity.x, velocity.y, velocity.z);
+			}
 		}
 	}
 }

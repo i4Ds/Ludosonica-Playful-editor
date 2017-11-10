@@ -532,7 +532,7 @@ router.get('/play/gallery/all_scenes', function(req, res) {
 				var error = new Error(err);
 				next(error);
 			} else {
-			res.render( 'scenes', { a_scenes: a_scenes, b_scenes: b_scenes,c_scenes: c_scenes, d_scenes: d_scenes, e_scenes: e_scenes,f_scenes: f_scenes, g_scenes: g_scenes,h_scenes: h_scenes, i_scenes: i_scenes, j_scenes: j_scenes, k_scenes: k_scenes, l_scenes: l_scenes,m_scenes: m_scenes, n_scenes: n_scenes, o_scenes: o_scenes, p_scenes: p_scenes, q_scenes: q_scenes,r_scenes: r_scenes, s_scenes: s_scenes, t_scenes: t_scenes, u_scenes: u_scenes, v_scenes: v_scenes,w_scenes: w_scenes, z_scenes: z_scenes,scenes:all, host: req.headers.host } );	
+			res.render( 'scenes', { a_scenes: a_scenes, b_scenes: b_scenes,c_scenes: c_scenes, d_scenes: d_scenes, e_scenes: e_scenes,f_scenes: f_scenes, g_scenes: g_scenes,h_scenes: h_scenes, i_scenes: i_scenes, j_scenes: j_scenes, k_scenes: k_scenes, l_scenes: l_scenes,m_scenes: m_scenes, n_scenes: n_scenes, o_scenes: o_scenes, p_scenes: p_scenes, q_scenes: q_scenes,r_scenes: r_scenes, s_scenes: s_scenes, t_scenes: t_scenes, u_scenes: u_scenes, v_scenes: v_scenes,w_scenes: w_scenes, z_scenes: z_scenes,scenes:all, host: "www.cs.technik.fhnw.ch" } );
 			}	
 		});
 		

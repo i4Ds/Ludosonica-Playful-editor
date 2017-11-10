@@ -1,8 +1,9 @@
-var Editor = function ( isDevMode ) {
+var Editor = function ( isDevMode, isGalleryOn ) {
 
     var SIGNALS = signals;
 
     this.isDevMode = isDevMode;
+    this.isGalleryOn = isGalleryOn;
 
     this.signals = {
 

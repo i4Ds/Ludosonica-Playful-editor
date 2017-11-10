@@ -4,6 +4,7 @@ Tools.Menu = function (editor) {
     this.signals = editor.signals;
 
     var DEV_MODE = editor.isDevMode;
+    var GALLERY_IN_USE = editor.isGalleryOn;
     //var buttonpanel = new UI.ButtonHelper.createButtonPanel( "menu" );
     //
     ////buttonpanel.addButton( "icon-file", function() { signals.menuButtonClicked.dispatch("file+help"); } );
@@ -15,25 +16,36 @@ Tools.Menu = function (editor) {
     var activeButton = "add";
 
 
-    var backPanel = new UI.ButtonHelper.createButtonPanel("menu");
-    backPanel.addButton("icon-back", function () {
-        signals.menuButtonClicked.dispatch("back-to-gallery");
-    }, 'menu-gallery', 'go back to gallery');
+    /**************************/
+    // BACK PANEL
 
-    this.sceneButton = backPanel.dom.children[0];
-    setButtonActivationCallback(this.sceneButton, "back-to-gallery");
+    if (GALLERY_IN_USE) {
+        var backPanel = new UI.ButtonHelper.createButtonPanel("menu");
 
-    buttonPanels.push(backPanel);
+        // back button
+        backPanel.addButton("icon-back", function () {
+            signals.menuButtonClicked.dispatch("back-to-gallery");
+        }, 'menu-gallery', 'go back to gallery');
 
-    signals.menuButtonClicked.add(function (name) {
-        if (name == "back-to-gallery") {
-            location.href = document.referrer;
-        }
-    });
+        this.sceneButton = backPanel.dom.children[0];
+        setButtonActivationCallback(this.sceneButton, "back-to-gallery");
 
+        buttonPanels.push(backPanel);
+
+        signals.menuButtonClicked.add(function (name) {
+            if (name == "back-to-gallery") {
+                location.href = document.referrer;
+            }
+        });
+    }
+
+
+    /**************************/
+    // EDIT PANEL
 
     var editPanel = new UI.ButtonHelper.createButtonPanel("menu");
 
+    // more button
     if (DEV_MODE) {
         editPanel.addButton("icon-file", function () {
             signals.menuButtonClicked.dispatch("file+help");
@@ -42,32 +54,42 @@ Tools.Menu = function (editor) {
         setButtonActivationCallback(editPanel.dom.children[0], "file+help");
     }
 
-    editPanel.addButton("icon-save", function () {
-        signals.menuButtonClicked.dispatch("save");
-    }, 'menu-save', 'save the scene');
+    // save button
+    if (GALLERY_IN_USE) {
+        editPanel.addButton("icon-save", function () {
+            signals.menuButtonClicked.dispatch("save");
+        }, 'menu-save', 'save the scene');
 
-    if(DEV_MODE){
-        setButtonActivationCallback(editPanel.dom.children[1], "save");
-    }else{
-        setButtonActivationCallback(editPanel.dom.children[0], "save");
+        if (DEV_MODE) {
+            setButtonActivationCallback(editPanel.dom.children[1], "save");
+        } else {
+            setButtonActivationCallback(editPanel.dom.children[0], "save");
+        }
+
+
+        signals.menuButtonClicked.add(function (name) {
+            if (name == "save") {
+                showHide('sceneSave');
+            }
+        });
     }
 
     buttonPanels.push(editPanel);
 
-    signals.menuButtonClicked.add(function (name) {
-        if (name == "save") {
-            showHide('sceneSave');
-        }
-    });
 
+    /**************************/
+    // MENU PANEL
 
     var addPanel = new UI.ButtonHelper.createButtonPanel("menu");
+
+    // add objects button
     addPanel.addButton("icon-object active", function () {
         signals.menuButtonClicked.dispatch("add");
     }, 'menu-object', 'open panel to add objects');
 
     setButtonActivationCallback(addPanel.dom.children[0], "add");
 
+    // add template button
     // todo comment this to hide template
     addPanel.addButton("icon-template", function () {
         signals.menuButtonClicked.dispatch("add-template");
@@ -112,6 +134,7 @@ Tools.Menu = function (editor) {
 
     }
 
+    /**************************/
 
     function showHide(id) {
         var panel = $('#' + id);

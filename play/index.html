@@ -188,10 +188,12 @@
     window.URL = window.URL || window.webkitURL;
     window.BlobBuilder = window.BlobBuilder || window.WebKitBlobBuilder || window.MozBlobBuilder;
 
+    /********** SETTINGS ************/
     var workMode = 'easy';
     var IS_DEV_MODE = true;
+    var IS_GALLERY_ON = false;
 
-    var editor = new Editor( IS_DEV_MODE );
+    var editor = new Editor( IS_DEV_MODE, IS_GALLERY_ON );
 
     var viewportParent = new Viewport(editor);
     var viewport = viewportParent.getContainer();
@@ -280,6 +282,7 @@
 
                     }
 
+
                 } else {
 
                     //default scene
@@ -314,9 +317,10 @@
 //            editor.loader.loadRemotePlayful(sceneId[0]);
 //        }
 
+
         var sceneId = getParameterByName('load_scene');
-        var userId = getParameterByName('user');
-        var play = getParameterByName('mode');
+        var userId  = getParameterByName('user');
+        var play    = getParameterByName('mode');
 
         console.log('play', play);
 
@@ -324,26 +328,28 @@
         sessionStorage.setItem('scene', sceneId);
         sessionStorage.setItem('mode', play);
 
-        if (sceneId !== null && play) {
+        if (!IS_DEV_MODE) {
+            if (sceneId !== null && play) {
 
-            var onLoadComplete = function () {
-                $('#modes-play').click();
-                $('#modes-play').hide();
-                $('#menu-gallery').show();
-            };
+                var onLoadComplete = function () {
+                    $('#modes-play').click();
+                    $('#modes-play').hide();
+                    $('#menu-gallery').show();
+                };
 
-            editor.signals.fileLoadCompleted.add(onLoadComplete);
+                editor.signals.fileLoadCompleted.add(onLoadComplete);
 
-            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
+                editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
 
-            window.onbeforeunload = null;
+                window.onbeforeunload = null;
 
-        } else if (sceneId !== null) {
+            } else if (sceneId !== null) {
 
-            editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
+                editor.loader.loadRemotePlayful('?load_scene=' + sceneId);
 
-        } else {
-            console.log('dont load scene');
+            } else {
+                console.log('dont load scene');
+            }
         }
 
 

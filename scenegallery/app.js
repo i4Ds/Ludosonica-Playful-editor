@@ -37,7 +37,7 @@ app.set('view engine', 'html');
 // uncomment after placing your favicon in /public
 //app.use(favicon(__dirname + '/public/favicon.ico'));
 
-app.use(express.static(path.join(__dirname, 'public')));
+//app.use(express.static(path.join(__dirname, 'public')));
 
 var db = new sqlite3.Database(GLOBAL.db);
 
@@ -71,7 +71,12 @@ app.use(bodyParser.urlencoded({
 app.use(cookieParser());
 
 //set up the folder
-app.use(express.static(path.join(__dirname, 'public'))); //store the stylesheets, images...
+//app.use(express.static(path.join(__dirname, 'public'))); //store the stylesheets, images...
+app.use('/play/gallery/stylesheets', express.static(__dirname + '/public/stylesheets'));
+app.use('/play/gallery/content', express.static(__dirname + '/public/content'));
+app.use('/play/gallery/fonts', express.static(__dirname + '/public/fonts'));
+app.use('/play/gallery/images', express.static(__dirname + '/public/images'));
+app.use('/play/gallery/javascript', express.static(__dirname + '/public/javascript'));
 
 //Express session
 
