@@ -11,7 +11,7 @@
     "busboy": "~0.2.9",
     "connect-busboy": "0.0.2",
     "connect-flash": "^0.1.1",
-    "ejs": "~1.0.0",
+    "ejs": "~2.5.5",
     "express": "~4.10.6",
     "express-session": "^1.14.1",
     "glob": "^7.1.0",
